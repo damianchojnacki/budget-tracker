@@ -1,6 +1,6 @@
 ARG PHP_EXTENSIONS="bcmath gd imap intl pdo_mysql uuid igbinary redis sqlite3 pdo_sqlite"
 
-FROM thecodingmachine/php:8.2-v4-slim-fpm
+FROM thecodingmachine/php:8.3-v4-slim-fpm
 
 ENV PHP_EXTENSIONS="bcmath gd imap intl pdo_mysql uuid igbinary redis sqlite3 pdo_sqlite"
 

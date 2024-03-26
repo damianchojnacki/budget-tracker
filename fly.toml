@@ -10,7 +10,7 @@ console_command = "php /var/www/html/artisan tinker"
 [build]
   dockerfile = "docker/prod/Dockerfile"
   [build.args]
-    PHP_VERSION = "8.2"
+    PHP_VERSION = "8.3"
 
 [env]
   APP_DEBUG = "false"
