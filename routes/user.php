@@ -10,10 +10,3 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [UserController::class, 'show'])->name('show')->withoutMiddleware('verified');
 
 Route::apiResource('organizations', UserOrganizationController::class)->only('store');
-
-Route::apiResource('cars', UserCarController::class)->only('update');
-
-Route::apiResource('trips', UserTripController::class);
-
-Route::apiResource('trips.points', UserTripPointController::class)
-    ->only('store');

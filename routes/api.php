@@ -17,23 +17,4 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-require __DIR__.'/auth.php';
 
-Route::apiResource('cars/brands', CarBrandController::class)
-    ->only('index', 'show');
-
-Route::group([
-    'middleware' => 'auth:sanctum',
-], function () {
-    Route::apiResource('cars', CarController::class)
-        ->only('index', 'show');
-
-    Route::apiResource('cars.operations', CarOperationController::class);
-
-    Route::put('organization-invitations/{invitation}', [OrganizationInvitationController::class, 'accept'])
-        ->name('organization-invitations.accept')
-        ->middleware(['signed', 'throttle:6,1']);
-
-    Route::delete('organization-invitations/{invitation}', [OrganizationInvitationController::class, 'cancel'])
-        ->name('organization-invitations.cancel');
-});

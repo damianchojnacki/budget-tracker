@@ -11,12 +11,16 @@ use Filament\Facades\Filament;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ListRecords;
+use Illuminate\Contracts\Support\Htmlable;
 
 class ListUsers extends ListRecords
 {
     protected static string $resource = UserResource::class;
 
-    protected static ?string $title = 'Drivers';
+    public function getTitle(): Htmlable | string
+    {
+        return __('Users');
+    }
 
     protected function getHeaderActions(): array
     {
@@ -24,15 +28,15 @@ class ListUsers extends ListRecords
         $organization = Filament::getTenant();
 
         return [
-            CreateAction::make()
-                ->label('New driver'),
+            CreateAction::make(),
             Action::make('invite')
                 ->form([
                     TextInput::make('email')
                         ->email()
                         ->required(),
                 ])
-                ->label('Invite driver')
+                ->label('Invite user')
+                ->translateLabel()
                 ->action(function (array $data) use ($organization): void {
                     if (OrganizationInvitation::where('email', $data['email'])->exists()) {
                         Notification::make()

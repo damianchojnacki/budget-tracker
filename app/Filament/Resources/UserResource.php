@@ -2,8 +2,11 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Resources\UserResource\Pages\CreateBudget;
 use App\Filament\Resources\UserResource\Pages\CreateUser;
+use App\Filament\Resources\UserResource\Pages\EditBudget;
 use App\Filament\Resources\UserResource\Pages\EditUser;
+use App\Filament\Resources\UserResource\Pages\ListBudgets;
 use App\Filament\Resources\UserResource\Pages\ListUsers;
 use App\Models\Organization;
 use App\Models\User;
@@ -23,32 +26,43 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Table;
+use Illuminate\Auth\Access\Response;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
 
 class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationLabel = 'Drivers';
-
     protected static ?string $navigationIcon = 'fas-users';
+
+    public static function getNavigationLabel(): string
+    {
+        return __('Users');
+    }
+
+    public static function getBreadcrumb(): string
+    {
+        return __('Users');
+    }
 
     public static function form(Form $form): Form
     {
-        /** @var User $user */
-        $user = Auth::user();
-
         return $form
             ->schema([
                 TextInput::make('firstname')
+                    ->translateLabel()
                     ->required(),
                 TextInput::make('lastname')
+                    ->translateLabel()
                     ->required(),
                 TextInput::make('email')
+                    ->translateLabel()
                     ->email()
                     ->required(),
                 TextInput::make('password')
+                    ->translateLabel()
                     ->password()
                     ->minLength(8)
                     ->maxLength(255)
@@ -56,7 +70,7 @@ class UserResource extends Resource
                     ->dehydrated(fn (?string $state): bool => filled($state))
                     ->required(fn (string $operation): bool => $operation === 'create'),
                 Toggle::make('email_verified_at')
-                    ->hidden(! $user->isAdmin())
+                    ->translateLabel()
                     ->label('Email Verified')
                     ->dehydrateStateUsing(fn (?string $state): ?Carbon => filled($state) ? now() : null),
             ]);
@@ -75,40 +89,47 @@ class UserResource extends Resource
                     ->sortable()
                     ->searchable(),
                 TextColumn::make('firstname')
+                    ->translateLabel()
                     ->sortable()
                     ->searchable(),
                 TextColumn::make('lastname')
+                    ->translateLabel()
                     ->sortable()
                     ->searchable(),
                 TextColumn::make('email')
+                    ->translateLabel()
                     ->sortable()
                     ->searchable(),
                 TextColumn::make('email_verified_at')
-                    ->hidden(! $user->isAdmin())
+                    ->translateLabel()
                     ->dateTime()
+                    ->hidden(!$user->isAdmin())
                     ->sortable()
                     ->searchable(),
                 ToggleColumn::make('is_admin')
+                    ->translateLabel()
                     ->label('Admin')
-                    ->hidden(! $user->isAdmin())
+                    ->hidden(!$user->isAdmin())
                     ->sortable()
                     ->disabled(),
             ])
             ->filters([
                 Filter::make('is_admin')
-                    ->hidden(! $user->isAdmin())
+                    ->hidden(!$user->isAdmin())
                     ->toggle()
                     ->query(fn (Builder $query) => $query->where('is_admin', true))
                     ->label('Admin'),
             ])
             ->actions([
-                EditAction::make(),
-                DeleteAction::make(),
+                EditAction::make()
+                    ->hidden(!$user->isAdmin()),
+                DeleteAction::make()
+                    ->hidden(!$user->isAdmin()),
             ])
             ->bulkActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
-                ]),
+                ])->hidden(!$user->isAdmin()),
             ])
             ->emptyStateActions([
                 CreateAction::make(),

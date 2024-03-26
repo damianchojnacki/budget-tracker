@@ -3,7 +3,6 @@
 namespace App\Providers;
 
 use App\Models\User;
-use App\Services\Frontend;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -27,12 +26,10 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        ResetPassword::createUrlUsing(function (User $user, string $token) {
-            return Frontend::url()->resetPassword($user, $token);
-        });
-
-        VerifyEmail::createUrlUsing(function (User $user) {
-            return Frontend::url()->verifyEmail($user);
+        Gate::before(function (User $user) {
+            if ($user->isAdmin()) {
+                return true;
+            }
         });
 
         Gate::define('viewApiDocs', function (User $user) {

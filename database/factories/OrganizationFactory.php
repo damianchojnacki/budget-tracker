@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Currency;
 use App\Models\Organization;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -22,6 +23,7 @@ class OrganizationFactory extends Factory
     {
         return [
             'owner_id' => User::factory(),
+            'currency_id' => Currency::inRandomOrder()->first()->id,
             'name' => $this->faker->unique()->company(),
         ];
     }

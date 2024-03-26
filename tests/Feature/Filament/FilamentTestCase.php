@@ -28,9 +28,4 @@ class FilamentTestCase extends TestCase
 
         Filament::setTenant($this->user->organization);
     }
-
-    public function actingAs(UserContract $user, $guard = null): TestCase
-    {
-        return parent::actingAs($user, $guard ?? 'web');
-    }
 }

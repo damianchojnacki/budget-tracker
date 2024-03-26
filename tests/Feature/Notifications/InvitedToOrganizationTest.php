@@ -27,6 +27,6 @@ class InvitedToOrganizationTest extends TestCase
         $content = $notification->toMail($user)->render();
 
         $this->assertStringContainsString($invitation->organization->name, $content);
-        $this->assertStringContainsString(Frontend::url()->acceptOrganizationInvitation($invitation), html_entity_decode($content));
+        $this->assertStringContainsString(route('organization-invitations.accept', ['invitation' => $invitation]), $content);
     }
 }

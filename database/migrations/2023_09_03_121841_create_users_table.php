@@ -15,7 +15,6 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Car::class)->nullable()->constrained()->nullOnDelete();
             $table->foreignIdFor(Organization::class)->nullable()->constrained()->nullOnDelete();
             $table->string('firstname');
             $table->string('lastname');

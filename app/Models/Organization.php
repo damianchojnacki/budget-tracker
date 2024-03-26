@@ -21,6 +21,14 @@ class Organization extends Model
     }
 
     /**
+     * Get the default currency of the organization.
+     */
+    public function currency(): BelongsTo
+    {
+        return $this->belongsTo(Currency::class);
+    }
+
+    /**
      * Get all the organization's users including its owner.
      *
      * @return Collection<int, User>
@@ -40,11 +48,19 @@ class Organization extends Model
     }
 
     /**
-     * Get all the users that belong to the organization.
+     * Get all the budgets that belong to the organization.
      */
-    public function cars(): HasMany
+    public function budgets(): HasMany
     {
-        return $this->hasMany(Car::class);
+        return $this->hasMany(Budget::class);
+    }
+
+    /**
+     * Get all the currencies that belong to the organization.
+     */
+    public function currencies(): HasMany
+    {
+        return $this->hasMany(Currency::class);
     }
 
     /**

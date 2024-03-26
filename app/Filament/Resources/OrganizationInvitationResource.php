@@ -20,9 +20,17 @@ class OrganizationInvitationResource extends Resource
 {
     protected static ?string $model = OrganizationInvitation::class;
 
-    protected static ?string $navigationLabel = 'Invitations';
-
     protected static ?string $navigationIcon = 'fas-envelope';
+
+    public static function getNavigationLabel(): string
+    {
+        return __('Invitations');
+    }
+
+    public static function getBreadcrumb(): string
+    {
+        return __('Invitations');
+    }
 
     public static function form(Form $form): Form
     {

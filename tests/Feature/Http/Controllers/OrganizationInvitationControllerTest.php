@@ -31,7 +31,7 @@ class OrganizationInvitationControllerTest extends TestCase
         $url = URL::signedRoute('organization-invitations.accept', ['invitation' => $invitation]);
 
         $this->actingAs($user)
-            ->putJson($url)
+            ->put($url)
             ->assertSuccessful();
 
         $this->assertEquals($organization->id, $user->fresh()->organization->id);
@@ -53,7 +53,7 @@ class OrganizationInvitationControllerTest extends TestCase
         $url = URL::signedRoute('organization-invitations.accept', ['invitation' => $invitation]);
 
         $this->actingAs($user)
-            ->putJson($url)
+            ->put($url)
             ->assertInvalid('email');
     }
 
@@ -72,7 +72,7 @@ class OrganizationInvitationControllerTest extends TestCase
         $url = URL::signedRoute('organization-invitations.accept', ['invitation' => $invitation]);
 
         $this->actingAs($user)
-            ->putJson($url)
+            ->put($url)
             ->assertForbidden();
     }
 
@@ -87,7 +87,7 @@ class OrganizationInvitationControllerTest extends TestCase
         );
 
         $this->actingAs($owner)
-            ->deleteJson(route('organization-invitations.cancel', ['invitation' => $invitation]))
+            ->delete(route('organization-invitations.cancel', ['invitation' => $invitation]))
             ->assertSuccessful();
 
         $this->assertModelMissing($invitation);
@@ -104,7 +104,7 @@ class OrganizationInvitationControllerTest extends TestCase
         );
 
         $this->actingAs($user)
-            ->deleteJson(route('organization-invitations.cancel', ['invitation' => $invitation]))
+            ->delete(route('organization-invitations.cancel', ['invitation' => $invitation]))
             ->assertForbidden();
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DocsController;
+use App\Http\Controllers\OrganizationInvitationController;
 use Dedoc\Scramble\Http\Middleware\RestrictedDocsAccess;
 use Illuminate\Support\Facades\Route;
 
@@ -15,11 +16,20 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return ['version' => config('app.version')];
-})->name('homepage');
+Route::redirect('/', 'dashboard')->name('homepage');
 
 Route::get('docs/{path?}', DocsController::class)
     ->middleware(RestrictedDocsAccess::class)
     ->where('path', '(.*)')
     ->name('docs');
+
+Route::group([
+    'middleware' => ['auth', 'verified'],
+], function () {
+    Route::put('organization-invitations/{invitation}', [OrganizationInvitationController::class, 'accept'])
+        ->name('organization-invitations.accept')
+        ->middleware(['signed', 'throttle:6,1']);
+
+    Route::delete('organization-invitations/{invitation}', [OrganizationInvitationController::class, 'cancel'])
+        ->name('organization-invitations.cancel');
+});

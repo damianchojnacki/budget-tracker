@@ -30,7 +30,7 @@ use Laravel\Sanctum\HasApiTokens;
  */
 class User extends Authenticatable implements FilamentUser, HasTenants, MustVerifyEmail
 {
-    use HasApiTokens, HasApiTokens, HasFactory, HasOrganization, Notifiable;
+    use HasFactory, HasOrganization, Notifiable;
 
     /**
      * The attributes that should be hidden for serialization.
@@ -59,7 +59,7 @@ class User extends Authenticatable implements FilamentUser, HasTenants, MustVeri
 
     public function canAccessPanel(Panel $panel): bool
     {
-        return $this->isAdmin() || $this->ownsOrganization($this->organization);
+        return true;
     }
 
     public function car(): BelongsTo
@@ -89,6 +89,6 @@ class User extends Authenticatable implements FilamentUser, HasTenants, MustVeri
     public function canAccessTenant(Model $tenant): bool
     {
         /** @phpstan-ignore-next-line  */
-        return $this->ownsOrganization($tenant) || $this->isAdmin();
+        return $this->belongsToOrganization($tenant) || $this->isAdmin();
     }
 }
