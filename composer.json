@@ -10,7 +10,7 @@
     "require": {
         "php": "^8.1",
         "ext-intl": "*",
-        "bezhansalleh/filament-language-switch": "^2.0",
+        "bezhansalleh/filament-language-switch": "^3.0",
         "calebporzio/sushi": "^2.4",
         "codeat3/blade-rpg-awesome-icons": "^1.4",
         "dedoc/scramble": "^0.8.3",
@@ -18,6 +18,7 @@
         "fakerphp/faker": "^1.9.1",
         "filament/filament": "^3.0-stable",
         "flowframe/laravel-trend": "^0.1.5",
+        "guava/filament-icon-picker": "^2.0",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^10.10",
         "laravel/telescope": "^4.16",

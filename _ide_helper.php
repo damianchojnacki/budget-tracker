@@ -4806,102 +4806,6 @@
             /**
      * 
      *
-     * @see \Illuminate\Encryption\Encrypter
-     */ 
-        class Crypt {
-                    /**
-         * Determine if the given key and cipher combination is valid.
-         *
-         * @param string $key
-         * @param string $cipher
-         * @return bool 
-         * @static 
-         */ 
-        public static function supported($key, $cipher)
-        {
-                        return \Illuminate\Encryption\Encrypter::supported($key, $cipher);
-        }
-                    /**
-         * Create a new encryption key for the given cipher.
-         *
-         * @param string $cipher
-         * @return string 
-         * @static 
-         */ 
-        public static function generateKey($cipher)
-        {
-                        return \Illuminate\Encryption\Encrypter::generateKey($cipher);
-        }
-                    /**
-         * Encrypt the given value.
-         *
-         * @param mixed $value
-         * @param bool $serialize
-         * @return string 
-         * @throws \Illuminate\Contracts\Encryption\EncryptException
-         * @static 
-         */ 
-        public static function encrypt($value, $serialize = true)
-        {
-                        /** @var \Illuminate\Encryption\Encrypter $instance */
-                        return $instance->encrypt($value, $serialize);
-        }
-                    /**
-         * Encrypt a string without serialization.
-         *
-         * @param string $value
-         * @return string 
-         * @throws \Illuminate\Contracts\Encryption\EncryptException
-         * @static 
-         */ 
-        public static function encryptString($value)
-        {
-                        /** @var \Illuminate\Encryption\Encrypter $instance */
-                        return $instance->encryptString($value);
-        }
-                    /**
-         * Decrypt the given value.
-         *
-         * @param string $payload
-         * @param bool $unserialize
-         * @return mixed 
-         * @throws \Illuminate\Contracts\Encryption\DecryptException
-         * @static 
-         */ 
-        public static function decrypt($payload, $unserialize = true)
-        {
-                        /** @var \Illuminate\Encryption\Encrypter $instance */
-                        return $instance->decrypt($payload, $unserialize);
-        }
-                    /**
-         * Decrypt the given string without unserialization.
-         *
-         * @param string $payload
-         * @return string 
-         * @throws \Illuminate\Contracts\Encryption\DecryptException
-         * @static 
-         */ 
-        public static function decryptString($payload)
-        {
-                        /** @var \Illuminate\Encryption\Encrypter $instance */
-                        return $instance->decryptString($payload);
-        }
-                    /**
-         * Get the encryption key that the encrypter is currently using.
-         *
-         * @return string 
-         * @static 
-         */ 
-        public static function getKey()
-        {
-                        /** @var \Illuminate\Encryption\Encrypter $instance */
-                        return $instance->getKey();
-        }
-         
-    }
-            /**
-     * 
-     *
      * @see https://carbon.nesbot.com/docs/
      * @see https://github.com/briannesbitt/Carbon/blob/master/src/Carbon/Factory.php
      * @method static \Illuminate\Support\Carbon create($year = 0, $month = 1, $day = 1, $hour = 0, $minute = 0, $second = 0, $tz = null)
@@ -18399,31 +18303,43 @@
      
 }
 
-        namespace App\Services\ApiNinjas { 
+        namespace App\Services\Rate { 
             /**
      * 
      *
      */ 
-        class ApiNinjasFacade {
+        class RateFacade {
                     /**
          * 
          *
+         * @throws DriverNotFoundException
          * @static 
          */ 
-        public static function validateConfig()
+        public static function driver($driver)
         {
-                        /** @var \App\Services\ApiNinjas\Client $instance */
-                        return $instance->validateConfig();
+                        /** @var \App\Services\Rate\RateService $instance */
+                        return $instance->driver($driver);
+        }
+                    /**
+         * 
+         *
+         * @throws DriverNotFoundException
+         * @static 
+         */ 
+        public static function get($currency)
+        {
+                        /** @var \App\Services\Rate\RateService $instance */
+                        return $instance->get($currency);
         }
                     /**
          * 
          *
          * @static 
          */ 
-        public static function cars()
+        public static function convert($value, $from, $to)
         {
-                        /** @var \App\Services\ApiNinjas\Client $instance */
-                        return $instance->cars();
+                        /** @var \App\Services\Rate\RateService $instance */
+                        return $instance->convert($value, $from, $to);
         }
          
     }
@@ -18807,6 +18723,250 @@
         {
                         /** @var \Livewire\LivewireManager $instance */
                         return $instance->originalMethod();
+        }
+         
+    }
+     
+}
+
+    namespace Sentry\Laravel { 
+            /**
+     * 
+     *
+     * @see \Sentry\State\HubInterface
+     */ 
+        class Facade {
+                    /**
+         * Gets the client bound to the top of the stack.
+         *
+         * @static 
+         */ 
+        public static function getClient()
+        {
+                        /** @var \Sentry\State\Hub $instance */
+                        return $instance->getClient();
+        }
+                    /**
+         * Gets the ID of the last captured event.
+         *
+         * @static 
+         */ 
+        public static function getLastEventId()
+        {
+                        /** @var \Sentry\State\Hub $instance */
+                        return $instance->getLastEventId();
+        }
+                    /**
+         * Creates a new scope to store context information that will be layered on
+         * top of the current one. It is isolated, i.e. all breadcrumbs and context
+         * information added to this scope will be removed once the scope ends. Be
+         * sure to always remove this scope with {@see Hub::popScope} when the
+         * operation finishes or throws.
+         *
+         * @static 
+         */ 
+        public static function pushScope()
+        {
+                        /** @var \Sentry\State\Hub $instance */
+                        return $instance->pushScope();
+        }
+                    /**
+         * Removes a previously pushed scope from the stack. This restores the state
+         * before the scope was pushed. All breadcrumbs and context information added
+         * since the last call to {@see Hub::pushScope} are discarded.
+         *
+         * @static 
+         */ 
+        public static function popScope()
+        {
+                        /** @var \Sentry\State\Hub $instance */
+                        return $instance->popScope();
+        }
+                    /**
+         * Creates a new scope with and executes the given operation within. The scope
+         * is automatically removed once the operation finishes or throws.
+         *
+         * @param callable $callback The callback to be executed
+         * @return mixed|void The callback's return value, upon successful execution
+         * @psalm-template T
+         * @psalm-param callable(Scope): T $callback
+         * @psalm-return T
+         * @static 
+         */ 
+        public static function withScope($callback)
+        {
+                        /** @var \Sentry\State\Hub $instance */
+                        return $instance->withScope($callback);
+        }
+                    /**
+         * Calls the given callback passing to it the current scope so that any
+         * operation can be run within its context.
+         *
+         * @param callable $callback The callback to be executed
+         * @static 
+         */ 
+        public static function configureScope($callback)
+        {
+                        /** @var \Sentry\State\Hub $instance */
+                        return $instance->configureScope($callback);
+        }
+                    /**
+         * Binds the given client to the current scope.
+         *
+         * @param \Sentry\ClientInterface $client The client
+         * @static 
+         */ 
+        public static function bindClient($client)
+        {
+                        /** @var \Sentry\State\Hub $instance */
+                        return $instance->bindClient($client);
+        }
+                    /**
+         * Captures a message event and sends it to Sentry.
+         *
+         * @param string $message The message
+         * @param \Sentry\Severity|null $level The severity level of the message
+         * @param \Sentry\EventHint|null $hint Object that can contain additional information about the event
+         * @static 
+         */ 
+        public static function captureMessage($message, $level = null, $hint = null)
+        {
+                        /** @var \Sentry\State\Hub $instance */
+                        return $instance->captureMessage($message, $level, $hint);
+        }
+                    /**
+         * Captures an exception event and sends it to Sentry.
+         *
+         * @param \Throwable $exception The exception
+         * @param \Sentry\EventHint|null $hint Object that can contain additional information about the event
+         * @static 
+         */ 
+        public static function captureException($exception, $hint = null)
+        {
+                        /** @var \Sentry\State\Hub $instance */
+                        return $instance->captureException($exception, $hint);
+        }
+                    /**
+         * Captures a new event using the provided data.
+         *
+         * @param \Event $event The event being captured
+         * @param \Sentry\EventHint|null $hint May contain additional information about the event
+         * @static 
+         */ 
+        public static function captureEvent($event, $hint = null)
+        {
+                        /** @var \Sentry\State\Hub $instance */
+                        return $instance->captureEvent($event, $hint);
+        }
+                    /**
+         * Captures an event that logs the last occurred error.
+         *
+         * @param \Sentry\EventHint|null $hint Object that can contain additional information about the event
+         * @static 
+         */ 
+        public static function captureLastError($hint = null)
+        {
+                        /** @var \Sentry\State\Hub $instance */
+                        return $instance->captureLastError($hint);
+        }
+                    /**
+         * 
+         *
+         * @param string $slug Identifier of the Monitor
+         * @param \Sentry\CheckInStatus $status The status of the check-in
+         * @param int|float|null $duration The duration of the check-in
+         * @param \Sentry\MonitorConfig|null $monitorConfig Configuration of the Monitor
+         * @param string|null $checkInId A check-in ID from the previous check-in
+         * @static 
+         */ 
+        public static function captureCheckIn($slug, $status, $duration = null, $monitorConfig = null, $checkInId = null)
+        {
+                        /** @var \Sentry\State\Hub $instance */
+                        return $instance->captureCheckIn($slug, $status, $duration, $monitorConfig, $checkInId);
+        }
+                    /**
+         * Records a new breadcrumb which will be attached to future events. They
+         * will be added to subsequent events to provide more context on user's
+         * actions prior to an error or crash.
+         *
+         * @param \Sentry\Breadcrumb $breadcrumb The breadcrumb to record
+         * @return bool Whether the breadcrumb was actually added to the current scope
+         * @static 
+         */ 
+        public static function addBreadcrumb($breadcrumb)
+        {
+                        /** @var \Sentry\State\Hub $instance */
+                        return $instance->addBreadcrumb($breadcrumb);
+        }
+                    /**
+         * Gets the integration whose FQCN matches the given one if it's available on the current client.
+         *
+         * @param string $className The FQCN of the integration
+         * @psalm-template T of IntegrationInterface
+         * @psalm-param class-string<T> $className
+         * @psalm-return T|null
+         * @static 
+         */ 
+        public static function getIntegration($className)
+        {
+                        /** @var \Sentry\State\Hub $instance */
+                        return $instance->getIntegration($className);
+        }
+                    /**
+         * Starts a new `Transaction` and returns it. This is the entry point to manual
+         * tracing instrumentation.
+         * 
+         * A tree structure can be built by adding child spans to the transaction, and
+         * child spans to other spans. To start a new child span within the transaction
+         * or any span, call the respective `startChild()` method.
+         * 
+         * Every child span must be finished before the transaction is finished,
+         * otherwise the unfinished spans are discarded.
+         * 
+         * The transaction must be finished with a call to its `finish()` method, at
+         * which point the transaction with all its finished child spans will be sent to
+         * Sentry.
+         *
+         * @param array<string, mixed> $customSamplingContext Additional context that will be passed to the {@see SamplingContext}
+         * @param \Sentry\Tracing\TransactionContext $context Properties of the new transaction
+         * @param array<string, mixed> $customSamplingContext Additional context that will be passed to the {@see SamplingContext}
+         * @static 
+         */ 
+        public static function startTransaction($context, $customSamplingContext = [])
+        {
+                        /** @var \Sentry\State\Hub $instance */
+                        return $instance->startTransaction($context, $customSamplingContext);
+        }
+                    /**
+         * Returns the transaction that is on the Hub.
+         *
+         * @static 
+         */ 
+        public static function getTransaction()
+        {
+                        /** @var \Sentry\State\Hub $instance */
+                        return $instance->getTransaction();
+        }
+                    /**
+         * Sets the span on the Hub.
+         *
+         * @param \Sentry\Tracing\Span|null $span The span
+         * @static 
+         */ 
+        public static function setSpan($span)
+        {
+                        /** @var \Sentry\State\Hub $instance */
+                        return $instance->setSpan($span);
+        }
+                    /**
+         * Returns the span that is on the Hub.
+         *
+         * @static 
+         */ 
+        public static function getSpan()
+        {
+                        /** @var \Sentry\State\Hub $instance */
+                        return $instance->getSpan();
         }
          
     }
@@ -21361,6 +21521,31 @@
      
 }
 
+    namespace Illuminate\Console\Scheduling { 
+            /**
+     * 
+     *
+     */ 
+        class Event {
+                    /**
+         * 
+         *
+         * @see \Sentry\Laravel\Features\ConsoleIntegration::onBootInactive()
+         * @param string|null $monitorSlug
+         * @param int|null $checkInMargin
+         * @param int|null $maxRuntime
+         * @param bool $updateMonitorConfig
+         * @static 
+         */ 
+        public static function sentryMonitor($monitorSlug = null, $checkInMargin = null, $maxRuntime = null, $updateMonitorConfig = true)
+        {
+                        return \Illuminate\Console\Scheduling\Event::sentryMonitor($monitorSlug, $checkInMargin, $maxRuntime, $updateMonitorConfig);
+        }
+         
+    }
+     
+}
+
 
 namespace  { 
             class App extends \Illuminate\Support\Facades\App {}
@@ -21373,7 +21558,6 @@ namespace  {
             class Cache extends \Illuminate\Support\Facades\Cache {}
             class Config extends \Illuminate\Support\Facades\Config {}
             class Cookie extends \Illuminate\Support\Facades\Cookie {}
-            class Crypt extends \Illuminate\Support\Facades\Crypt {}
             class Date extends \Illuminate\Support\Facades\Date {}
             class DB extends \Illuminate\Support\Facades\DB {}
             class Eloquent extends \Illuminate\Database\Eloquent\Model {             
@@ -25755,8 +25939,9 @@ namespace  {
             class Validator extends \Illuminate\Support\Facades\Validator {}
             class View extends \Illuminate\Support\Facades\View {}
             class Vite extends \Illuminate\Support\Facades\Vite {}
-            class ApiNinjas extends \App\Services\ApiNinjas\ApiNinjasFacade {}
+            class Rate extends \App\Services\Rate\RateFacade {}
             class Livewire extends \Livewire\Livewire {}
+            class Sentry extends \Sentry\Laravel\Facade {}
             class Flare extends \Spatie\LaravelIgnition\Facades\Flare {}
      
 }

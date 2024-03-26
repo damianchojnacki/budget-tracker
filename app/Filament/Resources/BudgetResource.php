@@ -34,6 +34,7 @@ use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Guava\FilamentIconPicker\Forms\IconPicker;
 use Illuminate\Auth\Access\Response;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -80,6 +81,7 @@ class BudgetResource extends Resource
                 Select::make('currency_id')
                     ->label('Currency')
                     ->translateLabel()
+                    ->searchable()
                     ->options(fn() =>
                         Currency::all()
                             ->map(fn(Currency $currency) => [
@@ -98,6 +100,8 @@ class BudgetResource extends Resource
                     ->required(),
                 ColorPicker::make('color')
                     ->translateLabel()
+                    ->required(),
+                IconPicker::make('icon')
                     ->required(),
             ]);
     }

@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use BezhanSalleh\FilamentLanguageSwitch\LanguageSwitch;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -37,5 +38,9 @@ class AppServiceProvider extends ServiceProvider
     {
         Model::unguard();
         JsonResource::withoutWrapping();
+
+        LanguageSwitch::configureUsing(function (LanguageSwitch $switch) {
+            $switch->locales(['en','pl']);
+        });
     }
 }

@@ -59,9 +59,6 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ])
-            ->plugins([
-                FilamentLanguageSwitchPlugin::make()
             ]);
     }
 }

@@ -23,7 +23,7 @@ class BudgetFactory extends Factory
             'currency_id' => Currency::factory(),
             'name' => $this->faker->randomElement(['Main', 'Savings', 'Emergency']),
             'color' => $this->faker->hexColor(),
-            'icon' => 'fa-money-bill-wave',
+            'icon' => 'fas-money-bill-wave',
             'amount' => $this->faker->randomFloat(2, 1, 10000),
         ];
     }
