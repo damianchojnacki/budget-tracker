@@ -43,6 +43,8 @@ class CurrencyResource extends Resource
 
     protected static ?string $navigationIcon = 'fas-dollar-sign';
 
+    protected static bool $isScopedToTenant = false;
+
     public static function getNavigationLabel(): string
     {
         return __('Currencies');

@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('currencies', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Organization::class)->nullable()->constrained()->cascadeOnDelete();
+//            $table->foreignIdFor(Organization::class)->nullable()->constrained()->cascadeOnDelete();
             $table->enum('type', CurrencyType::values());
             $table->string('name');
             $table->string('code');

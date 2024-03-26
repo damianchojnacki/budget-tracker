@@ -40,7 +40,8 @@ class TransactionsRelationManager extends RelationManager
             ->recordTitleAttribute('name')
             ->columns([
                 TextColumn::make('name'),
-                TextColumn::make('description'),
+                TextColumn::make('description')
+                    ->limit(30),
                 TextColumn::make('amount')
                     ->translateLabel()
                     ->formatStateUsing(function (Transaction $record, $state): string | null | false {
@@ -48,7 +49,7 @@ class TransactionsRelationManager extends RelationManager
                             return null;
                         }
 
-                        $currency = $record->currency->code;
+                        $currency = $record->budget->currency->code;
 
                         $formatter = new NumberFormatter(app()->getLocale(), NumberFormatter::CURRENCY);
 
