@@ -13,7 +13,7 @@ class CurrencyApiDriver implements Driver
      * @var Collection<Rate>
      */
     protected Collection $rates;
-    protected string $url = "https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/usd.json";
+    protected string $url = "https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/usd.json";
     protected Collection $assets;
 
     /**
