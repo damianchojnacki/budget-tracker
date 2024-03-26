@@ -5,7 +5,6 @@ namespace Tests\Feature\Notifications;
 use App\Models\OrganizationInvitation;
 use App\Models\User;
 use App\Notifications\InvitedToOrganization;
-use App\Services\Frontend;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 

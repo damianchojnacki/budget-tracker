@@ -24,7 +24,7 @@ trait HasOrganization
     /**
      * Determine if the user owns the given team.
      */
-    public function ownsOrganization(Organization $organization = null): bool
+    public function ownsOrganization(?Organization $organization = null): bool
     {
         if (! $organization) {
             return false;
@@ -36,7 +36,7 @@ trait HasOrganization
     /**
      * Determine if the user belongs to the given team.
      */
-    public function belongsToOrganization(Organization $organization = null): bool
+    public function belongsToOrganization(?Organization $organization = null): bool
     {
         if (! $organization) {
             return false;

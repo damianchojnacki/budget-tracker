@@ -2,7 +2,6 @@
 
 namespace App\Policies;
 
-use App\Models\OrganizationInvitation;
 use App\Models\User;
 
 class UserPolicy

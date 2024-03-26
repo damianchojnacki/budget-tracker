@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\Currency;
 use App\Models\Organization;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;

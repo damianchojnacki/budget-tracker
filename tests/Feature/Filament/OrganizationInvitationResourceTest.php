@@ -2,15 +2,9 @@
 
 namespace Tests\Feature\Filament;
 
-use App\Filament\Resources\CarResource;
-use App\Filament\Resources\CarResource\Pages\CreateCar;
-use App\Filament\Resources\CarResource\Pages\EditCar;
-use App\Filament\Resources\CarResource\Pages\ListCars;
 use App\Filament\Resources\OrganizationInvitationResource;
 use App\Filament\Resources\OrganizationInvitationResource\Pages\ListOrganizationInvitations;
-use App\Models\Car;
 use App\Models\OrganizationInvitation;
-use Filament\Actions\DeleteAction;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 

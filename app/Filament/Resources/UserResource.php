@@ -2,17 +2,12 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\UserResource\Pages\CreateBudget;
 use App\Filament\Resources\UserResource\Pages\CreateUser;
-use App\Filament\Resources\UserResource\Pages\EditBudget;
 use App\Filament\Resources\UserResource\Pages\EditUser;
-use App\Filament\Resources\UserResource\Pages\ListBudgets;
 use App\Filament\Resources\UserResource\Pages\ListUsers;
-use App\Models\Organization;
 use App\Models\User;
 use Auth;
 use Carbon\Carbon;
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
@@ -26,9 +21,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Table;
-use Illuminate\Auth\Access\Response;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
 
 class UserResource extends Resource
@@ -103,33 +96,33 @@ class UserResource extends Resource
                 TextColumn::make('email_verified_at')
                     ->translateLabel()
                     ->dateTime()
-                    ->hidden(!$user->isAdmin())
+                    ->hidden(! $user->isAdmin())
                     ->sortable()
                     ->searchable(),
                 ToggleColumn::make('is_admin')
                     ->translateLabel()
                     ->label('Admin')
-                    ->hidden(!$user->isAdmin())
+                    ->hidden(! $user->isAdmin())
                     ->sortable()
                     ->disabled(),
             ])
             ->filters([
                 Filter::make('is_admin')
-                    ->hidden(!$user->isAdmin())
+                    ->hidden(! $user->isAdmin())
                     ->toggle()
                     ->query(fn (Builder $query) => $query->where('is_admin', true))
                     ->label('Admin'),
             ])
             ->actions([
                 EditAction::make()
-                    ->hidden(!$user->isAdmin()),
+                    ->hidden(! $user->isAdmin()),
                 DeleteAction::make()
-                    ->hidden(!$user->isAdmin()),
+                    ->hidden(! $user->isAdmin()),
             ])
             ->bulkActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
-                ])->hidden(!$user->isAdmin()),
+                ])->hidden(! $user->isAdmin()),
             ])
             ->emptyStateActions([
                 CreateAction::make(),

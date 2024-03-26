@@ -3,7 +3,6 @@
 namespace App\Notifications;
 
 use App\Models\OrganizationInvitation;
-use App\Services\Frontend;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
@@ -43,7 +42,7 @@ class InvitedToOrganization extends Notification
             ->line(__('You may accept this invitation by clicking the button below:'))
             ->action(
                 __('Accept Invitation'),
-                URL::signedRoute('organization-invitations.accept' , ['invitation' => $this->invitation])
+                URL::signedRoute('organization-invitations.accept', ['invitation' => $this->invitation])
             )
             ->line(__('If you did not expect to receive an invitation to this team, you may discard this email.'));
     }

@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Enums\CurrencyType;
 use App\Models\Currency;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class CurrencySeeder extends Seeder
@@ -336,7 +335,7 @@ class CurrencySeeder extends Seeder
             [
                 'name' => 'VeChain',
                 'code' => 'VET',
-            ]
+            ],
         ];
 
         $metals = [
@@ -489,7 +488,7 @@ class CurrencySeeder extends Seeder
         ];
 
         Currency::insert(
-            collect($fiats)->map(function ($currency){
+            collect($fiats)->map(function ($currency) {
                 $currency['type'] = CurrencyType::FIAT;
                 $currency['updated_at'] = now();
                 $currency['created_at'] = now();
@@ -499,7 +498,7 @@ class CurrencySeeder extends Seeder
         );
 
         Currency::insert(
-            collect($cryptos)->map(function ($currency){
+            collect($cryptos)->map(function ($currency) {
                 $currency['type'] = CurrencyType::CRYPTO;
                 $currency['updated_at'] = now();
                 $currency['created_at'] = now();
@@ -509,7 +508,7 @@ class CurrencySeeder extends Seeder
         );
 
         Currency::insert(
-            collect($metals)->map(function ($currency){
+            collect($metals)->map(function ($currency) {
                 $currency['type'] = CurrencyType::PRECIOUS_METAL;
                 $currency['updated_at'] = now();
                 $currency['created_at'] = now();
@@ -519,7 +518,7 @@ class CurrencySeeder extends Seeder
         );
 
         Currency::insert(
-            collect($stocks)->map(function ($currency){
+            collect($stocks)->map(function ($currency) {
                 $currency['type'] = CurrencyType::STOCK;
                 $currency['updated_at'] = now();
                 $currency['created_at'] = now();
@@ -529,7 +528,7 @@ class CurrencySeeder extends Seeder
         );
 
         Currency::insert(
-            collect($bonds)->map(function ($currency){
+            collect($bonds)->map(function ($currency) {
                 $currency['type'] = CurrencyType::BOND;
                 $currency['updated_at'] = now();
                 $currency['created_at'] = now();

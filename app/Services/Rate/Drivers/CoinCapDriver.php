@@ -13,15 +13,17 @@ class CoinCapDriver implements Driver
      * @var Collection<Rate>
      */
     protected Collection $rates;
-    protected string $url = "https://api.coincap.io/v2/rates";
+
+    protected string $url = 'https://api.coincap.io/v2/rates';
+
     protected Collection $assets;
 
     /**
-     * @param array<string>|Collection<string> $assets
+     * @param  array<string>|Collection<string>  $assets
      */
     public function __construct(array|Collection $assets = [])
     {
-        if(!($assets instanceof Collection)){
+        if (! ($assets instanceof Collection)) {
             $assets = collect($assets);
         }
 
@@ -30,7 +32,7 @@ class CoinCapDriver implements Driver
 
     protected function getQuery(): string
     {
-        return '?ids=' . strtolower($this->assets->implode(','));
+        return '?ids='.strtolower($this->assets->implode(','));
     }
 
     /**
@@ -41,7 +43,7 @@ class CoinCapDriver implements Driver
         return Cache::remember($this->url, 3600 * 24, function () {
             return Http::get($this->url)
                 ->collect('data')
-                ->map(function ($crypto){
+                ->map(function ($crypto) {
                     return new Rate(
                         code: strtolower($crypto['symbol']),
                         value: $crypto['rateUsd']
@@ -52,8 +54,8 @@ class CoinCapDriver implements Driver
 
     public function get(string $code): ?float
     {
-        if(!($this->rates ?? null)){
-           $this->rates = $this->getRates();
+        if (! ($this->rates ?? null)) {
+            $this->rates = $this->getRates();
         }
 
         return $this->rates

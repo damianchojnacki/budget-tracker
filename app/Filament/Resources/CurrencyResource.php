@@ -6,21 +6,10 @@ use App\Enums\CurrencyType;
 use App\Filament\Resources\CurrencyResource\Pages\CreateCurrency;
 use App\Filament\Resources\CurrencyResource\Pages\EditCurrency;
 use App\Filament\Resources\CurrencyResource\Pages\ListCurrencies;
-use App\Filament\Resources\UserResource\Pages\CreateBudget;
-use App\Filament\Resources\UserResource\Pages\EditBudget;
-use App\Filament\Resources\UserResource\Pages\ListBudgets;
-use App\Models\Budget;
 use App\Models\Currency;
-use App\Models\Organization;
-use App\Models\User;
-use Auth;
-use Carbon\Carbon;
-use Filament\Forms\Components\ColorPicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
-use Filament\Forms\Get;
 use Filament\Resources\Resource;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\CreateAction;
@@ -28,14 +17,7 @@ use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\ToggleColumn;
-use Filament\Tables\Filters\Filter;
-use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
-use Illuminate\Auth\Access\Response;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Hash;
 
 class CurrencyResource extends Resource
 {
@@ -64,8 +46,8 @@ class CurrencyResource extends Resource
                     ->required(),
                 Select::make('type')
                     ->translateLabel()
-                    ->options(CurrencyType::collect()->mapWithKeys(fn(CurrencyType $type) => [
-                        $type->value => $type->getName()
+                    ->options(CurrencyType::collect()->mapWithKeys(fn (CurrencyType $type) => [
+                        $type->value => $type->getName(),
                     ]))
                     ->native(false)
                     ->required(),

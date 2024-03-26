@@ -10,9 +10,9 @@ class ListOrganizationInvitations extends ListRecords
 {
     protected static string $resource = OrganizationInvitationResource::class;
 
-    public function getTitle(): Htmlable | string
+    public function getTitle(): Htmlable|string
     {
-        return  __('Invitations');
+        return __('Invitations');
     }
 
     protected function getHeaderActions(): array

@@ -11,7 +11,6 @@ use App\Models\OrganizationInvitation;
 use App\Models\User;
 use App\Notifications\InvitedToOrganization;
 use Filament\Actions\DeleteAction;
-use Filament\Facades\Filament;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Notification;
 use Livewire\Livewire;
@@ -152,7 +151,7 @@ class UserResourceTest extends FilamentTestCase
 
         Livewire::test(ListBudgets::class)
             ->callAction('invite', [
-                'email' => $email = 'test@example.com'
+                'email' => $email = 'test@example.com',
             ]);
 
         Notification::assertSentOnDemand(InvitedToOrganization::class, function ($notification, $channels, $notifable) use ($email) {
@@ -167,7 +166,7 @@ class UserResourceTest extends FilamentTestCase
         OrganizationInvitation::factory()
             ->recycle($this->user->organization)
             ->create([
-                'email' => $email = 'test@example.com'
+                'email' => $email = 'test@example.com',
             ]);
 
         Livewire::test(ListBudgets::class)

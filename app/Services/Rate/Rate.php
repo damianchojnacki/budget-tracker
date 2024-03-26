@@ -7,5 +7,6 @@ class Rate
     public function __construct(
         public string $code,
         public float $value,
-    ){}
+    ) {
+    }
 }

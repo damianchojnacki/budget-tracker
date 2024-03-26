@@ -1,11 +1,5 @@
 <?php
 
-use App\Http\Controllers\CarBrandController;
-use App\Http\Controllers\CarController;
-use App\Http\Controllers\CarOperationController;
-use App\Http\Controllers\OrganizationInvitationController;
-use Illuminate\Support\Facades\Route;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -16,5 +10,3 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
-

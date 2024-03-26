@@ -2,13 +2,10 @@
 
 namespace App\Filament\Resources\BudgetResource\RelationManagers;
 
-use App\Models\Budget;
 use App\Models\Transaction;
-use Filament\Forms;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Tables;
 use Filament\Tables\Actions\BulkActionGroup;
 use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\DeleteAction;
@@ -16,8 +13,6 @@ use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use NumberFormatter;
 
 class TransactionsRelationManager extends RelationManager
@@ -44,7 +39,7 @@ class TransactionsRelationManager extends RelationManager
                     ->limit(30),
                 TextColumn::make('amount')
                     ->translateLabel()
-                    ->formatStateUsing(function (Transaction $record, $state): string | null | false {
+                    ->formatStateUsing(function (Transaction $record, $state): string|null|false {
                         if (blank($state)) {
                             return null;
                         }

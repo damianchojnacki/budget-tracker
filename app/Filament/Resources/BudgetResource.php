@@ -10,14 +10,10 @@ use App\Filament\Resources\UserResource\Pages\ListBudgets;
 use App\Models\Budget;
 use App\Models\Currency;
 use App\Models\Organization;
-use App\Models\User;
-use Auth;
-use Carbon\Carbon;
 use Filament\Facades\Filament;
 use Filament\Forms\Components\ColorPicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Resources\Resource;
@@ -26,21 +22,14 @@ use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Actions\DeleteBulkAction;
 use Filament\Tables\Actions\EditAction;
-use Filament\Tables\Columns\ColorColumn;
-use Filament\Tables\Columns\Column;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Guava\FilamentIconPicker\Forms\IconPicker;
-use Illuminate\Auth\Access\Response;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Hash;
 use NumberFormatter;
-use function Filament\Support\format_money;
 
 class BudgetResource extends Resource
 {
@@ -71,7 +60,7 @@ class BudgetResource extends Resource
                     ->suffix(function (Get $get) {
                         $currency = Currency::find($get('currency'));
 
-                        if(!$currency){
+                        if (! $currency) {
                             return;
                         }
 
@@ -82,19 +71,17 @@ class BudgetResource extends Resource
                     ->label('Currency')
                     ->translateLabel()
                     ->searchable()
-                    ->options(fn() =>
-                        Currency::all()
-                            ->map(fn(Currency $currency) => [
-                                'id' => $currency->id,
-                                'label' => "{$currency->code} - {$currency->name}",
-                                'type' => $currency->type->getName(),
-                            ])
-                            ->groupBy('type')
-                            ->map(fn($currencies, $type) =>
-                                $currencies->mapWithKeys(fn($currency) => [$currency['id'] => $currency['label']])
-                                    ->toArray()
-                            )
+                    ->options(fn () => Currency::all()
+                        ->map(fn (Currency $currency) => [
+                            'id' => $currency->id,
+                            'label' => "{$currency->code} - {$currency->name}",
+                            'type' => $currency->type->getName(),
+                        ])
+                        ->groupBy('type')
+                        ->map(fn ($currencies, $type) => $currencies->mapWithKeys(fn ($currency) => [$currency['id'] => $currency['label']])
                             ->toArray()
+                        )
+                        ->toArray()
                     )
                     ->native(false)
                     ->required(),
@@ -115,16 +102,16 @@ class BudgetResource extends Resource
             ->columns([
                 IconColumn::make('icon')
                     ->translateLabel()
-                    ->icon(fn(string $state) => $state)
+                    ->icon(fn (string $state) => $state)
                     ->color('none')
-                    ->extraAttributes(fn(Budget $record) => ['style' => "color: $record->color"]),
+                    ->extraAttributes(fn (Budget $record) => ['style' => "color: $record->color"]),
                 TextColumn::make('name')
                     ->translateLabel()
                     ->sortable()
                     ->searchable(),
                 TextColumn::make('amount')
                     ->translateLabel()
-                    ->formatStateUsing(function (Budget $record, $state): string | null | false {
+                    ->formatStateUsing(function (Budget $record, $state): string|null|false {
                         if (blank($state)) {
                             return null;
                         }
@@ -139,7 +126,7 @@ class BudgetResource extends Resource
                     })
                     ->sortable(),
                 TextColumn::make('amount_base_currency')
-                    ->label(__('Amount') . " ({$organization->currency->code})")
+                    ->label(__('Amount')." ({$organization->currency->code})")
                     ->getStateUsing(function (Budget $record) use ($organization) {
                         return $record->selectRaw('(amount / (SELECT rate from currencies where id = currency_id) * (SELECT rate from currencies where code = ?)) as sum', [
                             $organization->currency->code,
@@ -163,14 +150,12 @@ class BudgetResource extends Resource
                         Select::make('type')
                             ->native(false)
                             ->translateLabel()
-                            ->options(CurrencyType::collect()->mapWithKeys(fn(CurrencyType $type) => [
-                                $type->value => $type->getName()
-                            ]))
+                            ->options(CurrencyType::collect()->mapWithKeys(fn (CurrencyType $type) => [
+                                $type->value => $type->getName(),
+                            ])),
                     ])
-                    ->query(fn(Builder $query, array $data) =>
-                        $query->when($data['type'], fn(Builder $query, $value) =>
-                            $query->whereRelation('currency', 'type', $value)
-                        )
+                    ->query(fn (Builder $query, array $data) => $query->when($data['type'], fn (Builder $query, $value) => $query->whereRelation('currency', 'type', $value)
+                    )
                     ),
             ])
             ->actions([

@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Budget;
 use App\Models\Transaction;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class BudgetHistorySeeder extends Seeder

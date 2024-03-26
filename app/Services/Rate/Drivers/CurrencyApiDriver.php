@@ -13,7 +13,9 @@ class CurrencyApiDriver implements Driver
      * @var Collection<Rate>
      */
     protected Collection $rates;
-    protected string $url = "https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/usd.json";
+
+    protected string $url = 'https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/usd.json';
+
     protected Collection $assets;
 
     /**
@@ -24,7 +26,7 @@ class CurrencyApiDriver implements Driver
         return Cache::remember($this->url, 3600 * 24, function () {
             return Http::get($this->url)
                 ->collect('usd')
-                ->mapWithKeys(function ($rate, $code){
+                ->mapWithKeys(function ($rate, $code) {
                     return [$code => new Rate(
                         code: strtolower($code),
                         value: $rate,
@@ -36,8 +38,8 @@ class CurrencyApiDriver implements Driver
 
     public function get(string $code): ?float
     {
-        if(!($this->rates ?? null)){
-           $this->rates = $this->getRates();
+        if (! ($this->rates ?? null)) {
+            $this->rates = $this->getRates();
         }
 
         return $this->rates

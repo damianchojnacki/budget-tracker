@@ -12,9 +12,9 @@ class CreateUser extends CreateRecord
 {
     protected static string $resource = UserResource::class;
 
-    public function getTitle(): Htmlable | string
+    public function getTitle(): Htmlable|string
     {
-        return __('Create') . ' ' . __('User');
+        return __('Create').' '.__('User');
     }
 
     protected function mutateFormDataBeforeCreate(array $data): array

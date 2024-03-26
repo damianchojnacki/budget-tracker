@@ -3,7 +3,6 @@
 namespace App\Filament\Resources\UserResource\Pages;
 
 use App\Filament\Resources\BudgetResource;
-use App\Filament\Resources\UserResource;
 use App\Models\Organization;
 use Filament\Facades\Filament;
 use Filament\Resources\Pages\CreateRecord;
@@ -13,9 +12,9 @@ class CreateBudget extends CreateRecord
 {
     protected static string $resource = BudgetResource::class;
 
-    public function getTitle(): Htmlable | string
+    public function getTitle(): Htmlable|string
     {
-        return __('Create') . ' ' . __('Budget');
+        return __('Create').' '.__('Budget');
     }
 
     protected function mutateFormDataBeforeCreate(array $data): array

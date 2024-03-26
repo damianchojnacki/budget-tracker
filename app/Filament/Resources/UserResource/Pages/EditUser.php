@@ -11,9 +11,9 @@ class EditUser extends EditRecord
 {
     protected static string $resource = UserResource::class;
 
-    public function getTitle(): Htmlable | string
+    public function getTitle(): Htmlable|string
     {
-        return __('Edit') . ' ' . __('User');
+        return __('Edit').' '.__('User');
     }
 
     protected function getHeaderActions(): array

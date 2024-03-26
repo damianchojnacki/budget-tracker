@@ -6,7 +6,6 @@ use App\Models\Budget;
 use App\Models\Currency;
 use App\Models\Organization;
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class BudgetSeeder extends Seeder

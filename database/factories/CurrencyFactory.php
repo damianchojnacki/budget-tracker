@@ -19,7 +19,7 @@ class CurrencyFactory extends Factory
     public function definition(): array
     {
         return [
-//            'organization_id' => null,
+            //            'organization_id' => null,
             'type' => $this->faker->randomElement(CurrencyType::cases()),
             'name' => $this->faker->randomElement(['US Dollar', 'Euro', 'Pound Sterling', 'Japanese Yen', 'Chinese Yuan', 'Indian Rupee', 'Australian Dollar', 'Canadian Dollar', 'Swiss Franc', 'South African Rand']),
             'code' => $this->faker->randomElement(['USD', 'EUR', 'GBP', 'JPY', 'CNY', 'INR', 'AUD', 'CAD', 'CHF', 'ZAR']),

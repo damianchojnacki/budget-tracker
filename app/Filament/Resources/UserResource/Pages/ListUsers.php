@@ -17,7 +17,7 @@ class ListUsers extends ListRecords
 {
     protected static string $resource = UserResource::class;
 
-    public function getTitle(): Htmlable | string
+    public function getTitle(): Htmlable|string
     {
         return __('Users');
     }

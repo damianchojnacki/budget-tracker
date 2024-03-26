@@ -18,10 +18,10 @@ return [
 
     'drivers' => [
         'coincap' => [
-            'class' => CoinCapDriver::class
+            'class' => CoinCapDriver::class,
         ],
         'currency-api' => [
-            'class' => CurrencyApiDriver::class
+            'class' => CurrencyApiDriver::class,
         ],
-    ]
+    ],
 ];

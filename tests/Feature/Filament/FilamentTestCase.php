@@ -5,7 +5,6 @@ namespace Tests\Feature\Filament;
 use App\Models\Organization;
 use App\Models\User;
 use Filament\Facades\Filament;
-use Illuminate\Contracts\Auth\Authenticatable as UserContract;
 use Tests\TestCase;
 
 class FilamentTestCase extends TestCase
