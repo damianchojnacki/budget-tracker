@@ -5,6 +5,7 @@ namespace App\Services\Rate;
 use App\Enums\CurrencyType;
 use App\Models\Currency;
 use App\Services\Rate\Drivers\Driver;
+use Illuminate\Contracts\Container\BindingResolutionException;
 
 class RateService
 {
@@ -14,7 +15,7 @@ class RateService
     protected Driver $metalDriver;
 
     /**
-     * @throws DriverNotFoundException
+     * @throws DriverNotFoundException|BindingResolutionException
      */
     public function __construct()
     {
@@ -22,7 +23,7 @@ class RateService
     }
 
     /**
-     * @throws DriverNotFoundException
+     * @throws DriverNotFoundException|BindingResolutionException
      */
     protected function resolveDrivers(): void
     {
@@ -32,7 +33,7 @@ class RateService
     }
 
     /**
-     * @throws DriverNotFoundException
+     * @throws DriverNotFoundException|BindingResolutionException
      */
     public function driver(string $driver): Driver
     {
