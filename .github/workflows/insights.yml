@@ -30,8 +30,8 @@ jobs:
           echo "branch=${EXPORT_VALUE}" >> $GITHUB_OUTPUT
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
-        env:
-          #runner: self-hosted
+#        env:
+#          runner: self-hosted
         with:
           php-version: ${{ matrix.php }}
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite
@@ -61,7 +61,8 @@ jobs:
           echo "style=${STYLE}" >> $GITHUB_OUTPUT
   check:
     needs: setup
-    runs-on: arc-runner-set
+    runs-on: ubuntu-20.04
+    #runs-on: arc-runner-set
     outputs:
       code: ${{ needs.setup.outputs.code }}
       architecture: ${{ needs.setup.outputs.architecture }}
@@ -83,6 +84,7 @@ jobs:
   badges:
     needs: setup
     runs-on: ubuntu-20.04
+    #runs-on: arc-runner-set
     steps:
       - uses: actions/checkout@v3
         with:

@@ -52,8 +52,8 @@ jobs:
           echo "branch=${EXPORT_VALUE}" >> $GITHUB_OUTPUT
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
-        env:
-          #runner: self-hosted
+#        env:
+#          runner: self-hosted
         with:
           php-version: ${{ matrix.php }}
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite
