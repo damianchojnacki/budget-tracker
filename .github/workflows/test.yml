@@ -16,7 +16,8 @@ env:
   API_NINJAS_API_KEY: ${{ secrets.API_NINJAS_API_KEY }}
 jobs:
   unit:
-    runs-on: arc-runner-set
+    #runs-on: arc-runner-set
+    runs-on: ubuntu-20.04
     services:
       mariadb:
         image: mariadb:10
@@ -52,7 +53,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         env:
-          runner: self-hosted
+          #runner: self-hosted
         with:
           php-version: ${{ matrix.php }}
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite
@@ -91,7 +92,8 @@ jobs:
 #          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
   badge:
     needs: unit
-    runs-on: arc-runner-set
+    #runs-on: arc-runner-set
+    runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v3
         with:
