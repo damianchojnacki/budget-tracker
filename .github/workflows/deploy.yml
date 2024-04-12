@@ -27,7 +27,7 @@ jobs:
         with:
           context: .
           file: ./docker/dev/Dockerfile
-          push: true
+          push: false
           tags: daamian3/budget-tracker:latest
 #          cache-from: type=gha
 #          cache-to: type=gha,mode=max
