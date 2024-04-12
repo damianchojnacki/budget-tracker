@@ -1,6 +1,6 @@
 ARG PHP_EXTENSIONS="bcmath exif gd imap intl pdo_mysql sockets uuid redis imagick gd"
 
-FROM thecodingmachine/php:8.1-v4-fpm
+FROM thecodingmachine/php:8.3-v4-fpm
 
 ENV PHP_EXTENSIONS="bcmath exif gd imap intl pdo_mysql sockets uuid redis imagick gd"
 

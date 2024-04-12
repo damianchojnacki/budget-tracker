@@ -2,7 +2,7 @@ name: insights
 on: [push]
 jobs:
   setup:
-    runs-on: ubuntu-20.04
+    runs-on: arc-runner-set
     outputs:
       branch: ${{ steps.extract_branch.outputs.branch }}
       code: ${{ steps.insights.outputs.code }}
@@ -11,7 +11,7 @@ jobs:
       style: ${{ steps.insights.outputs.style }}
     strategy:
       matrix:
-        php: [ 8.2 ]
+        php: [ 8.3 ]
     steps:
       - uses: actions/checkout@v3
       - name: Extract branch name
@@ -58,7 +58,7 @@ jobs:
           echo "style=${STYLE}" >> $GITHUB_OUTPUT
   check:
     needs: setup
-    runs-on: ubuntu-20.04
+    runs-on: arc-runner-set
     outputs:
       code: ${{ needs.setup.outputs.code }}
       architecture: ${{ needs.setup.outputs.architecture }}

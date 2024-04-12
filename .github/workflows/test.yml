@@ -16,7 +16,7 @@ env:
   API_NINJAS_API_KEY: ${{ secrets.API_NINJAS_API_KEY }}
 jobs:
   unit:
-    runs-on: ubuntu-20.04
+    runs-on: arc-runner-set
     services:
       mariadb:
         image: mariadb:10
@@ -33,7 +33,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        php: [8.2]
+        php: [8.3]
     steps:
       - uses: actions/checkout@v3
       - name: Extract branch name
@@ -89,7 +89,7 @@ jobs:
 #          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
   badge:
     needs: unit
-    runs-on: ubuntu-20.04
+    runs-on: arc-runner-set
     steps:
       - uses: actions/checkout@v3
         with:
