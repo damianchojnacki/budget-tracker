@@ -40,9 +40,15 @@ class BudgetOverview extends BaseWidget
         ];
     }
 
-    protected static function formatCurrency(float $value, string $currency = 'USD'): string|false
+    protected static function formatCurrency(float $value, string $currency = 'USD'): string
     {
-        return NumberFormatter::create(app()->currentLocale(), NumberFormatter::CURRENCY)->formatCurrency($value, $currency);
+        $result = NumberFormatter::create(app()->currentLocale(), NumberFormatter::CURRENCY)->formatCurrency($value, $currency);
+
+        if(!$result) {
+            return '';
+        }
+
+        return $result;
     }
 
     protected function getBudgetSum(): float

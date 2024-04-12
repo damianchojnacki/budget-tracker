@@ -58,10 +58,10 @@ class BudgetResource extends Resource
                     ->translateLabel()
                     ->numeric()
                     ->suffix(function (Get $get) {
-                        $currency = Currency::find($get('currency'));
+                        $currency = Currency::find((int) $get('currency'));
 
-                        if (! $currency) {
-                            return;
+                        if (!$currency) {
+                            return null;
                         }
 
                         return $currency->symbol ?? $currency->code;

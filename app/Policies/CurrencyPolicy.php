@@ -12,7 +12,7 @@ class CurrencyPolicy
      */
     public function view(User $user, Currency $currency): bool
     {
-        return ! $currency->organization || $user->organization?->id === $currency->organization?->id;
+        return !$currency->organization || $user->organization?->id === $currency->organization->id;
     }
 
     /**
@@ -36,7 +36,7 @@ class CurrencyPolicy
      */
     public function update(User $user, Currency $currency): bool
     {
-        return ! $currency->organization || $user->organization?->id === $currency->organization?->id;
+        return !$currency->organization || $user->organization?->id === $currency->organization->id;
     }
 
     /**
@@ -44,6 +44,6 @@ class CurrencyPolicy
      */
     public function delete(User $user, Currency $currency): bool
     {
-        return ! $currency->organization || $user->organization?->id === $currency->organization?->id;
+        return !$currency->organization || $user->organization?->id === $currency->organization->id;
     }
 }

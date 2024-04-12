@@ -66,7 +66,6 @@ class RateService
             CurrencyType::PRECIOUS_METAL => $this->metalDriver->get($currency->code),
             CurrencyType::STOCK => $this->metalDriver->get($currency->code),
             CurrencyType::BOND => $this->metalDriver->get($currency->code),
-            default => throw new DriverNotFoundException("Driver for {$currency->type->name} not found.")
         };
     }
 

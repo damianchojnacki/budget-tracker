@@ -7,7 +7,18 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 
+/**
+ * @property int $id
+ * @property CurrencyType $type
+ * @property string $name
+ * @property string $code
+ * @property string|null $symbol
+ * @property float $rate
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
+ */
 class Currency extends Model
 {
     use HasFactory;
