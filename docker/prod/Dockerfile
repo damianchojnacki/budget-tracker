@@ -1,31 +1,23 @@
-# syntax = docker/dockerfile:experimental
+ARG PHP_EXTENSIONS="bcmath exif gd imap intl pdo_mysql sockets uuid redis imagick gd"
 
-# Default to PHP 8.2, but we attempt to match
-# the PHP version from the user (wherever `flyctl launch` is run)
-# Valid version values are PHP 7.4+
-ARG PHP_VERSION=8.3
-FROM fideloper/fly-laravel:${PHP_VERSION} as base
+FROM thecodingmachine/php:8.1-v4-fpm
 
-# PHP_VERSION needs to be repeated here
-# See https://docs.docker.com/engine/reference/builder/#understand-how-arg-and-from-interact
-ARG PHP_VERSION
+ENV PHP_EXTENSIONS="bcmath exif gd imap intl pdo_mysql sockets uuid redis imagick gd"
 
-LABEL fly_launch_runtime="laravel"
+ENV TEMPLATE_PHP_INI=production
+ENV PHP_INI_MEMORY_LIMIT=2g
+ENV PHP_INI_UPLOAD_MAX_FILESIZE=10MB
 
-# copy application code, skipping files based on .dockerignore
-COPY storage storage_
+RUN sudo apt-get update -y && \
+    sudo apt-get install -y locales mysql-client && \
+    sudo locale-gen pl_PL.utf8 && \
+    echo "LANG=pl_PL.utf8" >> ~/.bashrc && \
+    sudo apt-get clean -y && \
+    sudo apt-get autoremove -y
 
-COPY . /var/www/html
+COPY --chown=docker:docker . /var/www/html
 
-RUN composer install --optimize-autoloader --no-dev \
-    && mkdir -p storage/logs \
-    && php artisan optimize:clear \
-    && chown -R www-data:www-data /var/www/html \
-    && sed -i 's/protected \$proxies/protected \$proxies = "*"/g' app/Http/Middleware/TrustProxies.php \
-    && echo "MAILTO=\"\"\n* * * * * www-data /usr/bin/php /var/www/html/artisan schedule:run" > /etc/cron.d/laravel \
-    && cp .fly/entrypoint.sh /entrypoint \
-    && chmod +x /entrypoint
+RUN composer install --no-dev --no-interaction --optimize-autoloader
+RUN php artisan storage:link
 
-EXPOSE 8080
-
-ENTRYPOINT ["/entrypoint"]
+EXPOSE 9000
