@@ -3,13 +3,14 @@
 namespace Tests\Feature\Filament;
 
 use App\Filament\Resources\UserResource;
-use App\Filament\Resources\UserResource\Pages\CreateBudget;
-use App\Filament\Resources\UserResource\Pages\EditBudget;
-use App\Filament\Resources\UserResource\Pages\ListBudgets;
+use App\Filament\Resources\UserResource\Pages\CreateUser;
+use App\Filament\Resources\UserResource\Pages\EditUser;
+use App\Filament\Resources\UserResource\Pages\ListUsers;
 use App\Models\Organization;
 use App\Models\OrganizationInvitation;
 use App\Models\User;
 use App\Notifications\InvitedToOrganization;
+use Database\Seeders\CurrencySeeder;
 use Filament\Actions\DeleteAction;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Notification;
@@ -79,7 +80,7 @@ class UserResourceTest extends FilamentTestCase
             'organization_id' => $organization->id,
         ]);
 
-        Livewire::test(ListBudgets::class)
+        Livewire::test(ListUsers::class)
             ->assertCanSeeTableRecords($users)
             ->assertCanNotSeeTableRecords($hidden);
     }
@@ -91,7 +92,7 @@ class UserResourceTest extends FilamentTestCase
         $data['password'] = 'password';
         $data['email_verified_at'] = true;
 
-        Livewire::test(CreateBudget::class)
+        Livewire::test(CreateUser::class)
             ->fillForm($data)
             ->call('create')
             ->assertHasNoFormErrors();
@@ -118,7 +119,7 @@ class UserResourceTest extends FilamentTestCase
 
         $data['email_verified_at'] = true;
 
-        Livewire::test(EditBudget::class, [
+        Livewire::test(EditUser::class, [
             'record' => $user->id,
         ])->fillForm($data)
             ->call('save')
@@ -138,7 +139,7 @@ class UserResourceTest extends FilamentTestCase
             'organization_id' => $this->user->organization->id,
         ]);
 
-        Livewire::test(EditBudget::class, [
+        Livewire::test(EditUser::class, [
             'record' => $user->id,
         ])->callAction(DeleteAction::class);
 
@@ -149,7 +150,7 @@ class UserResourceTest extends FilamentTestCase
     {
         Notification::fake();
 
-        Livewire::test(ListBudgets::class)
+        Livewire::test(ListUsers::class)
             ->callAction('invite', [
                 'email' => $email = 'test@example.com',
             ]);
@@ -169,7 +170,7 @@ class UserResourceTest extends FilamentTestCase
                 'email' => $email = 'test@example.com',
             ]);
 
-        Livewire::test(ListBudgets::class)
+        Livewire::test(ListUsers::class)
             ->callAction('invite', [
                 'email' => $email,
             ])->assertNotified('User already exists');

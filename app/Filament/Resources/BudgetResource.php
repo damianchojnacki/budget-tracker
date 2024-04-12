@@ -4,9 +4,9 @@ namespace App\Filament\Resources;
 
 use App\Enums\CurrencyType;
 use App\Filament\Resources\BudgetResource\RelationManagers\TransactionsRelationManager;
-use App\Filament\Resources\UserResource\Pages\CreateBudget;
-use App\Filament\Resources\UserResource\Pages\EditBudget;
-use App\Filament\Resources\UserResource\Pages\ListBudgets;
+use App\Filament\Resources\BudgetResource\Pages\CreateBudget;
+use App\Filament\Resources\BudgetResource\Pages\EditBudget;
+use App\Filament\Resources\BudgetResource\Pages\ListBudgets;
 use App\Models\Budget;
 use App\Models\Currency;
 use App\Models\Organization;

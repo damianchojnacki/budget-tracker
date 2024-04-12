@@ -5,6 +5,7 @@ namespace Tests\Feature\Notifications;
 use App\Models\OrganizationInvitation;
 use App\Models\User;
 use App\Notifications\InvitedToOrganization;
+use Database\Seeders\CurrencySeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -14,6 +15,13 @@ use Tests\TestCase;
 class InvitedToOrganizationTest extends TestCase
 {
     use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->seed(CurrencySeeder::class);
+    }
 
     public function testRendersNotificationCorrectly(): void
     {

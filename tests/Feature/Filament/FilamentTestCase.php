@@ -4,6 +4,7 @@ namespace Tests\Feature\Filament;
 
 use App\Models\Organization;
 use App\Models\User;
+use Database\Seeders\CurrencySeeder;
 use Filament\Facades\Filament;
 use Tests\TestCase;
 
@@ -14,6 +15,8 @@ class FilamentTestCase extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+
+        $this->seed(CurrencySeeder::class);
 
         $organization = Organization::factory()->create();
 
