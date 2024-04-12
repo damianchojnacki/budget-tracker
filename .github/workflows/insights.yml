@@ -2,7 +2,8 @@ name: insights
 on: [push]
 jobs:
   setup:
-    runs-on: arc-runner-set
+    #runs-on: arc-runner-set
+    runs-on: ubuntu-20.04
     outputs:
       branch: ${{ steps.extract_branch.outputs.branch }}
       code: ${{ steps.insights.outputs.code }}
@@ -29,6 +30,8 @@ jobs:
           echo "branch=${EXPORT_VALUE}" >> $GITHUB_OUTPUT
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
+        env:
+          #runner: self-hosted
         with:
           php-version: ${{ matrix.php }}
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite
