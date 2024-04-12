@@ -3,10 +3,10 @@
 namespace App\Filament\Resources;
 
 use App\Enums\CurrencyType;
-use App\Filament\Resources\BudgetResource\RelationManagers\TransactionsRelationManager;
 use App\Filament\Resources\BudgetResource\Pages\CreateBudget;
 use App\Filament\Resources\BudgetResource\Pages\EditBudget;
 use App\Filament\Resources\BudgetResource\Pages\ListBudgets;
+use App\Filament\Resources\BudgetResource\RelationManagers\TransactionsRelationManager;
 use App\Models\Budget;
 use App\Models\Currency;
 use App\Models\Organization;
@@ -104,7 +104,7 @@ class BudgetResource extends Resource
                     ->translateLabel()
                     ->icon(fn (string $state) => $state)
                     ->color('none')
-                    ->extraAttributes(fn (Budget $record) => ['style' => "color: $record->color"]),
+                    ->extraAttributes(fn (Budget $record) => ['style' => "color: {$record->color}"]),
                 TextColumn::make('name')
                     ->translateLabel()
                     ->sortable()

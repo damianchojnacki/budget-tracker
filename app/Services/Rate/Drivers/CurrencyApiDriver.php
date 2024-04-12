@@ -18,6 +18,18 @@ class CurrencyApiDriver implements Driver
 
     protected Collection $assets;
 
+    public function get(string $code): ?float
+    {
+        if (! ($this->rates ?? null)) {
+            $this->rates = $this->getRates();
+        }
+
+        return $this->rates
+            ->where('code', strtolower($code))
+            ->first()
+            ?->value;
+    }
+
     /**
      * @return Collection<Rate>
      */
@@ -30,21 +42,10 @@ class CurrencyApiDriver implements Driver
                     return [$code => new Rate(
                         code: strtolower($code),
                         value: $rate,
-                    )];
+                    ),
+                    ];
                 })
                 ->values();
         });
-    }
-
-    public function get(string $code): ?float
-    {
-        if (! ($this->rates ?? null)) {
-            $this->rates = $this->getRates();
-        }
-
-        return $this->rates
-            ->where('code', strtolower($code))
-            ->first()
-            ?->value;
     }
 }

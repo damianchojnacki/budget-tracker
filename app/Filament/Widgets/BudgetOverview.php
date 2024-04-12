@@ -44,7 +44,7 @@ class BudgetOverview extends BaseWidget
     {
         $result = NumberFormatter::create(app()->currentLocale(), NumberFormatter::CURRENCY)->formatCurrency($value, $currency);
 
-        if(!$result) {
+        if (!$result) {
             return '';
         }
 

@@ -28,16 +28,6 @@ class RateService
     /**
      * @throws DriverNotFoundException|BindingResolutionException
      */
-    protected function resolveDrivers(): void
-    {
-        $this->cryptoDriver = $this->driver(config('rate.crypto.driver'));
-        $this->fiatDriver = $this->driver(config('rate.fiat.driver'));
-        $this->metalDriver = $this->driver(config('rate.metal.driver'));
-    }
-
-    /**
-     * @throws DriverNotFoundException|BindingResolutionException
-     */
     public function driver(string $driver): Driver
     {
         $class = config("rate.drivers.{$driver}.class");
@@ -72,5 +62,15 @@ class RateService
     public function convert(float $value, Currency $from, Currency $to): float
     {
         return $value / $from->rate * $to->rate;
+    }
+
+    /**
+     * @throws DriverNotFoundException|BindingResolutionException
+     */
+    protected function resolveDrivers(): void
+    {
+        $this->cryptoDriver = $this->driver(config('rate.crypto.driver'));
+        $this->fiatDriver = $this->driver(config('rate.fiat.driver'));
+        $this->metalDriver = $this->driver(config('rate.metal.driver'));
     }
 }

@@ -30,6 +30,18 @@ class CoinCapDriver implements Driver
         $this->assets = $assets;
     }
 
+    public function get(string $code): ?float
+    {
+        if (! ($this->rates ?? null)) {
+            $this->rates = $this->getRates();
+        }
+
+        return $this->rates
+            ->where('code', strtolower($code))
+            ->first()
+            ?->value;
+    }
+
     protected function getQuery(): string
     {
         return '?ids='.strtolower($this->assets->implode(','));
@@ -50,17 +62,5 @@ class CoinCapDriver implements Driver
                     );
                 });
         });
-    }
-
-    public function get(string $code): ?float
-    {
-        if (! ($this->rates ?? null)) {
-            $this->rates = $this->getRates();
-        }
-
-        return $this->rates
-            ->where('code', strtolower($code))
-            ->first()
-            ?->value;
     }
 }

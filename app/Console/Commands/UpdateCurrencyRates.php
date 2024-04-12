@@ -31,7 +31,7 @@ class UpdateCurrencyRates extends Command
             $rate = Rate::get($currency);
 
             if (! $rate) {
-                $this->output->warning("Could not get rate for $currency->code.");
+                $this->output->warning("Could not get rate for {$currency->code}.");
 
                 return;
             }
