@@ -19,9 +19,7 @@ jobs:
       - name: Set credentials
         run: |
           mkdir ~/.docker
-          echo "{\"auths\": {\"harbor.home:80\": {\"auth\": \"${{secrets.DOCKER_AUTH_TOKEN}}\"}}}" > ~/.docker/config.json
-          sudo mkdir -p /etc/docker
-          echo -n "${{secrets.CA_CRT}}" | sudo tee /etc/docker/ca.crt
+          echo "{\"auths\": {\"harbor-core.registry.svc:80\": {\"auth\": \"${{secrets.DOCKER_AUTH_TOKEN}}\"}}}" > ~/.docker/config.json
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
         with:
@@ -29,7 +27,7 @@ jobs:
           config-inline: |
             insecure-entitlements = [ "network.host", "security.insecure" ]
 
-            [registry."harbor.home:80"]
+            [registry."harbor-core.registry.svc:80"]
               insecure = true
               http = true
               ca=["/etc/docker/ca.crt"]
@@ -39,7 +37,7 @@ jobs:
           context: .
           file: ./docker/dev/Dockerfile
           push: true
-          tags: harbor.home:80/default/budget-tracker:latest
+          tags: harbor-core.registry.svc:80/default/budget-tracker:latest
 #          cache-from: type=gha
 #          cache-to: type=gha,mode=max
 #      - uses: ravsamhq/notify-slack-action@v2
@@ -53,7 +51,7 @@ jobs:
 #          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
       - name: Inspect
         run: |
-          docker buildx imagetools inspect harbor.home:80/default/budget-tracker:latest
+          docker buildx imagetools inspect harbor-core.registry.svc:80/default/budget-tracker:latest
 #  flyio:
 #    name: Deploy to Fly.io
 #    runs-on: ubuntu-20.04
