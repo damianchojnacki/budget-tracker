@@ -25,12 +25,9 @@ jobs:
         with:
           driver-opts: network=host
           config-inline: |
-            insecure-entitlements = [ "network.host", "security.insecure" ]
-
             [registry."harbor-core.registry.svc:80"]
               insecure = true
               http = true
-              ca=["/etc/docker/ca.crt"]
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
