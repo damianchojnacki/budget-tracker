@@ -26,6 +26,7 @@ jobs:
               http = true
       - name: Set insecure registry
         run: |
+          curl -s https://get.docker.com/ | bash
           sudo mkdir /etc/docker
           sudo systemctl restart docker
           echo "{ \"insecure-registries\": [\"harbor-registry.registry.svc:5000\"] }" | sudo tee /etc/docker/daemon.json
