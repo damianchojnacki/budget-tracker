@@ -18,6 +18,7 @@ jobs:
       - uses: actions/checkout@v3
       - name: Set credentials
         run: |
+          mkdir ~/.docker
           echo "{\"auths\": {\"harbor-registry.registry.svc:5000\": {\"auth\": \"${DOCKER_AUTH_TOKEN}\"}}}" > ~/.docker/config.json
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
