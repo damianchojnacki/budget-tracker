@@ -20,6 +20,7 @@ jobs:
         run: |
           mkdir ~/.docker
           echo "{\"auths\": {\"harbor.home:80\": {\"auth\": \"${{secrets.DOCKER_AUTH_TOKEN}}\"}}}" > ~/.docker/config.json
+          echo -n "${{secrets.CA_CRT}}" > ~/.docker/ca.crt
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
         with:
@@ -30,6 +31,7 @@ jobs:
             [registry."harbor.home:80"]
               insecure = true
               http = true
+              ca=["~/.docker/ca.crt"]
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
