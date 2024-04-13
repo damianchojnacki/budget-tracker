@@ -20,6 +20,7 @@ jobs:
         run: |
           mkdir ~/.docker
           echo "{\"auths\": {\"harbor.home:80\": {\"auth\": \"${{secrets.DOCKER_AUTH_TOKEN}}\"}}}" > ~/.docker/config.json
+          sudo apt-get update
           sudo apt-get install -y ca-certificates
           echo -n "${{secrets.CA_CRT}}" | sudo tee /usr/local/share/ca-certificates/home.crt
           sudo update-ca-certificates
