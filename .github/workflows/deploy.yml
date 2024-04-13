@@ -26,7 +26,7 @@ jobs:
               http = true
       - name: Set insecure registry
         run: |
-          echo "{ \"insecure-registries\": [\"harbor-registry.registry.svc:5000\"] }" | sudo tee ~/.docker/config.json
+          echo "{ \"insecure-registries\": [\"harbor-registry.registry.svc:5000\"] }" | tee ~/.docker/config.json
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
