@@ -20,7 +20,7 @@ jobs:
         run: |
           echo -n "${{secrets.CA_CRT}}" | sudo tee /usr/local/share/ca-certificates/home.crt
           sudo update-ca-certificates
-          sudo mkdir -p ~/.docker
+          mkdir -p ~/.docker
           echo "{\"insecure-registries\": [\"http://harbor.home:80\"]}" | tee ~/.docker/daemon.json
           echo -n "${{secrets.DOCKER_PASSWORD}}" | docker login harbor.home:80 -u=${{secrets.DOCKER_USERNAME}} --password-stdin
       - name: Set up Docker Buildx
