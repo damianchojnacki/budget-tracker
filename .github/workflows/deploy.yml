@@ -34,7 +34,7 @@ jobs:
           context: .
           file: ./docker/dev/Dockerfile
           push: true
-          tags: harbor-registry.registry.svc:5000/library/budget-tracker:latest
+          tags: harbor-registry.registry.svc:5000/default/budget-tracker:latest
 #          cache-from: type=gha
 #          cache-to: type=gha,mode=max
 #      - uses: ravsamhq/notify-slack-action@v2
@@ -48,7 +48,7 @@ jobs:
 #          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
       - name: Inspect
         run: |
-          docker buildx imagetools inspect harbor-registry.registry.svc:5000/library/budget-tracker:latest
+          docker buildx imagetools inspect harbor-registry.registry.svc:5000/default/budget-tracker:latest
 #  flyio:
 #    name: Deploy to Fly.io
 #    runs-on: ubuntu-20.04
