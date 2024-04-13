@@ -25,7 +25,9 @@ jobs:
         with:
           driver-opts: network=host
           config-inline: |
-            [registry."http://harbor.home:80"]
+            insecure-entitlements = [ "network.host", "security.insecure" ]
+
+            [registry."harbor.home:80"]
               insecure = true
               http = true
       - name: Build and push Docker image
