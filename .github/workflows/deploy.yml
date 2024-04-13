@@ -29,6 +29,9 @@ jobs:
             [registry."harbor-registry.registry.svc:5000"]
               insecure = true
               http = true
+      - name: Review config
+        run: |
+          cat ~/.docker/config.json
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
