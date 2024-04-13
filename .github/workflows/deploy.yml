@@ -25,7 +25,7 @@ jobs:
         with:
           driver-opts: network=host
           config-inline: |
-            [registry."harbor.home:80"]
+            [registry."http://harbor.home:80"]
               insecure = true
               http = true
       - name: Build and push Docker image
