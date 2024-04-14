@@ -5,7 +5,7 @@ on:
     workflows: [test]
     types: [completed]
 env:
-  DOCKER_INSECURE_REGISTRY: harbor.home:80
+  DOCKER_INSECURE_REGISTRY: http://harbor.home:80
 
 jobs:
   dockerhub:
