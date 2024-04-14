@@ -22,7 +22,7 @@ jobs:
         with:
           driver-opts: network=host
           buildkitd-config-inline: |
-            [registry."harbor.home:80"]
+            [registry."harbor-registry.registry.svc:5000"]
               insecure = true
               http = true
       - name: Login to Docker Hub
@@ -37,7 +37,7 @@ jobs:
           context: .
           file: ./docker/dev/Dockerfile
           push: true
-          tags: harbor.home:80/default/budget-tracker:latest
+          tags: harbor-registry.registry.svc:5000/default/budget-tracker:latest
 #          cache-from: type=gha
 #          cache-to: type=gha,mode=max
 #      - uses: ravsamhq/notify-slack-action@v2
@@ -51,7 +51,7 @@ jobs:
 #          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
       - name: Inspect
         run: |
-          docker buildx imagetools inspect harbor.home:80/default/budget-tracker:latest
+          docker buildx imagetools inspect harbor-registry.registry.svc:5000/default/budget-tracker:latest
 #  flyio:
 #    name: Deploy to Fly.io
 #    runs-on: ubuntu-20.04
