@@ -4,8 +4,6 @@ on:
   workflow_run:
     workflows: [test]
     types: [completed]
-env:
-  DOCKER_INSECURE_REGISTRY: http://harbor.home:80
 
 jobs:
   dockerhub:
@@ -21,12 +19,12 @@ jobs:
       - uses: actions/checkout@v3
       - name: Set credentials
         run: |
-          echo -n "${{secrets.CA_CRT}}" | sudo tee /usr/local/share/ca-certificates/home.crt
-          sudo update-ca-certificates
+          #echo -n "${{secrets.CA_CRT}}" | sudo tee /usr/local/share/ca-certificates/home.crt
+          #sudo update-ca-certificates
           #mkdir -p ~/.docker
           #echo "{\"insecure-registries\": [\"harbor.home:80\"]}" | tee ~/.docker/daemon.json
           docker info
-          echo -n "${{secrets.DOCKER_PASSWORD}}" | docker login http://harbor.home:80 -u=${{secrets.DOCKER_USERNAME}} --password-stdin
+          echo -n "${{secrets.DOCKER_PASSWORD}}" | docker login harbor.home:80 -u=${{secrets.DOCKER_USERNAME}} --password-stdin
 #      - name: Login to Docker Hub
 #        uses: docker/login-action@v3
 #        with:
