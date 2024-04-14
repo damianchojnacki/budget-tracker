@@ -5,7 +5,7 @@ on:
     workflows: [test]
     types: [completed]
 env:
-  DOCKER_INSECURE_REGISTRY: harbor.home:80
+  DOCKER_INSECURE_REGISTRY: http://harbor.home:80
 
 jobs:
   dockerhub:
@@ -26,7 +26,7 @@ jobs:
           #mkdir -p ~/.docker
           #echo "{\"insecure-registries\": [\"harbor.home:80\"]}" | tee ~/.docker/daemon.json
           docker config
-          echo -n "${{secrets.DOCKER_PASSWORD}}" | docker login harbor.home:80 -u=${{secrets.DOCKER_USERNAME}} --password-stdin
+          echo -n "${{secrets.DOCKER_PASSWORD}}" | docker login http://harbor.home:80 -u=${{secrets.DOCKER_USERNAME}} --password-stdin
 #      - name: Login to Docker Hub
 #        uses: docker/login-action@v3
 #        with:
