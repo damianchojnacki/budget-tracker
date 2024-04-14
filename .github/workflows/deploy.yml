@@ -38,6 +38,8 @@ jobs:
           file: ./docker/dev/Dockerfile
           push: true
           tags: harbor-core.registry.svc:80/default/budget-tracker:latest
+          cache-from: type=registry,ref=harbor-core.registry.svc:80/default/budget-tracker:latest
+          cache-to: type=inline
 #          cache-from: type=gha
 #          cache-to: type=gha,mode=max
 #      - uses: ravsamhq/notify-slack-action@v2
