@@ -25,4 +25,4 @@ RUN composer install --no-dev --no-interaction --optimize-autoloader && \
 
 EXPOSE 9000
 
-ENTRYPOINT ["/entrypoint"]
+#ENTRYPOINT ["/entrypoint"]
