@@ -28,7 +28,7 @@ jobs:
           echo $GIT_BRANCH
 
           if [[ $GIT_BRANCH == feature/* ]]; then
-            BRANCH="${${{ env.GITHUB_REF_NAME }}##*/}"
+            BRANCH="${$GIT_BRANCH##*/}"
           else
             BRANCH="${{ env.GITHUB_REF_NAME }}"
           fi
