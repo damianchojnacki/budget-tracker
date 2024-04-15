@@ -90,7 +90,7 @@ jobs:
 
           IMAGE="${{ fromJSON(steps.meta.outputs.json).tags[1] }}"
           find k8s -type f | xargs sed -i -e "s/\${IMAGE}/$IMAGE/g"
-      - uses: Update k8s resources
+      - name: Update k8s resources
         run: |
           curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
           ./kubectl apply -k k8s --dry-run=client -o yaml
