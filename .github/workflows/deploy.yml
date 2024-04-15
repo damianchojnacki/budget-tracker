@@ -85,7 +85,9 @@ jobs:
           fi
           find k8s -type f | xargs sed -i -e "s/\${SUBDOMAIN}/$SUBDOMAIN/g"
 
-          APP_KEY="base64:$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1 | base64)"
+          sudo apt-get update
+          sudo apt-get install -y openssl
+          APP_KEY="base64:$(openssl rand 32 | base64)"
           find k8s -type f | xargs sed -i -e "s/\${APP_KEY}/$APP_KEY/g"
 
           IMAGE="${{ fromJSON(steps.meta.outputs.json).tags[1] }}"
