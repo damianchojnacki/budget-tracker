@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: laravel-ingress
+data:
+  DOCUMENT_ROOT: "/var/www/public"
+  SCRIPT_FILENAME: "/var/www/public$fastcgi_script_name"

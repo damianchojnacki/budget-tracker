@@ -20,17 +20,18 @@ jobs:
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v3
-      - name: Set branch name
+      - name: Extract branch name
         id: branch
-        shell: bash
         run: |
           GIT_BRANCH=${GITHUB_BASE_REF:-${GITHUB_REF#refs/heads/}}
           echo $GIT_BRANCH
 
           if [[ $GIT_BRANCH == feature/* ]]; then
             BRANCH="${GIT_BRANCH##*/}"
-          else
+          elseif [[ $GIT_BRANCH == main ]] || [[ $GIT_BRANCH == dev ]] || [[ $GIT_BRANCH == stage ]]; then
             BRANCH="$GIT_BRANCH"
+          else
+            BRANCH=""
           fi
 
           echo "name=$BRANCH" >> $GITHUB_OUTPUT
@@ -73,44 +74,36 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=registry,ref=${{ env.DOCKER_REGISTRY_URL }}/default/budget-tracker:latest
           cache-to: type=inline
-#      - uses: ravsamhq/notify-slack-action@v2
-#        if: always()
-#        with:
-#          status: ${{ job.status }}
-#          notification_title: "Workflow {workflow} {status_message}"
-#          footer: ""
-#          notify_when: "failure"
-#        env:
-#          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-#  flyio:
-#    name: Deploy to Fly.io
-#    runs-on: ubuntu-20.04
-#    environment: production
-#    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
-#    concurrency:
-#      group: production
-#      cancel-in-progress: true
-#    env:
-#      FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
-#    steps:
-#      - uses: actions/checkout@v3
-#      - uses: superfly/flyctl-actions/setup-flyctl@master
-#      - run: flyctl deploy
-#      - name: Create Sentry release
-#        uses: getsentry/action-release@v1
-#        env:
-#          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-#          SENTRY_ORG: ${{ vars.SENTRY_ORG }}
-#          SENTRY_PROJECT: ${{ vars.SENTRY_PROJECT }}
-#        with:
-#          environment: production
-#      - uses: ravsamhq/notify-slack-action@v2
-#        if: always()
-#        with:
-#          status: ${{ job.status }}
-#          notification_title: "Workflow {workflow} {status_message}"
-#          footer: ""
-#          notify_when: "failure"
-#        env:
-#          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      - name: Prepare k8s manifests
+        run: |
+          echo "${{ steps.meta.outputs.json }}"
 
+          NAME="budget-tracker-${{ steps.branch.outputs.name }}"
+          find k8s -type f | xargs sed -i -e "s/\${NAME}/$NAME/g"
+
+          if [[ ${{ steps.branch.outputs.name }} == main ]]; then
+            SUBDOMAIN=""
+          else
+            SUBDOMAIN="${{ steps.branch.outputs.name }}."
+          fi
+          find k8s -type f | xargs sed -i -e "s/\${SUBDOMAIN}/$SUBDOMAIN/g"
+
+          APP_KEY="base64:$(openssl rand 32 | base64)"
+          find k8s -type f | xargs sed -i -e "s/\${APP_KEY}/$APP_KEY/g"
+
+          #IMAGE="${{ steps.branch.outputs.name }}"
+          #find k8s -type f | xargs sed -i -e "s/\${IMAGE}/$IMAGE/g"
+      - uses: actions-hub/kubectl@1
+        #env:
+        #  KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
+        with:
+          args: apply -k k8s --dry-run=client -o yaml
+#      - uses: ravsamhq/notify-slack-action@v2
+#        if: always()
+#        with:
+#          status: ${{ job.status }}
+#          notification_title: "Workflow {workflow} {status_message}"
+#          footer: ""
+#          notify_when: "failure"
+#        env:
+#          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
