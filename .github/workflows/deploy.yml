@@ -33,7 +33,7 @@ jobs:
             BRANCH="$GIT_BRANCH"
           fi
 
-          echo "name=$BRANCH >> $GITHUB_OUTPUT
+          echo "name=$BRANCH" >> $GITHUB_OUTPUT
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v5
