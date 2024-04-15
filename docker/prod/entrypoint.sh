@@ -9,7 +9,4 @@ php /var/www/html/artisan route:cache --no-ansi -q
 php /var/www/html/artisan view:cache --no-ansi -q
 php /var/www/html/artisan event:cache --no-ansi -q
 
-if [ $# -gt 0 ]; then
-    # If we passed a command, run it as root
-    exec "$@"
-fi
+exec "$@"

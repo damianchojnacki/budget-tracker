@@ -4,5 +4,5 @@ metadata:
   name: laravel-ingress
   namespace: apps
 data:
-  DOCUMENT_ROOT: "/var/www/html/public"
-  SCRIPT_FILENAME: "/var/www/html/public$fastcgi_script_name"
+  SCRIPT_FILENAME: "/var/www/html/public/index.php"
+  HTTP_PROXY: ""
