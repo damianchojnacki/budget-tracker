@@ -5,8 +5,11 @@ on:
     workflows: [test]
     types: [completed]
 
+env:
+  DOCKER_REGISTRY_URL: harbor-core.registry.svc:80
+
 jobs:
-  dockerhub:
+  deploy:
     name: Deploy to registry
     runs-on: arc-runner-set
     #runs-on: ubuntu-20.04
@@ -17,13 +20,24 @@ jobs:
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v3
+      - name: Extract branch name
+        shell: bash
+        run: |
+          if [[ ${{ env.GITHUB_REF_NAME }} == feature/* ]]; then
+            BRANCH="${${{ env.GITHUB_REF_NAME }}##*/}"
+          else
+            BRANCH="${{ env.GITHUB_REF_NAME }}"
+          fi
+
+          echo "branch=$BRANCH >> $GITHUB_OUTPUT
+        id: extract_branch
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v5
         with:
           # list of Docker images to use as base name for tags
           images: |
-            ${{ vars.DOCKER_REGISTRY_URL }}/default/budget-tracker
+            ${{ env.DOCKER_REGISTRY_URL }}/default/budget-tracker
           # generate Docker tags based on the following events/attributes
           tags: |
             type=ref,event=branch
@@ -37,7 +51,7 @@ jobs:
         with:
           driver-opts: network=host
           buildkitd-config-inline: |
-            [registry."${{ vars.DOCKER_REGISTRY_URL }}"]
+            [registry."${{ env.DOCKER_REGISTRY_URL }}"]
               insecure = true
               http = true
       - name: Login to registry
@@ -50,11 +64,11 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: ./docker/dev/Dockerfile
+          file: ./docker/prod/Dockerfile
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=registry,ref=${{ vars.DOCKER_REGISTRY_URL }}/default/budget-tracker:latest
+          cache-from: type=registry,ref=${{ env.DOCKER_REGISTRY_URL }}/default/budget-tracker:latest
           cache-to: type=inline
 #      - uses: ravsamhq/notify-slack-action@v2
 #        if: always()
