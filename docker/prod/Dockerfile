@@ -6,7 +6,7 @@ ARG PHP_EXTENSIONS="bcmath gd imap intl pdo_mysql uuid igbinary redis sqlite3 pd
 
 ENV TEMPLATE_PHP_INI=production
 ENV PHP_INI_MEMORY_LIMIT=2g
-ENV PHP_INI_UPLOAD_MAX_FILESIZE=10MB
+ENV PHP_INI_UPLOAD_MAX_FILESIZE=10M
 
 RUN sudo apt-get update -y && \
     sudo apt-get install -y locales mysql-client && \
