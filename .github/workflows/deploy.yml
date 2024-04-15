@@ -20,21 +20,20 @@ jobs:
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v3
-      - name: Set ref
+      - name: Set branch name
+        id: branch
         shell: bash
         run: |
-          echo "value=${{ github.ref || format('{0}{1}', 'refs/heads/', github.event.release.tag_name) }}" >> $GITHUB_OUTPUT
-      - name: Extract branch name
-        shell: bash
-        run: |
-          if [[ ${{ env.GITHUB_REF_NAME }} == feature/* ]]; then
+          GIT_BRANCH=${GITHUB_BASE_REF:-${GITHUB_REF#refs/heads/}}
+          echo $GIT_BRANCH
+
+          if [[ ${{ env.GITHUB_REF_NAME }}:-$GIT_BRANCH == feature/* ]]; then
             BRANCH="${${{ env.GITHUB_REF_NAME }}##*/}"
           else
             BRANCH="${{ env.GITHUB_REF_NAME }}"
           fi
 
-          echo "branch=$BRANCH >> $GITHUB_OUTPUT
-        id: extract_branch
+          echo "name=$BRANCH >> $GITHUB_OUTPUT
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v5
