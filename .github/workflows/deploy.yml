@@ -85,13 +85,11 @@ jobs:
           fi
           find k8s -type f | xargs sed -i -e "s/\${SUBDOMAIN}/$SUBDOMAIN/g"
 
-          sudo apt-get update
-          sudo apt-get install -y openssl
           APP_KEY="base64:$(openssl rand 32 | base64)"
-          find k8s -type f | xargs sed -i -e "s/\${APP_KEY}/$APP_KEY/g"
+          find k8s -type f | xargs sed -i -e "s|\${APP_KEY}|$APP_KEY|g"
 
           IMAGE="${{ fromJSON(steps.meta.outputs.json).tags[1] }}"
-          find k8s -type f | xargs sed -i -e "s/\${IMAGE}/$IMAGE/g"
+          find k8s -type f | xargs sed -i -e "s|\${IMAGE}|$IMAGE|g"
       - name: Update k8s resources
         run: |
           curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
