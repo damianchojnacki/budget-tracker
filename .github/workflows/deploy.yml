@@ -88,7 +88,7 @@ jobs:
           APP_KEY="base64:$(openssl rand 32 | base64)"
           find k8s -type f | xargs sed -i -e "s|\${APP_KEY}|$APP_KEY|g"
 
-          IMAGE="${{ env.DOCKER_REGISTRY_URL }}/default/budget-tracker:$(git rev-parse --short HEAD)"
+          IMAGE="${{ env.DOCKER_REGISTRY_URL }}/default/budget-tracker:$(echo ${{GITHUB_SHA}} | cut -c1-7)"
           find k8s -type f | xargs sed -i -e "s|\${IMAGE}|$IMAGE|g"
       - name: Update k8s resources
         run: |
