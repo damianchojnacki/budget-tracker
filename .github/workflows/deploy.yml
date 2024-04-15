@@ -23,7 +23,7 @@ jobs:
       - name: Set ref
         shell: bash
         run: |
-          echo "value=${{ github.event.inputs.release_ref }}" >> $GITHUB_OUTPUT
+          echo "value=${{ github.ref || format('{0}{1}', 'refs/heads/', github.event.release.tag_name) }}" >> $GITHUB_OUTPUT
       - name: Extract branch name
         shell: bash
         run: |
