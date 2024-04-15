@@ -28,7 +28,7 @@ jobs:
           echo $GIT_BRANCH
 
           if [[ $GIT_BRANCH == feature/* ]]; then
-            BRANCH="${$GIT_BRANCH##*/}"
+            BRANCH="${GIT_BRANCH##*/}"
           else
             BRANCH="$GIT_BRANCH"
           fi
