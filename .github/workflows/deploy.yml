@@ -92,6 +92,8 @@ jobs:
           find k8s -type f | xargs sed -i -e "s|\${IMAGE}|$IMAGE|g"
       - name: Update k8s resources
         run: |
+          sudo apt-get update 
+          sudo apt-get install -y curl
           curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
           ./kubectl apply -k k8s --dry-run=client -o yaml
 #      - uses: ravsamhq/notify-slack-action@v2
