@@ -93,7 +93,7 @@ jobs:
 
           #IMAGE="${{ steps.branch.outputs.name }}"
           #find k8s -type f | xargs sed -i -e "s/\${IMAGE}/$IMAGE/g"
-      - uses: actions-hub/kubectl@1
+      - uses: actions-hub/kubectl@master
         #env:
         #  KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
         with:
