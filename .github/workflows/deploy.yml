@@ -27,7 +27,7 @@ jobs:
           GIT_BRANCH=${GITHUB_BASE_REF:-${GITHUB_REF#refs/heads/}}
           echo $GIT_BRANCH
 
-          if [[ ${{ env.GITHUB_REF_NAME }}:-$GIT_BRANCH == feature/* ]]; then
+          if [[ $GIT_BRANCH == feature/* ]]; then
             BRANCH="${${{ env.GITHUB_REF_NAME }}##*/}"
           else
             BRANCH="${{ env.GITHUB_REF_NAME }}"
