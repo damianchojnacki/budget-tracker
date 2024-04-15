@@ -17,7 +17,12 @@ RUN sudo apt-get update -y && \
 
 COPY --chown=docker:docker . /var/www/html
 
-RUN composer install --no-dev --no-interaction --optimize-autoloader
-RUN php artisan storage:link
+RUN composer install --no-dev --no-interaction --optimize-autoloader && \
+    php artisan storage:link && \
+    php artisan optimize:clear && \
+    cp docker/prod/entrypoint.sh /entrypoint && \
+    chmod +x /entrypoint
 
 EXPOSE 9000
+
+ENTRYPOINT ["/entrypoint"]
