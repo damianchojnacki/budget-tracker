@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 touch /var/www/html/storage/database.sqlite
 
 php /var/www/html/artisan migrate --force
