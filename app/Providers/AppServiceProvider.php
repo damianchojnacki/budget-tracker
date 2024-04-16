@@ -36,6 +36,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        app()->environment('production') && URL::forceScheme('https');
+
         Model::unguard();
         JsonResource::withoutWrapping();
 

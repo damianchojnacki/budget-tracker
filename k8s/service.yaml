@@ -9,6 +9,10 @@ spec:
     port: 80
     protocol: TCP
     targetPort: 80
+  - name: php
+    port: 9000
+    protocol: TCP
+    targetPort: 9000
   selector:
     app: ${NAME}
   type: ClusterIP
