@@ -52,5 +52,5 @@ spec:
           configMap:
             name: ${NAME}-config
             items:
-              - key: nginx.conf
-                path: nginx.conf
+              - key: default.conf
+                path: default.conf
