@@ -105,7 +105,7 @@ jobs:
           fi
 
           find k8s -type f | xargs sed -i -e "s|\${DB_PASSWORD}|$DB_PASSWORD|g"
-          find k8s -type f | xargs sed -i -e "s/\${{ secrets.DB_HOST }}/$DB_HOST/g"
+          find k8s -type f | xargs sed -i -e "s/\${DB_HOST}/${{ secrets.DB_HOST }}/g"
       - name: Prepare k8s manifests
         run: |
           NAME="budget-tracker-${{ steps.branch.outputs.name }}"
