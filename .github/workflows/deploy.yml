@@ -125,7 +125,7 @@ jobs:
           find k8s -type f | xargs sed -i -e "s|\${IMAGE}|$IMAGE|g"
       - name: Update k8s resources
         run: |
-          ./kubectl apply -k k8s -o yaml
+          ./kubectl apply -k k8s
 #      - uses: ravsamhq/notify-slack-action@v2
 #        if: always()
 #        with:
