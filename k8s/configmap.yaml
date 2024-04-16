@@ -1,8 +1,55 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: laravel-ingress
+  name: ${NAME}-config
   namespace: apps
 data:
-  SCRIPT_FILENAME: "/var/www/html/public/index.php"
-  HTTP_PROXY: ""
+  nginx.conf: |
+    server {
+      listen 80 http2;
+      listen [::]:80 http2;
+      server_name _;
+
+      add_header X-Frame-Options "SAMEORIGIN";
+      add_header X-XSS-Protection "1; mode=block";
+      add_header X-Content-Type-Options "nosniff";
+
+      root /var/www/html/public;
+      index index.php index.html;
+      charset utf-8;
+
+      error_log  /var/log/nginx/error.log;
+      access_log off;
+
+      error_page 404 /index.php;
+
+      location / {
+        try_files $uri $uri/ /index.php?$query_string;
+      }
+
+      location ~ \.php$ {
+        try_files $uri =404;
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+        fastcgi_pass php:9000;
+        fastcgi_index index.php;
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param PATH_INFO $fastcgi_path_info;
+      }
+      location ~* \.(jpg|jpeg|gif|png|webp|tgz|gz|ico|woff|woff2|svg)$ {
+        expires 365d;
+        add_header Pragma "public";
+        add_header Cache-Control "public";
+      }
+
+      location ~* \.(?:css|js)$ {
+        expires 365d;
+        access_log off;
+        add_header Cache-Control "public";
+      }
+    }
+
+    server {
+       server_name "~^www\.(.*)$" ;
+       return 301 $scheme://$1$request_uri ;
+    }

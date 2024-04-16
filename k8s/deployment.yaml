@@ -19,17 +19,38 @@ spec:
         app: ${NAME}
     spec:
       containers:
-        - image: ${IMAGE}
+        - name: php
+          image: ${IMAGE}
           imagePullPolicy: IfNotPresent
-          name: ${NAME}
           envFrom:
             - secretRef:
                 name: ${NAME}-env
           volumeMounts:
-            - mountPath: /var/www/html/storage
-              name: storage
+            - name: storage
+              mountPath: /var/www/html/storage
+            - name: code
+              mountPath: /code
+        - name: nginx
+          image: nginx:stable-alpine
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: code
+              mountPath: /var/www/html
+            - name: config
+              mountPath: /etc/nginx/conf.d
+            - name: storage
+              mountPath: /var/www/html/storage
       restartPolicy: Always
       volumes:
         - name: storage
           persistentVolumeClaim:
             claimName: ${NAME}-storage
+        - name: code
+          persistentVolumeClaim:
+            claimName: ${NAME}-code
+        - name: config
+          configMap:
+            name: ${NAME}-config
+            items:
+              - key: nginx.conf
+                path: nginx.conf
