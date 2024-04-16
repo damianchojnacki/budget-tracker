@@ -89,7 +89,7 @@ jobs:
           EXISTS=$(mariadb -h ${{ secrets.DB_HOST }} -u${{ secrets.DB_USERNAME }} -p${{ secrets.DB_PASSWORD }} -e " \
             SELECT SCHEMA_NAME \
             FROM INFORMATION_SCHEMA.SCHEMATA \
-            WHERE SCHEMA_NAME = \"$DB_NAME\; \
+            WHERE SCHEMA_NAME = \"$DB_NAME\"; \
           ")
 
           if [[ -n "$EXISTS" ]]; then
