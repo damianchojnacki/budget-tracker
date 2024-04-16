@@ -75,6 +75,7 @@ jobs:
           cache-to: type=inline
       - name: Install kubectl
         run: |
+          sudo apt-get update
           sudo apt-get install -y curl
           curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
           sudo chmod u+x ./kubectl
@@ -83,7 +84,6 @@ jobs:
           DB_NAME="budget_tracker_${{ steps.branch.outputs.name }}"
           find k8s -type f | xargs sed -i -e "s/\${DB_NAME}/$DB_NAME/g"
 
-          sudo apt-get update
           sudo apt-get install -y mariadb-client
 
           EXISTS=$(mariadb -h ${{ secrets.DB_HOST }} -u${{ secrets.DB_USERNAME }} -p${{ secrets.DB_PASSWORD }} -e " \
