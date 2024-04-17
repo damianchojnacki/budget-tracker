@@ -22,8 +22,15 @@ jobs:
       - name: Extract branch name
         id: branch
         run: |
-          GIT_BRANCH=${GITHUB_BASE_REF:-${GITHUB_REF#refs/heads/}}
-          echo $GIT_BRANCH
+          TMP_PULL_HEAD_REF="${{ github.head_ref }}"
+          TMP_GITHUB_REF="${GITHUB_REF#refs/heads/}"
+          GIT_BRANCH=""
+          if [ "${TMP_PULL_HEAD_REF}" != "" ]
+          then
+              GIT_BRANCH="${TMP_PULL_HEAD_REF}"
+          else
+              GIT_BRANCH="${TMP_GITHUB_REF}"
+          fi
 
           if [[ $GIT_BRANCH == feature/* ]]; then
             BRANCH="${GIT_BRANCH##*/}"
