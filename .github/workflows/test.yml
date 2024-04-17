@@ -11,9 +11,6 @@ env:
   BROADCAST_DRIVER: log
   QUEUE_CONNECTION: sync
   TELESCOPE_ENABLED: false
-  STRIPE_KEY: ${{ secrets.STRIPE_KEY }}
-  STRIPE_SECRET: ${{ secrets.STRIPE_SECRET }}
-  API_NINJAS_API_KEY: ${{ secrets.API_NINJAS_API_KEY }}
 jobs:
   test:
     #runs-on: arc-runner-set
