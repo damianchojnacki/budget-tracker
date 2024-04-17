@@ -1,0 +1,26 @@
+apiVersion: kuttl.dev/v1beta1
+kind: TestStep
+commands:
+  - command: |
+      kubectl apply --server-side -f https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.68.0/example/prometheus-operator-crd/monitoring.coreos.com_servicemonitors.yaml
+      helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+      helm repo update
+      helm install ingress-nginx \
+          ingress-nginx/ingress-nginx \
+          --namespace ingress-nginx \
+          --create-namespace \
+          --set controller.ingressClassResource.default=true \
+          --set controller.publishService.enabled=true
+  - command: |
+      helm repo add jetstack https://charts.jetstack.io
+      helm repo update
+      kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.13.1/cert-manager.crds.yaml
+      helm install cert-manager jetstack/cert-manager \
+        --namespace cert-manager \
+        --create-namespace \
+        --version v1.13.1
+  - command: |
+      helm install mariadb oci://registry-1.docker.io/bitnamicharts/mariadb \
+        --namespace databases \
+        --create-namespace \
+        --set auth.rootPassword="${DB_PASSWORD}"
