@@ -30,9 +30,17 @@ spec:
               mountPath: /var/www/html/storage
             - name: code
               mountPath: /code
+          livenessProbe:
+            initialDelaySeconds: 3
+            tcpSocket:
+              port: 9000
+          readinessProbe:
+            initialDelaySeconds: 3
+            tcpSocket:
+              port: 9000
         - name: nginx
           image: nginx:stable-alpine
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           volumeMounts:
             - name: code
               mountPath: /var/www/html
@@ -40,6 +48,20 @@ spec:
               mountPath: /etc/nginx/conf.d
             - name: storage
               mountPath: /var/www/html/storage
+          livenessProbe:
+            httpGet:
+              httpHeaders:
+                - name: Host
+                  value: ${SUBDOMAIN}budget-tracker.home
+              path: /nginx-health
+              port: 80
+          readinessProbe:
+            httpGet:
+              httpHeaders:
+                - name: Host
+                  value: ${SUBDOMAIN}budget-tracker.home
+              path: /nginx-health
+              port: 80
       restartPolicy: Always
       volumes:
         - name: storage

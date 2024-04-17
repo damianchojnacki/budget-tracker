@@ -53,6 +53,10 @@ data:
         access_log off;
         add_header Cache-Control "public";
       }
+
+      location /nginx-health {
+        return 200 "healthy\n";
+      }
     }
 
     server {
