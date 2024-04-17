@@ -25,7 +25,7 @@
 </a>
 </p>
 
-## About Fleet Tracker API
+## About Budget Tracker
 
 ## Setup
 
@@ -37,16 +37,6 @@ chmod +x setup.sh
 ```
 
 Optionally you can follow the official [Laravel installation guide](https://laravel.com/docs/10.x/installation).
-
-By default, database use temporary filesystem (that wipes up data every reboot) to speed up the development. 
-To use persistence database, you can must comment the following lines in the end of `docker-compose.yml` file:
-
-```yaml
-driver_opts:
-    o: bind
-    type: none
-    device: '/dev/shm'
-```
 
 ## Usage
 
