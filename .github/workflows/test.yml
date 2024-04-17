@@ -15,7 +15,7 @@ env:
   STRIPE_SECRET: ${{ secrets.STRIPE_SECRET }}
   API_NINJAS_API_KEY: ${{ secrets.API_NINJAS_API_KEY }}
 jobs:
-  unit:
+  test:
     #runs-on: arc-runner-set
     runs-on: ubuntu-20.04
     services:
@@ -56,12 +56,12 @@ jobs:
 #          runner: self-hosted
         with:
           php-version: ${{ matrix.php }}
-          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo
           coverage: xdebug
       - name: Copy .env
         run: php -r "file_exists('.env') || copy('.env.example', '.env');"
       - name: Cache composer dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: vendor
           key: composer-${{ hashFiles('**/composer.lock') }}
