@@ -95,8 +95,8 @@ jobs:
           sudo apt-get install -y curl
           curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
           sudo chmod u+x ./kubectl
-          curl -fsSL -o kutl "https://github.com/kudobuilder/kuttl/releases/download/v0.15.0/kubectl-kuttl_0.15.0_linux_x86_64"
-          sudo chmod u+x ./kutl
+          curl -fsSL -o kuttl "https://github.com/kudobuilder/kuttl/releases/download/v0.15.0/kubectl-kuttl_0.15.0_linux_x86_64"
+          sudo chmod u+x ./kuttl
       - name: Prepare k8s manifests
         run: |
           DB_NAME="budget_tracker_${{ needs.build.outputs.branch }}"
