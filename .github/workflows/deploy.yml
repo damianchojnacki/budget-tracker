@@ -119,7 +119,7 @@ jobs:
           APP_KEY="base64:$(openssl rand 32 | base64)"
           find k8s -type f | xargs sed -i -e "s|\${APP_KEY}|$APP_KEY|g"
 
-          IMAGE="${{ env.DOCKER_REGISTRY_URL }}/default/budget-tracker:sha-$(echo ${GITHUB_SHA} | cut -c1-7)"
+          IMAGE="${{ env.DOCKER_REGISTRY_URL }}:80/default/budget-tracker:sha-$(echo ${GITHUB_SHA} | cut -c1-7)"
           find k8s -type f | xargs sed -i -e "s|\${IMAGE}|$IMAGE|g"
 
           ./kubectl kustomize k8s -o k8s/tests/e2e/00-install.yaml
