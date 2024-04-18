@@ -109,7 +109,7 @@ jobs:
           NAME="budget-tracker-${{ needs.build.outputs.branch }}"
           find k8s -type f | xargs sed -i -e "s/\${NAME}/$NAME/g"
 
-          if [[ ${{ needs.build.outputs.branch }}== main ]]; then
+          if [[ ${{ needs.build.outputs.branch }} == main ]]; then
             SUBDOMAIN=""
           else
             SUBDOMAIN="${{ needs.build.outputs.branch }}."
