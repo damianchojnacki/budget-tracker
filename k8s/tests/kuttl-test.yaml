@@ -1,0 +1,23 @@
+apiVersion: kuttl.dev/v1beta1
+kind: TestSuite
+testDirs:
+  - ./
+timeout: 90
+startKIND: true
+kindNodeCache: true
+kindConfig: ./kind.yaml
+kindContainers:
+  - ${IMAGE}
+commands:
+  - script: |
+      kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml &&
+      kubectl delete -A ValidatingWebhookConfiguration ingress-nginx-admission
+      kubectl wait --namespace ingress-nginx \
+            --for=condition=ready pod \
+            --selector=app.kubernetes.io/component=controller \
+            --timeout=90s
+  - script: |
+      helm install mariadb oci://registry-1.docker.io/bitnamicharts/mariadb \
+        --namespace databases \
+        --create-namespace \
+        --set auth.rootPassword="password"

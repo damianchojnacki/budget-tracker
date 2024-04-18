@@ -1,0 +1,255 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: apps
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: budget-tracker-main-config
+  namespace: apps
+data:
+  default.conf: |
+    server {
+      listen 80;
+      listen [::]:80;
+      server_name _;
+
+      add_header X-Frame-Options "SAMEORIGIN";
+      add_header X-XSS-Protection "1; mode=block";
+      add_header X-Content-Type-Options "nosniff";
+
+      root /var/www/html/public;
+      index index.php index.html;
+      charset utf-8;
+
+      error_log  /var/log/nginx/error.log;
+      access_log off;
+
+      error_page 404 /index.php;
+
+      location / {
+        try_files $uri $uri/ /index.php?$query_string;
+      }
+
+      location ~ \.php$ {
+        try_files $uri =404;
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+        fastcgi_pass budget-tracker-main:9000;
+        fastcgi_index index.php;
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param PATH_INFO $fastcgi_path_info;
+      }
+
+      location = /livewire/livewire.min.js {
+        expires off;
+        try_files $uri $uri/ /index.php?$query_string;
+      }
+
+      location ~* \.(jpg|jpeg|gif|png|webp|tgz|gz|ico|woff|woff2|svg)$ {
+        expires 365d;
+        add_header Pragma "public";
+        add_header Cache-Control "public";
+      }
+
+      location ~* \.(?:css|js)$ {
+        expires 365d;
+        access_log off;
+        add_header Cache-Control "public";
+      }
+
+      location /nginx-health {
+        return 200 "healthy\n";
+      }
+    }
+
+    server {
+       server_name "~^www\.(.*)$" ;
+       return 301 $scheme://$1$request_uri ;
+    }
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: budget-tracker-main-storage
+  namespace: apps
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: budget-tracker-main-code
+  namespace: apps
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: budget-tracker-main-env
+  namespace: apps
+type: Opaque
+stringData:
+  APP_DEBUG: 'false'
+  APP_ENV: production
+  APP_KEY: base64:EBCSvKeUxNHNGmbR1hmbmtln3ypTq/gaXm3JoK1t3kY=
+  APP_NAME: 'Budget Tracker'
+  APP_URL: https://budget-tracker.home
+  BROADCAST_DRIVER: log
+  CACHE_DRIVER: file
+  DB_CONNECTION: mysql
+  DB_HOST: mariadb.databases
+  DB_DATABASE: budget-tracker-main
+  DB_PASSWORD: password
+  DB_PORT: '3306'
+  DB_USERNAME: budget-tracker-main
+  IGNITION_ENABLE_RUNNABLE_SOLUTIONS: 'false'
+  LOG_CHANNEL: stack
+  LOG_LEVEL: debug
+  MAIL_ENCRYPTION: null
+  MAIL_FROM_ADDRESS: 'hello@example.com'
+  MAIL_FROM_NAME: 'Budget Tracker'
+  MAIL_HOST: mailpit
+  MAIL_MAILER: smtp
+  MAIL_PASSWORD: null
+  MAIL_PORT: '1025'
+  MAIL_USERNAME: null
+  QUEUE_CONNECTION: sync
+  SESSION_DRIVER: file
+  SESSION_LIFETIME: '1440'
+  TELESCOPE_ENABLED: 'true'
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: budget-tracker-main
+  namespace: apps
+spec:
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 80
+    - name: php
+      port: 9000
+      protocol: TCP
+      targetPort: 9000
+  selector:
+    app: budget-tracker-main
+  type: ClusterIP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: budget-tracker-main
+  namespace: apps
+  annotations:
+    cert-manager.io/cluster-issuer: "nginx-clusterissuer"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - budget-tracker.home
+      secretName: budget-tracker-main-tls
+  rules:
+    - host: budget-tracker.home
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: budget-tracker-main
+                port:
+                  number: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: budget-tracker-main
+  namespace: apps
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: budget-tracker-main
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: budget-tracker-main
+    spec:
+      containers:
+        - name: php
+          image: harbor-core.registry.svc/default/budget-tracker:latest
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - secretRef:
+                name: budget-tracker-main-env
+          volumeMounts:
+            - name: storage
+              mountPath: /var/www/html/storage
+            - name: code
+              mountPath: /code
+          livenessProbe:
+            initialDelaySeconds: 3
+            tcpSocket:
+              port: 9000
+          readinessProbe:
+            initialDelaySeconds: 3
+            tcpSocket:
+              port: 9000
+        - name: nginx
+          image: nginx:stable-alpine
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: code
+              mountPath: /var/www/html
+            - name: config
+              mountPath: /etc/nginx/conf.d
+            - name: storage
+              mountPath: /var/www/html/storage
+          livenessProbe:
+            httpGet:
+              httpHeaders:
+                - name: Host
+                  value: budget-tracker.home
+              path: /nginx-health
+              port: 80
+          readinessProbe:
+            httpGet:
+              httpHeaders:
+                - name: Host
+                  value: budget-tracker.home
+              path: /nginx-health
+              port: 80
+      restartPolicy: Always
+      volumes:
+        - name: storage
+          persistentVolumeClaim:
+            claimName: budget-tracker-main-storage
+        - name: code
+          persistentVolumeClaim:
+            claimName: budget-tracker-main-code
+        - name: config
+          configMap:
+            name: budget-tracker-main-config
+            items:
+              - key: default.conf
+                path: default.conf
+

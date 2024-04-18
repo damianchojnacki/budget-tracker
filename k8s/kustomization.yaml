@@ -3,6 +3,7 @@ kind: Kustomization
 commonLabels:
   app: ${NAME}
 resources:
+- namespace.yaml
 - pvc.yaml
 - secret.yaml
 - configmap.yaml
