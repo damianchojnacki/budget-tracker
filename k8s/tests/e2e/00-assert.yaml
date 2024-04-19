@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: budget-tracker-${NAME}
+  name: ${NAME}
   namespace: apps
 status:
   readyReplicas: 1
