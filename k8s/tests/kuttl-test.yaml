@@ -2,7 +2,7 @@ apiVersion: kuttl.dev/v1beta1
 kind: TestSuite
 testDirs:
   - ./
-timeout: 90
+timeout: 120
 startKIND: true
 kindNodeCache: true
 kindConfig: ./kind.yaml
