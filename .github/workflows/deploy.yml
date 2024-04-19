@@ -124,7 +124,7 @@ jobs:
       - name: Run tests
         run: |
           cd k8s/tests
-          kubectl krew install kuttl
+          export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
           kubectl kuttl test
   push:
     name: Update k8s resources
