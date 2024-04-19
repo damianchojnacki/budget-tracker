@@ -16,7 +16,7 @@ jobs:
     outputs:
       branch: ${{ steps.branch.outputs.name }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Extract branch name
         id: branch
         run: |
@@ -85,7 +85,7 @@ jobs:
     outputs:
       branch: ${{ needs.build.outputs.branch }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Cache kind files
         uses: actions/cache@v3
         with:
@@ -134,7 +134,7 @@ jobs:
       cancel-in-progress: true
     needs: test
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Create database if doesn't exists
         run: |
           DB_NAME="budget_tracker_${{ needs.test.outputs.branch }}"
