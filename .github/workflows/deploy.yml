@@ -86,11 +86,6 @@ jobs:
       branch: ${{ needs.build.outputs.branch }}
     steps:
       - uses: actions/checkout@v4
-      - name: Prepare cache files
-        run: |
-          mkdir cache
-          sudo cp -r /var/lib/docker/overlay2 cache
-          sudo cp -r /var/lib/docker/volumes/kind-0 cache
       - name: Cache kind files
         uses: actions/cache@v4
         id: cache
@@ -135,6 +130,11 @@ jobs:
           cd k8s/tests
           export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
           kubectl kuttl test
+      - name: Prepare cache files
+        run: |
+          mkdir cache
+          sudo cp -r /var/lib/docker/overlay2 cache
+          sudo cp -r /var/lib/docker/volumes/kind-0 cache
   push:
     name: Update k8s resources
     runs-on: arc-runner-set
