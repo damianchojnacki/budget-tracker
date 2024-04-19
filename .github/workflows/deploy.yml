@@ -124,7 +124,7 @@ jobs:
 
           docker pull $IMAGE
 
-          ./kubectl kustomize k8s -o k8s/tests/e2e/00-install.yaml
+          kubectl kustomize k8s -o k8s/tests/e2e/00-install.yaml
       - name: Cache kind files
         uses: actions/cache@v4
         with:
