@@ -84,20 +84,15 @@ jobs:
     needs: build
     outputs:
       branch: ${{ needs.build.outputs.branch }}
-    strategy:
-      matrix:
-        branch: [ main, dev ]
     steps:
       - uses: actions/checkout@v3
-      - name: Install kubectl, helm and KUTL
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y curl
-          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-          sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
-          curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
-          curl -fsSL -o kuttl "https://github.com/kudobuilder/kuttl/releases/download/v0.15.0/kubectl-kuttl_0.15.0_linux_x86_64"
-          sudo chmod u+x ./kuttl
+      - name: Cache kind files
+        uses: actions/cache@v3
+        with:
+          path: |
+            /var/lib/docker/image
+            /var/lib/docker/volumes/kind-0
+          key: kind
       - name: Prepare k8s manifests
         run: |
           DB_NAME="budget_tracker_${{ needs.build.outputs.branch }}"
@@ -126,18 +121,10 @@ jobs:
           docker pull $IMAGE
 
           kubectl kustomize k8s -o k8s/tests/e2e/00-install.yaml
-      - name: Cache kind files
-        uses: actions/cache@v4
-        with:
-          path: |
-            /var/lib/docker/image
-            /var/lib/docker/volumes/kind-0
-          key: kind
       - name: Run tests
         run: |
-          mv kuttl k8s/tests
           cd k8s/tests
-          ./kuttl test
+          kubectl kuttl test
   push:
     name: Update k8s resources
     runs-on: arc-runner-set
@@ -148,18 +135,10 @@ jobs:
     needs: test
     steps:
       - uses: actions/checkout@v3
-      - name: Install kubectl
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y curl
-          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-          sudo chmod u+x ./kubectl
       - name: Create database if doesn't exists
         run: |
           DB_NAME="budget_tracker_${{ needs.test.outputs.branch }}"
           find k8s -type f | xargs sed -i -e "s/\${DB_NAME}/$DB_NAME/g"
-
-          sudo apt-get install -y mariadb-client
 
           EXISTS=$(mariadb -h ${{ secrets.DB_HOST }} -u${{ secrets.DB_USERNAME }} -p${{ secrets.DB_PASSWORD }} -e " \
             SELECT SCHEMA_NAME \
@@ -200,4 +179,4 @@ jobs:
           find k8s -type f | xargs sed -i -e "s|\${IMAGE}|$IMAGE|g"
       - name: Update k8s resources
         run: |
-          ./kubectl apply -k k8s
+          kubectl apply -k k8s
