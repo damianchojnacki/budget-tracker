@@ -124,7 +124,7 @@ jobs:
       - name: Run tests
         run: |
           cd k8s/tests
-          kubectl kuttl test
+          kubectl-kuttl test
   push:
     name: Update k8s resources
     runs-on: arc-runner-set
