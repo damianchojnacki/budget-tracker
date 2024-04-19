@@ -86,12 +86,15 @@ jobs:
       branch: ${{ needs.build.outputs.branch }}
     steps:
       - uses: actions/checkout@v4
+      - name: Prepare cache files
+        run: |
+          mdkir cache
+          sudo cp -r /var/lib/docker/overlay2 cache
+          sudo cp -r /var/lib/docker/volumes/kind-0 cache
       - name: Cache kind files
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
-          path: |
-            /var/lib/docker/image
-            /var/lib/docker/volumes/kind-0
+          path: ./cache
           key: kind
       - name: Prepare k8s manifests
         run: |
