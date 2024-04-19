@@ -122,6 +122,8 @@ jobs:
           IMAGE="${{ env.DOCKER_REGISTRY_URL }}:80/default/budget-tracker:sha-$(echo ${GITHUB_SHA} | cut -c1-7)"
           find k8s -type f | xargs sed -i -e "s|\${IMAGE}|$IMAGE|g"
 
+          docker pull $IMAGE
+
           ./kubectl kustomize k8s -o k8s/tests/e2e/00-install.yaml
       - name: Cache kind files
         uses: actions/cache@v4
