@@ -15,7 +15,7 @@ commands:
       kubectl wait --namespace ingress-nginx \
             --for=condition=ready pod \
             --selector=app.kubernetes.io/component=controller \
-            --timeout=90s
+            --timeout=120s
   - script: |
       helm install mariadb oci://registry-1.docker.io/bitnamicharts/mariadb \
         --namespace databases \
