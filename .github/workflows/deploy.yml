@@ -135,6 +135,7 @@ jobs:
           mkdir cache
           sudo cp -r /var/lib/docker/overlay2 cache
           sudo cp -r /var/lib/docker/volumes/kind-0 cache
+          sudo chown -R $USER cache
   push:
     name: Update k8s resources
     runs-on: arc-runner-set
