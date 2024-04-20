@@ -78,12 +78,6 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=registry,ref=${{ env.DOCKER_REGISTRY_URL }}:80/default/budget-tracker:latest
           cache-to: type=inline
-          outputs: type=docker,dest=image.tar
-      - name: Upload artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: budget-tracker-${{ steps.branch.outputs.name }}
-          path: image.tar
   test:
     name: Test k8s manifests
     runs-on: arc-runner-set
@@ -92,11 +86,6 @@ jobs:
       branch: ${{ needs.build.outputs.branch }}
     steps:
       - uses: actions/checkout@v4
-      - name: Download built image
-        uses: actions/download-artifact@v3
-        with:
-          name: budget-tracker-${{ needs.build.outputs.name }}
-          path: ./
       - name: Prepare k8s manifests
         run: |
           DB_NAME="budget_tracker_${{ needs.build.outputs.branch }}"
@@ -122,7 +111,7 @@ jobs:
           IMAGE="${{ env.DOCKER_REGISTRY_URL }}:80/default/budget-tracker:sha-$(echo ${GITHUB_SHA} | cut -c1-7)"
           find k8s -type f | xargs sed -i -e "s|\${IMAGE}|$IMAGE|g"
 
-          docker load --input image.tar
+          docker pull $IMAGE
 
           kubectl kustomize k8s -o k8s/tests/e2e/00-install.yaml
       - name: Run tests
