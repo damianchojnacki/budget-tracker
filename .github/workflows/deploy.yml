@@ -87,13 +87,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Prepare cache directory
-        run: sudo chmod -R 777 /var/lib/docker
+        run: sudo chmod -R 777 /var/lib/docker/volumes
       - name: Cache kind files
         uses: actions/cache@v4
         id: cache
         with:
           path: |
-            /var/lib/docker/overlay2
             /var/lib/docker/volumes/kind-0
           key: kind
       - name: Prepare k8s manifests
@@ -130,7 +129,7 @@ jobs:
           export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
           kubectl kuttl test
       - name: Prepare cache directory
-        run: sudo chmod -R 777 /var/lib/docker
+        run: sudo chmod -R 777 /var/lib/docker/volumes/kind-0
   push:
     name: Update k8s resources
     runs-on: arc-runner-set
