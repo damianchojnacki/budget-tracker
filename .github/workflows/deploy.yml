@@ -86,17 +86,16 @@ jobs:
       branch: ${{ needs.build.outputs.branch }}
     steps:
       - uses: actions/checkout@v4
+      - name: Use cache files
+        run: sudo chmod -R 777 /var/lib/docker
       - name: Cache kind files
         uses: actions/cache@v4
         id: cache
         with:
-          path: ./cache
+          path: |
+            /var/lib/docker/overlay2
+            /var/lib/docker/volumes/kind-0
           key: kind
-      - name: Use cache files
-        if: steps.cache.outputs.cache-hit == 'true'
-        run: |
-          sudo cp -r cache/overlay2 /var/lib/docker
-          sudo cp -r cache/kind-0 /var/lib/docker/volumes
       - name: Prepare k8s manifests
         run: |
           DB_NAME="budget_tracker_${{ needs.build.outputs.branch }}"
@@ -130,12 +129,6 @@ jobs:
           cd k8s/tests
           export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
           kubectl kuttl test
-      - name: Prepare cache files
-        run: |
-          mkdir cache
-          sudo cp -r /var/lib/docker/overlay2 cache
-          sudo cp -r /var/lib/docker/volumes/kind-0 cache
-          sudo chown -R $USER:$USER cache
   push:
     name: Update k8s resources
     runs-on: arc-runner-set
