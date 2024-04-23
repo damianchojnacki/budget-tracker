@@ -9,16 +9,14 @@ env:
   DOCKER_REGISTRY_URL: harbor-core.registry.svc
 
 jobs:
-  deploy:
-    name: Build and deploy application
+  build:
+    name: Build application image
     runs-on: arc-runner-set
-    environment: production
     if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
-    concurrency:
-      group: production
-      cancel-in-progress: true
+    outputs:
+      branch: ${{ steps.branch.outputs.name }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Extract branch name
         id: branch
         run: |
@@ -80,18 +78,61 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=registry,ref=${{ env.DOCKER_REGISTRY_URL }}:80/default/budget-tracker:latest
           cache-to: type=inline
-      - name: Install kubectl
+  test:
+    name: Test k8s manifests
+    runs-on: arc-runner-set
+    needs: build
+    outputs:
+      branch: ${{ needs.build.outputs.branch }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare k8s manifests
         run: |
-          sudo apt-get update
-          sudo apt-get install -y curl
-          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-          sudo chmod u+x ./kubectl
+          DB_NAME="budget_tracker_${{ needs.build.outputs.branch }}"
+          DB_PASSWORD="password"
+
+          find k8s -type f | xargs sed -i -e "s/\${DB_NAME}/$DB_NAME/g"
+          find k8s -type f | xargs sed -i -e "s|\${DB_PASSWORD}|$DB_PASSWORD|g"
+          find k8s -type f | xargs sed -i -e "s/\${DB_HOST}/${{ secrets.DB_HOST }}/g"
+
+          NAME="budget-tracker-${{ needs.build.outputs.branch }}"
+          find k8s -type f | xargs sed -i -e "s/\${NAME}/$NAME/g"
+
+          if [[ ${{ needs.build.outputs.branch }} == main ]]; then
+            SUBDOMAIN=""
+          else
+            SUBDOMAIN="${{ needs.build.outputs.branch }}."
+          fi
+          find k8s -type f | xargs sed -i -e "s/\${SUBDOMAIN}/$SUBDOMAIN/g"
+
+          APP_KEY="base64:$(openssl rand 32 | base64)"
+          find k8s -type f | xargs sed -i -e "s|\${APP_KEY}|$APP_KEY|g"
+
+          IMAGE="${{ env.DOCKER_REGISTRY_URL }}:80/default/budget-tracker:sha-$(echo ${GITHUB_SHA} | cut -c1-7)"
+          find k8s -type f | xargs sed -i -e "s|\${IMAGE}|$IMAGE|g"
+
+          docker pull $IMAGE
+
+          kubectl kustomize k8s -o k8s/tests/e2e/00-install.yaml
+      - name: Run tests
+        run: |
+          cd k8s/tests
+          export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+          kubectl kuttl test
+  push:
+    name: Update k8s resources
+    runs-on: arc-runner-set
+    environment: production
+    concurrency:
+      group: production
+      cancel-in-progress: true
+    needs: test
+    steps:
+      - uses: actions/checkout@v4
       - name: Create database if doesn't exists
         run: |
-          DB_NAME="budget_tracker_${{ steps.branch.outputs.name }}"
+          DB_NAME="budget_tracker_${{ needs.test.outputs.branch }}"
           find k8s -type f | xargs sed -i -e "s/\${DB_NAME}/$DB_NAME/g"
-
-          sudo apt-get install -y mariadb-client
 
           EXISTS=$(mariadb -h ${{ secrets.DB_HOST }} -u${{ secrets.DB_USERNAME }} -p${{ secrets.DB_PASSWORD }} -e " \
             SELECT SCHEMA_NAME \
@@ -115,13 +156,13 @@ jobs:
           find k8s -type f | xargs sed -i -e "s/\${DB_HOST}/${{ secrets.DB_HOST }}/g"
       - name: Prepare k8s manifests
         run: |
-          NAME="budget-tracker-${{ steps.branch.outputs.name }}"
+          NAME="budget-tracker-${{ needs.test.outputs.branch }}"
           find k8s -type f | xargs sed -i -e "s/\${NAME}/$NAME/g"
 
-          if [[ ${{ steps.branch.outputs.name }} == main ]]; then
+          if [[ ${{ needs.test.outputs.branch }} == main ]]; then
             SUBDOMAIN=""
           else
-            SUBDOMAIN="${{ steps.branch.outputs.name }}."
+            SUBDOMAIN="${{ needs.test.outputs.branch }}."
           fi
           find k8s -type f | xargs sed -i -e "s/\${SUBDOMAIN}/$SUBDOMAIN/g"
 
@@ -132,13 +173,4 @@ jobs:
           find k8s -type f | xargs sed -i -e "s|\${IMAGE}|$IMAGE|g"
       - name: Update k8s resources
         run: |
-          ./kubectl apply -k k8s
-#      - uses: ravsamhq/notify-slack-action@v2
-#        if: always()
-#        with:
-#          status: ${{ job.status }}
-#          notification_title: "Workflow {workflow} {status_message}"
-#          footer: ""
-#          notify_when: "failure"
-#        env:
-#          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          kubectl apply -k k8s

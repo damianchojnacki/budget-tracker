@@ -1,0 +1,6 @@
+apiVersion: kuttl.dev/v1beta1
+kind: TestAssert
+timeout: 3
+collectors:
+  - type: command
+    command: 'curl -sH "Accept: application/json" -H "Host: ${SUBDOMAIN}budget-tracker.home" --insecure --fail https://localhost/up'
