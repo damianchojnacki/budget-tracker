@@ -1,0 +1,25 @@
+parameters:
+
+    paths:
+        - app/
+        - database/
+        - config/
+        - bootstrap/
+        - tests/
+
+    excludePaths:
+        - database/migrations/*
+
+    level: 6
+
+    reportUnmatchedIgnoredErrors: false
+
+    ignoreErrors:
+        - identifier: typeCoverage.propertyTypeCoverage
+        - identifier: typeCoverage.returnTypeCoverage
+        - identifier: typeCoverage.paramTypeCoverage
+        - '#Call to an undefined method Illuminate\\Testing\\TestResponse::[a-zA-Z0-9\\_]#'
+        - '#Call to an undefined method Pest\\PendingCalls\\TestCall::preset\(\)#'
+        - '#Call to an undefined method Pest\\PendingCalls\\TestCall|Pest\\Support\\HigherOrderTapProxy::mutates\(\).#'
+
+

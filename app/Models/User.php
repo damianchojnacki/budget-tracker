@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Traits\HasOrganization;
+use Database\Factories\UserFactory;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasTenants;
 use Filament\Panel;
@@ -15,7 +16,10 @@ use Illuminate\Support\Collection;
 
 class User extends Authenticatable implements FilamentUser, HasTenants, MustVerifyEmail
 {
-    use HasFactory, HasOrganization, Notifiable;
+    /** @use HasFactory<UserFactory> */
+    use HasFactory;
+
+    use HasOrganization, Notifiable;
 
     /**
      * The attributes that should be hidden for serialization.
@@ -55,6 +59,7 @@ class User extends Authenticatable implements FilamentUser, HasTenants, MustVeri
         return "{$this->firstname} {$this->lastname}";
     }
 
+    /** @return Collection<int, Organization> */
     public function getTenants(Panel $panel): Collection
     {
         if ($this->isAdmin()) {

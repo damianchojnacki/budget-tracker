@@ -25,7 +25,6 @@
     <env name="MAIL_MAILER" value="log"/>
     <env name="SESSION_DRIVER" value="array"/>
     <env name="TELESCOPE_ENABLED" value="false"/>
-    <env name="API_NINJAS_API_KEY" value=""/>
   </php>
   <source>
     <include>

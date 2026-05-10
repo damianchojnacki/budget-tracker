@@ -100,7 +100,7 @@ return [
     ],
 
     'ignore_commands' => [
-        //
+        \Filament\Support\Commands\UpgradeCommand::class,
     ],
 
     /*

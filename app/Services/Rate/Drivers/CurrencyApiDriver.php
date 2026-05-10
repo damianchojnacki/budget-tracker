@@ -2,7 +2,7 @@
 
 namespace App\Services\Rate\Drivers;
 
-use App\Services\Rate\Rate;
+use App\Services\Rate\RateDto;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
@@ -10,13 +10,11 @@ use Illuminate\Support\Facades\Http;
 class CurrencyApiDriver implements Driver
 {
     /**
-     * @var Collection<Rate>
+     * @var Collection<int, RateDto>
      */
     protected Collection $rates;
 
     protected string $url = 'https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/usd.json';
-
-    protected Collection $assets;
 
     public function get(string $code): ?float
     {
@@ -31,19 +29,18 @@ class CurrencyApiDriver implements Driver
     }
 
     /**
-     * @return Collection<Rate>
+     * @return Collection<int, RateDto>
      */
     protected function getRates(): Collection
     {
         return Cache::remember($this->url, 3600 * 24, function () {
             return Http::get($this->url)
                 ->collect('usd')
-                ->mapWithKeys(function ($rate, $code) {
-                    return [$code => new Rate(
+                ->mapWithKeys(function (float|int $rate, string $code) {
+                    return [$code => new RateDto(
                         code: strtolower($code),
                         value: $rate,
-                    ),
-                    ];
+                    )];
                 })
                 ->values();
         });

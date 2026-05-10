@@ -29,6 +29,7 @@ use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Guava\FilamentIconPicker\Forms\IconPicker;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
 use NumberFormatter;
 
 class BudgetResource extends Resource
@@ -78,7 +79,7 @@ class BudgetResource extends Resource
                             'type' => $currency->type->getName(),
                         ])
                         ->groupBy('type')
-                        ->map(fn ($currencies, $type) => $currencies->mapWithKeys(fn ($currency) => [$currency['id'] => $currency['label']])
+                        ->map(fn (Collection $currencies, string $type) => $currencies->mapWithKeys(fn (array $currency) => [$currency['id'] => $currency['label']])
                             ->toArray()
                         )
                         ->toArray()
@@ -111,7 +112,7 @@ class BudgetResource extends Resource
                     ->searchable(),
                 TextColumn::make('amount')
                     ->translateLabel()
-                    ->formatStateUsing(function (Budget $record, $state): string|null|false {
+                    ->formatStateUsing(function (Budget $record, mixed $state): string|null|false {
                         if (blank($state)) {
                             return null;
                         }
@@ -154,7 +155,7 @@ class BudgetResource extends Resource
                                 $type->value => $type->getName(),
                             ])),
                     ])
-                    ->query(fn (Builder $query, array $data) => $query->when($data['type'], fn (Builder $query, $value) => $query->whereRelation('currency', 'type', $value)
+                    ->query(fn (Builder $query, array $data) => $query->when($data['type'], fn (Builder $query, string $value) => $query->whereRelation('currency', 'type', $value)
                     )
                     ),
             ])

@@ -101,13 +101,13 @@ test('creates user', function () {
         ->call('create')
         ->assertHasNoFormErrors();
 
-    $user = User::firstWhere('email', $data['email']);
+    $record = User::firstWhere('email', $data['email']);
 
-    expect($user)->not->toBeNull()
-        ->and($user->firstname)->toEqual($data['firstname'])
-        ->and($user->lastname)->toEqual($data['lastname'])
-        ->and($user->email)->toEqual($data['email'])
-        ->and($user->organization->id)->toEqual($user->organization->id);
+    expect($record)->not->toBeNull()
+        ->and($record->firstname)->toEqual($data['firstname'])
+        ->and($record->lastname)->toEqual($data['lastname'])
+        ->and($record->email)->toEqual($data['email'])
+        ->and($record->organization->id)->toEqual($user->organization->id);
 });
 
 test('updates user', function () {
@@ -116,7 +116,7 @@ test('updates user', function () {
     ]);
     test()->actingAsTenant($user);
 
-    $user = User::factory()->create([
+    $record = User::factory()->create([
         'organization_id' => $user->organization->id,
     ]);
 
@@ -127,18 +127,17 @@ test('updates user', function () {
     $data['email_verified_at'] = true;
 
     Livewire::test(EditUser::class, [
-        'record' => $user->id,
+        'record' => $record->getRouteKey(),
     ])
         ->fillForm($data)
         ->call('save')
         ->assertHasNoFormErrors();
 
-    $user = $user->fresh();
+    $record = $record->refresh();
 
-    expect($user->firstname)->toEqual($data['firstname'])
-        ->and($user->lastname)->toEqual($data['lastname'])
-        ->and($user->email)->toEqual($data['email'])
-        ->and($user->organization->id)->toEqual($user->organization->id);
+    expect($record->firstname)->toEqual($data['firstname'])
+        ->and($record->lastname)->toEqual($data['lastname'])
+        ->and($record->email)->toEqual($data['email']);
 });
 
 test('deletes user', function () {
@@ -147,15 +146,15 @@ test('deletes user', function () {
     ]);
     test()->actingAsTenant($user);
 
-    $user = User::factory()->create([
+    $record = User::factory()->create([
         'organization_id' => $user->organization->id,
     ]);
 
     Livewire::test(EditUser::class, [
-        'record' => $user->id,
+        'record' => $record->getRouteKey(),
     ])->callAction(DeleteAction::class);
 
-    test()->assertModelMissing($user);
+    test()->assertModelMissing($record);
 });
 
 test('invites user', function () {

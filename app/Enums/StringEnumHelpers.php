@@ -8,8 +8,12 @@ trait StringEnumHelpers
 {
     abstract public function getName(): string;
 
+    /**
+     * @return Collection<int, self>
+     */
     public static function collect(): Collection
     {
+        /* @phpstan-ignore-next-line return.type */
         return collect(static::cases());
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Database\Factories\OrganizationFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -10,10 +11,13 @@ use Illuminate\Support\Collection;
 
 class Organization extends Model
 {
+    /** @use HasFactory<OrganizationFactory> */
     use HasFactory;
 
     /**
      * Get the owner of the organization.
+     *
+     * @return BelongsTo<User, $this>
      */
     public function owner(): BelongsTo
     {
@@ -22,6 +26,8 @@ class Organization extends Model
 
     /**
      * Get the default currency of the organization.
+     *
+     * @return BelongsTo<Currency, $this>
      */
     public function currency(): BelongsTo
     {
@@ -41,6 +47,8 @@ class Organization extends Model
 
     /**
      * Get all the users that belong to the organization.
+     *
+     * @return HasMany<User, $this>
      */
     public function users(): HasMany
     {
@@ -49,6 +57,8 @@ class Organization extends Model
 
     /**
      * Get all the budgets that belong to the organization.
+     *
+     * @return HasMany<Budget, $this>
      */
     public function budgets(): HasMany
     {
@@ -57,6 +67,8 @@ class Organization extends Model
 
     /**
      * Get all the currencies that belong to the organization.
+     *
+     * @return HasMany<Currency, $this>
      */
     public function currencies(): HasMany
     {
@@ -76,13 +88,15 @@ class Organization extends Model
      */
     public function hasUserWithEmail(string $email): bool
     {
-        return $this->allUsers()->contains(function ($user) use ($email) {
+        return $this->allUsers()->contains(function (User $user) use ($email) {
             return $user->email === $email;
         });
     }
 
     /**
      * Get all the pending user invitations for the organization.
+     *
+     * @return HasMany<OrganizationInvitation, $this>
      */
     public function invitations(): HasMany
     {

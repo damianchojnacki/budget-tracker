@@ -50,7 +50,7 @@ class TransactionsRelationManager extends RelationManager
 
                         $formatter->setAttribute(NumberFormatter::FRACTION_DIGITS, $record->budget->currency->precision);
 
-                        return $formatter->formatCurrency($state, $currency);
+                        return $formatter->formatCurrency((float) $state, $currency);
                     })
                     ->sortable(),
                 TextColumn::make('created_at')

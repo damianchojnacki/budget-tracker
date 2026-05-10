@@ -2,7 +2,7 @@
 
 namespace App\Services\Rate\Drivers;
 
-use App\Services\Rate\Rate;
+use App\Services\Rate\RateDto;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
@@ -10,16 +10,19 @@ use Illuminate\Support\Facades\Http;
 class CoinCapDriver implements Driver
 {
     /**
-     * @var Collection<Rate>
+     * @var Collection<int, RateDto>
      */
     protected Collection $rates;
 
     protected string $url = 'https://api.coincap.io/v2/rates';
 
+    /**
+     * @var Collection<int, string>
+     */
     protected Collection $assets;
 
     /**
-     * @param  array<string>|Collection<string>  $assets
+     * @param  array<string>|Collection<int, string>  $assets
      */
     public function __construct(array|Collection $assets = [])
     {
@@ -48,15 +51,15 @@ class CoinCapDriver implements Driver
     }
 
     /**
-     * @return Collection<Rate>
+     * @return Collection<int, RateDto>
      */
     protected function getRates(): Collection
     {
         return Cache::remember($this->url, 3600 * 24, function () {
             return Http::get($this->url)
                 ->collect('data')
-                ->map(function ($crypto) {
-                    return new Rate(
+                ->map(function (array $crypto) {
+                    return new RateDto(
                         code: strtolower($crypto['symbol']),
                         value: $crypto['rateUsd']
                     );

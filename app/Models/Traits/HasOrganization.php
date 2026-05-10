@@ -11,11 +11,13 @@ trait HasOrganization
 {
     use HasRelationships;
 
+    /** @return BelongsTo<Organization, $this> */
     public function organization(): BelongsTo
     {
         return $this->belongsTo(Organization::class);
     }
 
+    /** @return HasOne<Organization, $this> */
     public function ownedOrganization(): HasOne
     {
         return $this->hasOne(Organization::class, 'owner_id');

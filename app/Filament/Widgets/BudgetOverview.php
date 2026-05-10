@@ -4,8 +4,10 @@ namespace App\Filament\Widgets;
 
 use App\Models\BudgetHistory;
 use Carbon\Carbon;
+use Carbon\CarbonInterface;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use NumberFormatter;
 
@@ -64,7 +66,7 @@ class BudgetOverview extends BaseWidget
             ->sum;
     }
 
-    protected function getBudgetSumHistory(?Carbon $before = null): float
+    protected function getBudgetSumHistory(?CarbonInterface $before = null): float
     {
         $organization = Auth::user()->organization;
 
@@ -82,21 +84,21 @@ class BudgetOverview extends BaseWidget
     /**
      * @return float[]
      */
-    protected function getTotalData(?Carbon $after = null, ?Carbon $before = null): array
+    protected function getTotalData(?CarbonInterface $after = null, ?CarbonInterface $before = null): array
     {
         $organization = Auth::user()->organization;
 
         return BudgetHistory::query()
             ->where('budget_histories.created_at', '>', $after ?? BudgetHistory::oldest()->value('created_at') ?? now()->subMonth())
             ->where('budget_histories.created_at', '<', $before ?? now())
-            ->whereHas('budget', fn ($query) => $query->where('organization_id', $organization->id))
+            ->whereHas('budget', fn (Builder $query) => $query->where('organization_id', $organization->id))
             ->join('budgets', 'budgets.id', '=', 'budget_histories.budget_id')
             ->selectRaw('budget_histories.created_at, budget_histories.amount / (SELECT rate from currencies where id = budgets.currency_id) * (SELECT rate from currencies where code = ?) as converted_amount', [
                 $organization->currency->code,
             ])
             ->get()
-            ->groupBy(fn ($row) => Carbon::parse($row->created_at)->toDateString())
-            ->map(fn ($group) => $group->sum('converted_amount'))
+            ->groupBy(fn (mixed $row) => Carbon::parse($row->created_at)->toDateString())
+            ->map(fn (mixed $group) => $group->sum('converted_amount'))
             ->values()
             ->toArray();
     }
@@ -169,7 +171,7 @@ class BudgetOverview extends BaseWidget
     /**
      *  @return array{
      *     current: string,
-     *     data: int[],
+     *     data: float[],
      *     diff: string|null,
      *     icon: string|null,
      *     color: string|null,

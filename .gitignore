@@ -19,3 +19,6 @@ yarn-error.log
 /.vscode
 coverage.txt
 /.phpdoc
+/.claude
+/CLAUDE.md
+/phpstan.neon

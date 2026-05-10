@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Services\Rate;
+namespace App\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
-class RateFacade extends Facade
+class Rate extends Facade
 {
     protected static function getFacadeAccessor(): string
     {

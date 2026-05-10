@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
+use App\Facades\Rate;
 use App\Models\Currency;
 use Illuminate\Console\Command;
-use Rate;
 
 class UpdateCurrencyRates extends Command
 {

@@ -2,7 +2,7 @@
 
 namespace App\Services\Rate;
 
-class Rate
+class RateDto
 {
     public function __construct(
         public string $code,
