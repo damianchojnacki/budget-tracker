@@ -25,7 +25,7 @@ class AdminPanelProvider extends PanelProvider
     {
         return $panel
             ->default()
-            ->id('admin')
+            ->id('panel')
             ->path('dashboard')
             ->tenant(Organization::class)
             ->login()

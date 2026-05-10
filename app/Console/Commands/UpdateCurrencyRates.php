@@ -30,7 +30,7 @@ class UpdateCurrencyRates extends Command
         Currency::all()->each(function (Currency $currency) {
             $rate = Rate::get($currency);
 
-            if (! $rate) {
+            if (!$rate) {
                 $this->output->warning("Could not get rate for {$currency->code}.");
 
                 return;

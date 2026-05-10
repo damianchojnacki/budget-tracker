@@ -126,7 +126,7 @@ class BudgetResource extends Resource
                     })
                     ->sortable(),
                 TextColumn::make('amount_base_currency')
-                    ->label(__('Amount')." ({$organization->currency->code})")
+                    ->label(__('Amount') . " ({$organization->currency->code})")
                     ->getStateUsing(function (Budget $record) use ($organization) {
                         return $record->selectRaw('(amount / (SELECT rate from currencies where id = currency_id) * (SELECT rate from currencies where code = ?)) as sum', [
                             $organization->currency->code,

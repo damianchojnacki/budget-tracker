@@ -14,7 +14,7 @@ class CreateBudget extends CreateRecord
 
     public function getTitle(): Htmlable|string
     {
-        return __('Create').' '.__('Budget');
+        return __('Create') . ' ' . __('Budget');
     }
 
     protected function mutateFormDataBeforeCreate(array $data): array

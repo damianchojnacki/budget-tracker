@@ -2,8 +2,8 @@
 
 namespace Tests\Feature\Http\Controllers;
 
+use App\Http\Controllers\OrganizationInvitationController;
 use App\Models\Organization;
-use App\Models\OrganizationInvitation;
 use App\Models\User;
 use Database\Seeders\CurrencySeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\URL;
 use Tests\TestCase;
 
 /**
- * @see \App\Http\Controllers\OrganizationInvitationController
+ * @see OrganizationInvitationController
  */
 class OrganizationInvitationControllerTest extends TestCase
 {
@@ -24,7 +24,7 @@ class OrganizationInvitationControllerTest extends TestCase
         $this->seed(CurrencySeeder::class);
     }
 
-    public function testCanBeAccepted()
+    public function test_can_be_accepted()
     {
         $organization = Organization::factory()->create();
 
@@ -46,7 +46,7 @@ class OrganizationInvitationControllerTest extends TestCase
         $this->assertModelMissing($invitation);
     }
 
-    public function testCannotBeAcceptedIfUserAlreadyBelongsToOrganization()
+    public function test_cannot_be_accepted_if_user_already_belongs_to_organization()
     {
         $organization = Organization::factory()->create();
 
@@ -65,7 +65,7 @@ class OrganizationInvitationControllerTest extends TestCase
             ->assertInvalid('email');
     }
 
-    public function testCannotBeAcceptedIfUserHasDifferentEmail()
+    public function test_cannot_be_accepted_if_user_has_different_email()
     {
         $organization = Organization::factory()->create();
 
@@ -81,38 +81,6 @@ class OrganizationInvitationControllerTest extends TestCase
 
         $this->actingAs($user)
             ->put($url)
-            ->assertForbidden();
-    }
-
-    public function testCanBeCanceled()
-    {
-        $owner = User::factory()->create();
-
-        $organization = Organization::factory()->recycle($owner)->create();
-
-        $invitation = $organization->invitations()->save(
-            OrganizationInvitation::factory()->recycle($organization)->make()
-        );
-
-        $this->actingAs($owner)
-            ->delete(route('organization-invitations.cancel', ['invitation' => $invitation]))
-            ->assertSuccessful();
-
-        $this->assertModelMissing($invitation);
-    }
-
-    public function testCanBeCanceledOnlyByOrganizationOwner()
-    {
-        $organization = Organization::factory()->create();
-
-        $user = User::factory()->create();
-
-        $invitation = $organization->invitations()->save(
-            OrganizationInvitation::factory()->recycle($organization)->make()
-        );
-
-        $this->actingAs($user)
-            ->delete(route('organization-invitations.cancel', ['invitation' => $invitation]))
             ->assertForbidden();
     }
 }

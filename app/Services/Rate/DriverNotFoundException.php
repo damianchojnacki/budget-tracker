@@ -4,6 +4,4 @@ namespace App\Services\Rate;
 
 use Exception;
 
-class DriverNotFoundException extends Exception
-{
-}
+class DriverNotFoundException extends Exception {}

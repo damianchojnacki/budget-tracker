@@ -42,7 +42,7 @@ class OrganizationInvitationResource extends Resource
                 TextInput::make('email')
                     ->required(),
                 DateTimePicker::make('created_at')
-                    ->hidden(! $user->isAdmin())
+                    ->hidden(!$user->isAdmin())
                     ->label('Invited at'),
             ]);
     }

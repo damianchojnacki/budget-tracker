@@ -13,7 +13,7 @@ class EditCurrency extends EditRecord
 
     public function getTitle(): Htmlable|string
     {
-        return __('Edit').' '.__('Currency');
+        return __('Edit') . ' ' . __('Currency');
     }
 
     protected function getHeaderActions(): array

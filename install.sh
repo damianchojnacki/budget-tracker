@@ -19,14 +19,14 @@ docker run --rm \
     -u "$(id -u):$(id -g)" \
     -v "$(pwd)":/var/www/html \
     -w /var/www/html \
-    laravelsail/php82-composer:latest \
+    laravelsail/php84-composer:latest \
     composer install --ignore-platform-reqs --no-cache
 
 docker run --rm \
     -u "$(id -u):$(id -g)" \
     -v "$(pwd)":/var/www/html \
     -w /var/www/html \
-    laravelsail/php82-composer:latest \
+    laravelsail/php84-composer:latest \
     php artisan key:generate
 
 CYAN='\033[0;36m'

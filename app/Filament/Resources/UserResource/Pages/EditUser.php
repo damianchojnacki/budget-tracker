@@ -13,7 +13,7 @@ class EditUser extends EditRecord
 
     public function getTitle(): Htmlable|string
     {
-        return __('Edit').' '.__('User');
+        return __('Edit') . ' ' . __('User');
     }
 
     protected function getHeaderActions(): array

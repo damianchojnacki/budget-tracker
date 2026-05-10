@@ -10,3 +10,7 @@
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+use App\Http\Controllers\UserController;
+
+Route::get('/user', [UserController::class, 'show'])->name('user.show')->withoutMiddleware('verified');

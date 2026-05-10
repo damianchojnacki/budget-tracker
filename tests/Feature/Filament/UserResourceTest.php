@@ -10,14 +10,13 @@ use App\Models\Organization;
 use App\Models\OrganizationInvitation;
 use App\Models\User;
 use App\Notifications\InvitedToOrganization;
-use Database\Seeders\CurrencySeeder;
 use Filament\Actions\DeleteAction;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Notification;
 use Livewire\Livewire;
 
 /**
- * @see \App\Filament\Resources\UserResource
+ * @see UserResource
  */
 class UserResourceTest extends FilamentTestCase
 {
@@ -32,21 +31,21 @@ class UserResourceTest extends FilamentTestCase
         ]);
     }
 
-    public function testRendersListPage()
+    public function test_renders_list_page()
     {
         $this->actingAs($this->user)
             ->get(UserResource::getUrl('index'))
             ->assertSuccessful();
     }
 
-    public function testRendersCreatePage()
+    public function test_renders_create_page()
     {
         $this->actingAs($this->user)
             ->get(UserResource::getUrl('create'))
             ->assertSuccessful();
     }
 
-    public function testRendersUpdatePage()
+    public function test_renders_update_page()
     {
         $this->actingAs($this->user)
             ->get(UserResource::getUrl('edit', [
@@ -57,7 +56,7 @@ class UserResourceTest extends FilamentTestCase
             ->assertSuccessful();
     }
 
-    public function testDoesRenderUpdatePageForModelOutsideTenacy()
+    public function test_does_render_update_page_for_model_outside_tenacy()
     {
         $this->actingAs($this->user)
             ->get(UserResource::getUrl('edit', [
@@ -68,7 +67,7 @@ class UserResourceTest extends FilamentTestCase
             ->assertNotFound();
     }
 
-    public function testListsCorrectUsers()
+    public function test_lists_correct_users()
     {
         $users = User::factory()->count(3)->create([
             'organization_id' => $this->user->organization->id,
@@ -85,7 +84,7 @@ class UserResourceTest extends FilamentTestCase
             ->assertCanNotSeeTableRecords($hidden);
     }
 
-    public function testCreatesUser()
+    public function test_creates_user()
     {
         $data = User::factory()->make()->toArray();
 
@@ -107,7 +106,7 @@ class UserResourceTest extends FilamentTestCase
         $this->assertEquals($this->user->organization->id, $user->organization->id);
     }
 
-    public function testUpdatesUser()
+    public function test_updates_user()
     {
         $user = User::factory()->create([
             'organization_id' => $this->user->organization->id,
@@ -133,7 +132,7 @@ class UserResourceTest extends FilamentTestCase
         $this->assertEquals($this->user->organization->id, $user->organization->id);
     }
 
-    public function testDeletesUser()
+    public function test_deletes_user()
     {
         $user = User::factory()->create([
             'organization_id' => $this->user->organization->id,
@@ -146,7 +145,7 @@ class UserResourceTest extends FilamentTestCase
         $this->assertModelMissing($user);
     }
 
-    public function testInvitesUser()
+    public function test_invites_user()
     {
         Notification::fake();
 
@@ -160,7 +159,7 @@ class UserResourceTest extends FilamentTestCase
         });
     }
 
-    public function testDoesNotInvitesUserIfInvitationAlreadyExists()
+    public function test_does_not_invites_user_if_invitation_already_exists()
     {
         Notification::fake();
 

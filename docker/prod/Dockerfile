@@ -1,29 +1,68 @@
-ARG PHP_EXTENSIONS="bcmath gd imap intl pdo_mysql uuid igbinary redis"
 
-FROM thecodingmachine/php:8.3-v4-slim-fpm
+# Versions
+FROM dunglas/frankenphp:1-php8.4 AS frankenphp_upstream
 
-ARG PHP_EXTENSIONS="bcmath gd imap intl pdo_mysql uuid igbinary redis"
+ENV DB_DATABASE=/app/storage/database.sqlite
+ENV TELESCOPE_ENABLED=0
 
-ENV TEMPLATE_PHP_INI=production
-ENV PHP_INI_MEMORY_LIMIT=2g
-ENV PHP_INI_UPLOAD_MAX_FILESIZE=10M
+# The different stages of this Dockerfile are meant to be built into separate images
+# https://docs.docker.com/develop/develop-images/multistage-build/#stop-at-a-specific-build-stage
+# https://docs.docker.com/compose/compose-file/#target
 
-RUN sudo apt-get update -y && \
-    sudo apt-get install -y locales mysql-client && \
-    sudo locale-gen pl_PL.utf8 && \
-    echo "LANG=pl_PL.utf8" >> ~/.bashrc && \
-    sudo apt-get clean -y && \
-    sudo apt-get autoremove -y
 
-COPY --chown=docker:docker . /var/www/html
+# Base FrankenPHP image
+FROM frankenphp_upstream AS frankenphp_base
 
-RUN composer install --no-dev --no-interaction --optimize-autoloader && \
-    php artisan storage:link && \
-    php artisan optimize:clear && \
-    sudo cp docker/prod/entrypoint.sh /entrypoint && \
-    sudo chmod +x /entrypoint
+WORKDIR /app
 
-EXPOSE 9000
+# persistent / runtime deps
+# hadolint ignore=DL3008
+RUN apt-get update && apt-get install --no-install-recommends -y \
+	acl \
+	file \
+	gettext \
+	git \
+	&& rm -rf /var/lib/apt/lists/*
 
-ENTRYPOINT ["/entrypoint"]
-CMD ["php-fpm"]
+# https://getcomposer.org/doc/03-cli.md#composer-allow-superuser
+ENV COMPOSER_ALLOW_SUPERUSER=1
+
+RUN set -eux; \
+	install-php-extensions \
+		@composer \
+		apcu \
+		intl \
+		opcache \
+		zip \
+    	gd \
+    	exif \
+    	bcmath \
+        pdo_sqlite \
+	;
+
+
+COPY --link docker/prod/conf.d/php.ini $PHP_INI_DIR/conf.d/
+COPY --link --chmod=755 docker/prod/docker-entrypoint.sh /usr/local/bin/docker-entrypoint
+COPY --link docker/prod/Caddyfile /etc/caddy/Caddyfile
+
+ENTRYPOINT ["docker-entrypoint"]
+
+HEALTHCHECK --start-period=60s CMD curl -f http://localhost:2019/metrics || exit 1
+CMD [ "frankenphp", "run", "--config", "/etc/caddy/Caddyfile" ]
+
+# Prod FrankenPHP image
+FROM frankenphp_base AS frankenphp_prod
+
+RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
+
+# prevent the reinstallation of vendors at every changes in the source code
+COPY --link composer.* ./
+RUN set -eux; \
+	composer install --no-cache --prefer-dist --no-dev --no-autoloader --no-scripts --no-progress
+
+# copy sources
+COPY --link . ./
+RUN rm -Rf docker/
+
+RUN set -eux; \
+	composer dump-autoload --classmap-authoritative --no-dev

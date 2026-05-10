@@ -9,20 +9,20 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 
 /**
- * @see \App\Filament\Resources\OrganizationInvitationResource
+ * @see OrganizationInvitationResource
  */
 class OrganizationInvitationResourceTest extends FilamentTestCase
 {
     use RefreshDatabase;
 
-    public function testRendersListPage()
+    public function test_renders_list_page()
     {
         $this->actingAs($this->user)
             ->get(OrganizationInvitationResource::getUrl('index'))
             ->assertSuccessful();
     }
 
-    public function testListsCorrectInvitations()
+    public function test_lists_correct_invitations()
     {
         $invitations = OrganizationInvitation::factory()
             ->recycle(

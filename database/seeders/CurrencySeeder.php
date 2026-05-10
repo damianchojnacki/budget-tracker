@@ -8,533 +8,142 @@ use Illuminate\Database\Seeder;
 
 class CurrencySeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         $fiats = [
-            [
-                'name' => 'US Dollar',
-                'symbol' => '$',
-                'code' => 'USD',
-            ],
-            [
-                'name' => 'Euro',
-                'symbol' => '€',
-                'code' => 'EUR',
-            ],
-            [
-                'name' => 'British Pound',
-                'symbol' => '£',
-                'code' => 'GBP',
-            ],
-            [
-                'name' => 'Japanese Yen',
-                'symbol' => '¥',
-                'code' => 'JPY',
-            ],
-            [
-                'name' => 'Australian Dollar',
-                'symbol' => '$',
-                'code' => 'AUD',
-            ],
-            [
-                'name' => 'Canadian Dollar',
-                'symbol' => '$',
-                'code' => 'CAD',
-            ],
-            [
-                'name' => 'Swiss Franc',
-                'symbol' => 'CHF',
-                'code' => 'CHF',
-            ],
-            [
-                'name' => 'Chinese Yuan Renminbi',
-                'symbol' => '¥',
-                'code' => 'CNY',
-            ],
-            [
-                'name' => 'Swedish Krona',
-                'symbol' => 'kr',
-                'code' => 'SEK',
-            ],
-            [
-                'name' => 'New Zealand Dollar',
-                'symbol' => '$',
-                'code' => 'NZD',
-            ],
-            [
-                'name' => 'Mexican Peso',
-                'symbol' => '$',
-                'code' => 'MXN',
-            ],
-            [
-                'name' => 'Singapore Dollar',
-                'symbol' => '$',
-                'code' => 'SGD',
-            ],
-            [
-                'name' => 'Hong Kong Dollar',
-                'symbol' => '$',
-                'code' => 'HKD',
-            ],
-            [
-                'name' => 'Norwegian Krone',
-                'symbol' => 'kr',
-                'code' => 'NOK',
-            ],
-            [
-                'name' => 'South Korean Won',
-                'symbol' => '₩',
-                'code' => 'KRW',
-            ],
-            [
-                'name' => 'Turkish Lira',
-                'symbol' => '₺',
-                'code' => 'TRY',
-            ],
-            [
-                'name' => 'Russian Ruble',
-                'symbol' => '₽',
-                'code' => 'RUB',
-            ],
-            [
-                'name' => 'Indian Rupee',
-                'symbol' => '₹',
-                'code' => 'INR',
-            ],
-            [
-                'name' => 'Brazilian Real',
-                'symbol' => 'R$',
-                'code' => 'BRL',
-            ],
-            [
-                'name' => 'South African Rand',
-                'symbol' => 'R',
-                'code' => 'ZAR',
-            ],
-            [
-                'name' => 'Philippine Peso',
-                'symbol' => '₱',
-                'code' => 'PHP',
-            ],
-            [
-                'name' => 'Czech Koruna',
-                'symbol' => 'Kč',
-                'code' => 'CZK',
-            ],
-            [
-                'name' => 'Indonesian Rupiah',
-                'symbol' => 'Rp',
-                'code' => 'IDR',
-            ],
-            [
-                'name' => 'Malaysian Ringgit',
-                'symbol' => 'RM',
-                'code' => 'MYR',
-            ],
-            [
-                'name' => 'Hungarian Forint',
-                'symbol' => 'Ft',
-                'code' => 'HUF',
-            ],
-            [
-                'name' => 'Icelandic Krona',
-                'symbol' => 'kr',
-                'code' => 'ISK',
-            ],
-            [
-                'name' => 'Croatian Kuna',
-                'symbol' => 'kn',
-                'code' => 'HRK',
-            ],
-            [
-                'name' => 'Bulgarian Lev',
-                'symbol' => 'лв',
-                'code' => 'BGN',
-            ],
-            [
-                'name' => 'Romanian Leu',
-                'symbol' => 'lei',
-                'code' => 'RON',
-            ],
-            [
-                'name' => 'Danish Krone',
-                'symbol' => 'kr',
-                'code' => 'DKK',
-            ],
-            [
-                'name' => 'Thai Baht',
-                'symbol' => '฿',
-                'code' => 'THB',
-            ],
-            [
-                'name' => 'Polish Zloty',
-                'symbol' => 'zł',
-                'code' => 'PLN',
-            ],
-            [
-                'name' => 'Israeli Shekel',
-                'symbol' => '₪',
-                'code' => 'ILS',
-            ],
-            [
-                'name' => 'Chilean Peso',
-                'symbol' => '$',
-                'code' => 'CLP',
-            ],
-            [
-                'name' => 'Saudi Arabian Riyal',
-                'symbol' => '﷼',
-                'code' => 'SAR',
-            ],
-            [
-                'name' => 'Colombian Peso',
-                'symbol' => '$',
-                'code' => 'COP',
-            ],
-            [
-                'name' => 'Nigerian Naira',
-                'symbol' => '₦',
-                'code' => 'NGN',
-            ],
-            [
-                'name' => 'United Arab Emirates Dirham',
-                'symbol' => 'د.إ',
-                'code' => 'AED',
-            ],
-            [
-                'name' => 'Slovak Koruna',
-                'symbol' => 'Sk',
-                'code' => 'SKK',
-            ],
-            [
-                'name' => 'Qatari Riyal',
-                'symbol' => '﷼',
-                'code' => 'QAR',
-            ],
-            [
-                'name' => 'Costa Rican Colon',
-                'symbol' => '₡',
-                'code' => 'CRC',
-            ],
-            [
-                'name' => 'Peruvian Nuevo Sol',
-                'symbol' => 'S/.',
-                'code' => 'PEN',
-            ],
-            [
-                'name' => 'New Taiwan Dollar',
-                'symbol' => 'NT$',
-                'code' => 'TWD',
-            ],
-            [
-                'name' => 'Dominican Peso',
-                'symbol' => 'RD$',
-                'code' => 'DOP',
-            ],
-            [
-                'name' => 'Uruguayan Peso',
-                'symbol' => '$U',
-                'code' => 'UYU',
-            ],
-            [
-                'name' => 'Egyptian Pound',
-                'symbol' => '£',
-                'code' => 'EGP',
-            ],
-            [
-                'name' => 'Vietnamese Dong',
-                'symbol' => '₫',
-                'code' => 'VND',
-            ],
+            ['name' => 'US Dollar',                     'symbol' => '$',   'code' => 'USD', 'precision' => 2],
+            ['name' => 'Euro',                          'symbol' => '€',   'code' => 'EUR', 'precision' => 2],
+            ['name' => 'British Pound',                 'symbol' => '£',   'code' => 'GBP', 'precision' => 2],
+            ['name' => 'Japanese Yen',                  'symbol' => '¥',   'code' => 'JPY', 'precision' => 0],
+            ['name' => 'Australian Dollar',             'symbol' => '$',   'code' => 'AUD', 'precision' => 2],
+            ['name' => 'Canadian Dollar',               'symbol' => '$',   'code' => 'CAD', 'precision' => 2],
+            ['name' => 'Swiss Franc',                   'symbol' => 'CHF', 'code' => 'CHF', 'precision' => 2],
+            ['name' => 'Chinese Yuan Renminbi',         'symbol' => '¥',   'code' => 'CNY', 'precision' => 2],
+            ['name' => 'Swedish Krona',                 'symbol' => 'kr',  'code' => 'SEK', 'precision' => 2],
+            ['name' => 'New Zealand Dollar',            'symbol' => '$',   'code' => 'NZD', 'precision' => 2],
+            ['name' => 'Mexican Peso',                  'symbol' => '$',   'code' => 'MXN', 'precision' => 2],
+            ['name' => 'Singapore Dollar',              'symbol' => '$',   'code' => 'SGD', 'precision' => 2],
+            ['name' => 'Hong Kong Dollar',              'symbol' => '$',   'code' => 'HKD', 'precision' => 2],
+            ['name' => 'Norwegian Krone',               'symbol' => 'kr',  'code' => 'NOK', 'precision' => 2],
+            ['name' => 'South Korean Won',              'symbol' => '₩',   'code' => 'KRW', 'precision' => 0],
+            ['name' => 'Turkish Lira',                  'symbol' => '₺',   'code' => 'TRY', 'precision' => 2],
+            ['name' => 'Russian Ruble',                 'symbol' => '₽',   'code' => 'RUB', 'precision' => 2],
+            ['name' => 'Indian Rupee',                  'symbol' => '₹',   'code' => 'INR', 'precision' => 2],
+            ['name' => 'Brazilian Real',                'symbol' => 'R$',  'code' => 'BRL', 'precision' => 2],
+            ['name' => 'South African Rand',            'symbol' => 'R',   'code' => 'ZAR', 'precision' => 2],
+            ['name' => 'Philippine Peso',               'symbol' => '₱',   'code' => 'PHP', 'precision' => 2],
+            ['name' => 'Czech Koruna',                  'symbol' => 'Kč',  'code' => 'CZK', 'precision' => 2],
+            ['name' => 'Indonesian Rupiah',             'symbol' => 'Rp',  'code' => 'IDR', 'precision' => 0],
+            ['name' => 'Malaysian Ringgit',             'symbol' => 'RM',  'code' => 'MYR', 'precision' => 2],
+            ['name' => 'Hungarian Forint',              'symbol' => 'Ft',  'code' => 'HUF', 'precision' => 0],
+            ['name' => 'Icelandic Krona',               'symbol' => 'kr',  'code' => 'ISK', 'precision' => 0],
+            ['name' => 'Croatian Kuna',                 'symbol' => 'kn',  'code' => 'HRK', 'precision' => 2],
+            ['name' => 'Bulgarian Lev',                 'symbol' => 'лв',  'code' => 'BGN', 'precision' => 2],
+            ['name' => 'Romanian Leu',                  'symbol' => 'lei', 'code' => 'RON', 'precision' => 2],
+            ['name' => 'Danish Krone',                  'symbol' => 'kr',  'code' => 'DKK', 'precision' => 2],
+            ['name' => 'Thai Baht',                     'symbol' => '฿',   'code' => 'THB', 'precision' => 2],
+            ['name' => 'Polish Zloty',                  'symbol' => 'zł',  'code' => 'PLN', 'precision' => 2],
+            ['name' => 'Israeli Shekel',                'symbol' => '₪',   'code' => 'ILS', 'precision' => 2],
+            ['name' => 'Chilean Peso',                  'symbol' => '$',   'code' => 'CLP', 'precision' => 0],
+            ['name' => 'Saudi Arabian Riyal',           'symbol' => '﷼',   'code' => 'SAR', 'precision' => 2],
+            ['name' => 'Colombian Peso',                'symbol' => '$',   'code' => 'COP', 'precision' => 0],
+            ['name' => 'Nigerian Naira',                'symbol' => '₦',   'code' => 'NGN', 'precision' => 0],
+            ['name' => 'United Arab Emirates Dirham',   'symbol' => 'د.إ', 'code' => 'AED', 'precision' => 2],
+            ['name' => 'Slovak Koruna',                 'symbol' => 'Sk',  'code' => 'SKK', 'precision' => 2],
+            ['name' => 'Qatari Riyal',                  'symbol' => '﷼',   'code' => 'QAR', 'precision' => 2],
+            ['name' => 'Costa Rican Colon',             'symbol' => '₡',   'code' => 'CRC', 'precision' => 2],
+            ['name' => 'Peruvian Nuevo Sol',            'symbol' => 'S/.', 'code' => 'PEN', 'precision' => 2],
+            ['name' => 'New Taiwan Dollar',             'symbol' => 'NT$', 'code' => 'TWD', 'precision' => 2],
+            ['name' => 'Dominican Peso',                'symbol' => 'RD$', 'code' => 'DOP', 'precision' => 2],
+            ['name' => 'Uruguayan Peso',                'symbol' => '$U',  'code' => 'UYU', 'precision' => 2],
+            ['name' => 'Egyptian Pound',                'symbol' => '£',   'code' => 'EGP', 'precision' => 2],
+            ['name' => 'Vietnamese Dong',               'symbol' => '₫',   'code' => 'VND', 'precision' => 0],
         ];
 
         $cryptos = [
-            [
-                'name' => 'Bitcoin',
-                'code' => 'BTC',
-            ],
-            [
-                'name' => 'Ethereum',
-                'code' => 'ETH',
-            ],
-            [
-                'name' => 'Cardano',
-                'code' => 'ADA',
-            ],
-            [
-                'name' => 'Binance Coin',
-                'code' => 'BNB',
-            ],
-            [
-                'name' => 'Tether',
-                'code' => 'USDT',
-            ],
-            [
-                'name' => 'XRP',
-                'code' => 'XRP',
-            ],
-            [
-                'name' => 'Solana',
-                'code' => 'SOL',
-            ],
-            [
-                'name' => 'Polkadot',
-                'code' => 'DOT',
-            ],
-            [
-                'name' => 'Dogecoin',
-                'code' => 'DOGE',
-            ],
-            [
-                'name' => 'USD Coin',
-                'code' => 'USDC',
-            ],
-            [
-                'name' => 'Terra',
-                'code' => 'LUNA',
-            ],
-            [
-                'name' => 'Avalanche',
-                'code' => 'AVAX',
-            ],
-            [
-                'name' => 'Uniswap',
-                'code' => 'UNI',
-            ],
-            [
-                'name' => 'Chainlink',
-                'code' => 'LINK',
-            ],
-            [
-                'name' => 'Litecoin',
-                'code' => 'LTC',
-            ],
-            [
-                'name' => 'Bitcoin Cash',
-                'code' => 'BCH',
-            ],
-            [
-                'name' => 'Algorand',
-                'code' => 'ALGO',
-            ],
-            [
-                'name' => 'Cosmos',
-                'code' => 'ATOM',
-            ],
-            [
-                'name' => 'Crypto.com Coin',
-                'code' => 'CRO',
-            ],
-            [
-                'name' => 'Stellar',
-                'code' => 'XLM',
-            ],
-            [
-                'name' => 'VeChain',
-                'code' => 'VET',
-            ],
+            ['name' => 'Bitcoin',           'code' => 'BTC',  'precision' => 8],
+            ['name' => 'Ethereum',          'code' => 'ETH',  'precision' => 8],
+            ['name' => 'Cardano',           'code' => 'ADA',  'precision' => 6],
+            ['name' => 'Binance Coin',      'code' => 'BNB',  'precision' => 6],
+            ['name' => 'Tether',            'code' => 'USDT', 'precision' => 2],
+            ['name' => 'XRP',               'code' => 'XRP',  'precision' => 6],
+            ['name' => 'Solana',            'code' => 'SOL',  'precision' => 6],
+            ['name' => 'Polkadot',          'code' => 'DOT',  'precision' => 6],
+            ['name' => 'Dogecoin',          'code' => 'DOGE', 'precision' => 4],
+            ['name' => 'USD Coin',          'code' => 'USDC', 'precision' => 2],
+            ['name' => 'Terra',             'code' => 'LUNA', 'precision' => 6],
+            ['name' => 'Avalanche',         'code' => 'AVAX', 'precision' => 6],
+            ['name' => 'Uniswap',           'code' => 'UNI',  'precision' => 6],
+            ['name' => 'Chainlink',         'code' => 'LINK', 'precision' => 6],
+            ['name' => 'Litecoin',          'code' => 'LTC',  'precision' => 8],
+            ['name' => 'Bitcoin Cash',      'code' => 'BCH',  'precision' => 8],
+            ['name' => 'Algorand',          'code' => 'ALGO', 'precision' => 6],
+            ['name' => 'Cosmos',            'code' => 'ATOM', 'precision' => 6],
+            ['name' => 'Crypto.com Coin',   'code' => 'CRO',  'precision' => 4],
+            ['name' => 'Stellar',           'code' => 'XLM',  'precision' => 4],
+            ['name' => 'VeChain',           'code' => 'VET',  'precision' => 4],
         ];
 
         $metals = [
-            [
-                'name' => 'Gold Bullion Coin 1oz',
-                'code' => 'XAU',
-            ],
-            [
-                'name' => 'Gold Bullion Coin 1/2oz',
-                'code' => 'XAU',
-            ],
-            [
-                'name' => 'Gold Bullion Coin 1/4oz',
-                'code' => 'XAU',
-            ],
-            [
-                'name' => 'Silver Bullion Coin 1oz',
-                'code' => 'XAG',
-            ],
-            [
-                'name' => 'Silver Bullion Coin 1/2oz',
-                'code' => 'XAG',
-            ],
-            [
-                'name' => 'Silver Bullion Coin 1/4oz',
-                'code' => 'XAG',
-            ],
-            [
-                'name' => 'Platinum',
-                'code' => 'XPT',
-            ],
-            [
-                'name' => 'Palladium',
-                'code' => 'XPD',
-            ],
+            ['name' => 'Gold',      'code' => 'XAU', 'symbol' => 'oz.', 'precision' => 4],
+            ['name' => 'Silver',    'code' => 'XAG', 'symbol' => 'oz.', 'precision' => 4],
+            ['name' => 'Platinum',  'code' => 'XPT', 'symbol' => 'oz.', 'precision' => 4],
+            ['name' => 'Palladium', 'code' => 'XPD', 'symbol' => 'oz.', 'precision' => 4],
         ];
 
         $stocks = [
-            [
-                'name' => 'Apple',
-                'code' => 'AAPL',
-            ],
-            [
-                'name' => 'Microsoft',
-                'code' => 'MSFT',
-            ],
-            [
-                'name' => 'Amazon',
-                'code' => 'AMZN',
-            ],
-            [
-                'name' => 'Alphabet',
-                'code' => 'GOOGL',
-            ],
-            [
-                'name' => 'Facebook',
-                'code' => 'FB',
-            ],
-            [
-                'name' => 'Tesla',
-                'code' => 'TSLA',
-            ],
-            [
-                'name' => 'Nvidia',
-                'code' => 'NVDA',
-            ],
-            [
-                'name' => 'PayPal',
-                'code' => 'PYPL',
-            ],
-            [
-                'name' => 'Visa',
-                'code' => 'V',
-            ],
-            [
-                'name' => 'JPMorgan Chase',
-                'code' => 'JPM',
-            ],
-            [
-                'name' => 'Johnson & Johnson',
-                'code' => 'JNJ',
-            ],
-            [
-                'name' => 'Walmart',
-                'code' => 'WMT',
-            ],
-            [
-                'name' => 'UnitedHealth Group',
-                'code' => 'UNH',
-            ],
-            [
-                'name' => 'Mastercard',
-                'code' => 'MA',
-            ],
-            [
-                'name' => 'Home Depot',
-                'code' => 'HD',
-            ],
-            [
-                'name' => 'Procter & Gamble',
-                'code' => 'PG',
-            ],
-            [
-                'name' => 'Bank of America',
-                'code' => 'BAC',
-            ],
-            [
-                'name' => 'Verizon',
-                'code' => 'VZ',
-            ],
-            [
-                'name' => 'Intel',
-                'code' => 'INTC',
-            ],
-            [
-                'name' => 'Netflix',
-                'code' => 'NFLX',
-            ],
-            [
-                'name' => 'Adobe',
-                'code' => 'ADBE',
-            ],
-            [
-                'name' => 'Salesforce',
-                'code' => 'CRM',
-            ],
+            ['name' => 'Apple',             'code' => 'AAPL', 'precision' => 2],
+            ['name' => 'Microsoft',         'code' => 'MSFT', 'precision' => 2],
+            ['name' => 'Amazon',            'code' => 'AMZN', 'precision' => 2],
+            ['name' => 'Alphabet',          'code' => 'GOOGL', 'precision' => 2],
+            ['name' => 'Facebook',          'code' => 'FB',   'precision' => 2],
+            ['name' => 'Tesla',             'code' => 'TSLA', 'precision' => 2],
+            ['name' => 'Nvidia',            'code' => 'NVDA', 'precision' => 2],
+            ['name' => 'PayPal',            'code' => 'PYPL', 'precision' => 2],
+            ['name' => 'Visa',              'code' => 'V',    'precision' => 2],
+            ['name' => 'JPMorgan Chase',    'code' => 'JPM',  'precision' => 2],
+            ['name' => 'Johnson & Johnson', 'code' => 'JNJ',  'precision' => 2],
+            ['name' => 'Walmart',           'code' => 'WMT',  'precision' => 2],
+            ['name' => 'UnitedHealth Group', 'code' => 'UNH',  'precision' => 2],
+            ['name' => 'Mastercard',        'code' => 'MA',   'precision' => 2],
+            ['name' => 'Home Depot',        'code' => 'HD',   'precision' => 2],
+            ['name' => 'Procter & Gamble',  'code' => 'PG',   'precision' => 2],
+            ['name' => 'Bank of America',   'code' => 'BAC',  'precision' => 2],
+            ['name' => 'Verizon',           'code' => 'VZ',   'precision' => 2],
+            ['name' => 'Intel',             'code' => 'INTC', 'precision' => 2],
+            ['name' => 'Netflix',           'code' => 'NFLX', 'precision' => 2],
+            ['name' => 'Adobe',             'code' => 'ADBE', 'precision' => 2],
+            ['name' => 'Salesforce',        'code' => 'CRM',  'precision' => 2],
         ];
 
         $bonds = [
-            [
-                'name' => 'United States 10-Year Bond',
-                'code' => 'US10Y',
-            ],
-            [
-                'name' => 'United States 5-Year Bond',
-                'code' => 'US5Y',
-            ],
-            [
-                'name' => 'United States 2-Year Bond',
-                'code' => 'US2Y',
-            ],
-            [
-                'name' => 'United States 3-Month Bond',
-                'code' => 'US3M',
-            ],
-            [
-                'name' => 'United States 1-Month Bond',
-                'code' => 'US1M',
-            ],
+            ['name' => 'United States 10-Year Bond', 'code' => 'US10Y', 'precision' => 3],
+            ['name' => 'United States 5-Year Bond',  'code' => 'US5Y',  'precision' => 3],
+            ['name' => 'United States 2-Year Bond',  'code' => 'US2Y',  'precision' => 3],
+            ['name' => 'United States 3-Month Bond', 'code' => 'US3M',  'precision' => 3],
+            ['name' => 'United States 1-Month Bond', 'code' => 'US1M',  'precision' => 3],
         ];
 
-        Currency::insert(
-            collect($fiats)->map(function ($currency) {
-                $currency['type'] = CurrencyType::FIAT;
-                $currency['updated_at'] = now();
-                $currency['created_at'] = now();
+        $now = now();
 
-                return $currency;
-            })->toArray(),
-        );
-
-        Currency::insert(
-            collect($cryptos)->map(function ($currency) {
-                $currency['type'] = CurrencyType::CRYPTO;
-                $currency['updated_at'] = now();
-                $currency['created_at'] = now();
-
-                return $currency;
-            })->toArray(),
-        );
-
-        Currency::insert(
-            collect($metals)->map(function ($currency) {
-                $currency['type'] = CurrencyType::PRECIOUS_METAL;
-                $currency['updated_at'] = now();
-                $currency['created_at'] = now();
-
-                return $currency;
-            })->toArray(),
-        );
-
-        Currency::insert(
-            collect($stocks)->map(function ($currency) {
-                $currency['type'] = CurrencyType::STOCK;
-                $currency['updated_at'] = now();
-                $currency['created_at'] = now();
-
-                return $currency;
-            })->toArray(),
-        );
-
-        Currency::insert(
-            collect($bonds)->map(function ($currency) {
-                $currency['type'] = CurrencyType::BOND;
-                $currency['updated_at'] = now();
-                $currency['created_at'] = now();
-
-                return $currency;
-            })->toArray(),
-        );
+        foreach (
+            [
+                CurrencyType::FIAT->value => $fiats,
+                CurrencyType::CRYPTO->value => $cryptos,
+                CurrencyType::PRECIOUS_METAL->value => $metals,
+                CurrencyType::STOCK->value => $stocks,
+                CurrencyType::BOND->value => $bonds,
+            ] as $type => $currencies
+        ) {
+            Currency::insert(
+                collect($currencies)
+                    ->map(fn ($currency) => array_merge($currency, [
+                        'type' => $type,
+                        'created_at' => $now,
+                        'updated_at' => $now,
+                    ]))
+                    ->toArray(),
+            );
+        }
     }
 }

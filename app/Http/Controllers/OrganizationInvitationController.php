@@ -3,16 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Auth\AcceptOrganizationInvitationRequest;
-use App\Http\Requests\Auth\CancelOrganizationInvitationRequest;
 use App\Models\OrganizationInvitation;
-use Illuminate\Http\JsonResponse;
+use Filament\Pages\Dashboard;
+use Illuminate\Http\RedirectResponse;
 
 class OrganizationInvitationController extends Controller
 {
     /**
      * Accept organization invitation.
      */
-    public function accept(AcceptOrganizationInvitationRequest $request, OrganizationInvitation $invitation): JsonResponse
+    public function accept(AcceptOrganizationInvitationRequest $request, OrganizationInvitation $invitation): RedirectResponse
     {
         $request->user()->update([
             'organization_id' => $invitation->organization->id,
@@ -20,16 +20,6 @@ class OrganizationInvitationController extends Controller
 
         $invitation->delete();
 
-        return $this->noContent();
-    }
-
-    /**
-     * Cancel organization invitation.
-     */
-    public function cancel(CancelOrganizationInvitationRequest $request, OrganizationInvitation $invitation): JsonResponse
-    {
-        $invitation->delete();
-
-        return $this->noContent();
+        return redirect()->to(Dashboard::getUrl());
     }
 }

@@ -11,7 +11,7 @@ class DocsController extends Controller
 {
     public function __invoke(Request $request, string $path = 'index.html'): Response
     {
-        if (! Storage::disk('docs')->exists($path)) {
+        if (!Storage::disk('docs')->exists($path)) {
             abort(404);
         }
 

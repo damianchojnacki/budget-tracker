@@ -14,7 +14,7 @@ class CreateUser extends CreateRecord
 
     public function getTitle(): Htmlable|string
     {
-        return __('Create').' '.__('User');
+        return __('Create') . ' ' . __('User');
     }
 
     protected function mutateFormDataBeforeCreate(array $data): array

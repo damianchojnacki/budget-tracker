@@ -96,33 +96,33 @@ class UserResource extends Resource
                 TextColumn::make('email_verified_at')
                     ->translateLabel()
                     ->dateTime()
-                    ->hidden(! $user->isAdmin())
+                    ->hidden(!$user->isAdmin())
                     ->sortable()
                     ->searchable(),
                 ToggleColumn::make('is_admin')
                     ->translateLabel()
                     ->label('Admin')
-                    ->hidden(! $user->isAdmin())
+                    ->hidden(!$user->isAdmin())
                     ->sortable()
                     ->disabled(),
             ])
             ->filters([
                 Filter::make('is_admin')
-                    ->hidden(! $user->isAdmin())
+                    ->hidden(!$user->isAdmin())
                     ->toggle()
                     ->query(fn (Builder $query) => $query->where('is_admin', true))
                     ->label('Admin'),
             ])
             ->actions([
                 EditAction::make()
-                    ->hidden(! $user->isAdmin()),
+                    ->hidden(!$user->isAdmin()),
                 DeleteAction::make()
-                    ->hidden(! $user->isAdmin()),
+                    ->hidden(!$user->isAdmin()),
             ])
             ->bulkActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
-                ])->hidden(! $user->isAdmin()),
+                ])->hidden(!$user->isAdmin()),
             ])
             ->emptyStateActions([
                 CreateAction::make(),

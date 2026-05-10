@@ -16,7 +16,7 @@ class UserController extends Controller
         /** @var User $user */
         $user = $request->user();
 
-        if (! $user->hasVerifiedEmail()) {
+        if (!$user->hasVerifiedEmail()) {
             abort(409, 'You must verify your email address.');
         }
 

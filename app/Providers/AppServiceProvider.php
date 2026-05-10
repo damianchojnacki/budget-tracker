@@ -4,10 +4,16 @@ namespace App\Providers;
 
 use BezhanSalleh\FilamentLanguageSwitch\LanguageSwitch;
 use Carbon\Carbon;
+use Filament\Facades\Filament;
+use Filament\View\PanelsRenderHook;
+use Illuminate\Auth\Middleware\Authenticate;
+use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
+use LaravelLang\Locales\Facades\Locales;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -21,7 +27,7 @@ class AppServiceProvider extends ServiceProvider
 
             $url = parse_url($url, PHP_URL_QUERY);
 
-            if (! $url) {
+            if (!$url) {
                 return null;
             }
 
@@ -36,13 +42,27 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        app()->environment('production') && URL::forceScheme('https');
-
         Model::unguard();
-        JsonResource::withoutWrapping();
 
         LanguageSwitch::configureUsing(function (LanguageSwitch $switch) {
             $switch->locales(['en', 'pl']);
+        });
+
+        LanguageSwitch::configureUsing(static function (LanguageSwitch $switch): void {
+            $switch->locales(Locales::installed()->pluck('code')->toArray())
+                ->displayLocale()
+                ->flags(
+                    collect(Locales::available()->pluck('code'))->mapWithKeys(
+                        static fn (string $lang): array => [$lang => asset('vendor/blade-flags/language-' . $lang . '.svg')]
+                    )->toArray()
+                )
+                ->renderHook(PanelsRenderHook::USER_MENU_PROFILE_AFTER);
+        });
+
+        Authenticate::redirectUsing(static fn (): string => Filament::getLoginUrl());
+
+        RateLimiter::for('api', function (Request $request) {
+            return Limit::perMinute(config('app.api_rate_limit_by_minute'))->by($request->user()?->id ?: $request->ip());
         });
     }
 }

@@ -20,7 +20,7 @@ class CurrencyApiDriver implements Driver
 
     public function get(string $code): ?float
     {
-        if (! ($this->rates ?? null)) {
+        if (!($this->rates ?? null)) {
             $this->rates = $this->getRates();
         }
 

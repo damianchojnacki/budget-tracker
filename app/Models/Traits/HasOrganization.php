@@ -26,7 +26,7 @@ trait HasOrganization
      */
     public function ownsOrganization(?Organization $organization = null): bool
     {
-        if (! $organization) {
+        if (!$organization) {
             return false;
         }
 
@@ -38,7 +38,7 @@ trait HasOrganization
      */
     public function belongsToOrganization(?Organization $organization = null): bool
     {
-        if (! $organization) {
+        if (!$organization) {
             return false;
         }
 

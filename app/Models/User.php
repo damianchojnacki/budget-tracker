@@ -13,18 +13,6 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
 
-/**
- * @property int $id
- * @property int $car_id
- * @property string $name
- * @property string $email
- * @property \Carbon\Carbon $email_verified_at
- * @property string $password
- * @property bool $is_admin
- * @property string $remember_token
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $updated_at
- */
 class User extends Authenticatable implements FilamentUser, HasTenants, MustVerifyEmail
 {
     use HasFactory, HasOrganization, Notifiable;
@@ -32,7 +20,7 @@ class User extends Authenticatable implements FilamentUser, HasTenants, MustVeri
     /**
      * The attributes that should be hidden for serialization.
      *
-     * @var array<int, string>
+     * @var list<string>
      */
     protected $hidden = [
         'password',
@@ -40,14 +28,17 @@ class User extends Authenticatable implements FilamentUser, HasTenants, MustVeri
     ];
 
     /**
-     * The attributes that should be cast.
+     * Get the attributes that should be cast.
      *
-     * @var array<string, string>
+     * @return array<string, string>
      */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-        'password' => 'hashed',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+        ];
+    }
 
     public function isAdmin(): bool
     {

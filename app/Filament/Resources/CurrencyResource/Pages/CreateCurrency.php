@@ -14,7 +14,7 @@ class CreateCurrency extends CreateRecord
 
     public function getTitle(): Htmlable|string
     {
-        return __('Create').' '.__('Currency');
+        return __('Create') . ' ' . __('Currency');
     }
 
     protected function mutateFormDataBeforeCreate(array $data): array

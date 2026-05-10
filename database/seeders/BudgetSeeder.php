@@ -68,7 +68,7 @@ class BudgetSeeder extends Seeder
                 ],
                 [
                     'name' => 'Metals',
-                    'currency_id' => Currency::firstWhere('name', 'Silver Bullion Coin 1oz')->id,
+                    'currency_id' => Currency::firstWhere('name', 'Silver')->id,
                     'amount' => 5,
                     'color' => '#AAAAAA',
                     'icon' => 'rpg-gold-bar',

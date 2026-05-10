@@ -23,7 +23,7 @@ class CoinCapDriver implements Driver
      */
     public function __construct(array|Collection $assets = [])
     {
-        if (! ($assets instanceof Collection)) {
+        if (!($assets instanceof Collection)) {
             $assets = collect($assets);
         }
 
@@ -32,7 +32,7 @@ class CoinCapDriver implements Driver
 
     public function get(string $code): ?float
     {
-        if (! ($this->rates ?? null)) {
+        if (!($this->rates ?? null)) {
             $this->rates = $this->getRates();
         }
 
@@ -44,7 +44,7 @@ class CoinCapDriver implements Driver
 
     protected function getQuery(): string
     {
-        return '?ids='.strtolower($this->assets->implode(','));
+        return '?ids=' . strtolower($this->assets->implode(','));
     }
 
     /**

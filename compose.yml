@@ -1,0 +1,16 @@
+services:
+  php:
+    image: daamian3/budget-tracker:latest
+    restart: always
+    ports:
+      - "8000:80"
+    volumes:
+      - ./budget-tracker:/app/storage
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://localhost/up"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    environment:
+      APP_KEY: ${APP_KEY}

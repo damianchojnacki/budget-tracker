@@ -14,7 +14,7 @@ class RateServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->mergeConfigFrom(config_path('rate.php'), 'rate');
+        //
     }
 
     /**
@@ -23,10 +23,10 @@ class RateServiceProvider extends ServiceProvider
     public function boot(): void
     {
         // drivers
-        $this->app->singleton(CoinCapDriver::class, fn () => new CoinCapDriver());
-        $this->app->singleton(CurrencyApiDriver::class, fn () => new CurrencyApiDriver());
+        $this->app->singleton(CoinCapDriver::class, fn () => new CoinCapDriver);
+        $this->app->singleton(CurrencyApiDriver::class, fn () => new CurrencyApiDriver);
 
-        $this->app->singleton('rate', fn () => new RateService());
+        $this->app->singleton('rate', fn () => new RateService);
         $this->app->alias('rate', RateService::class);
     }
 }

@@ -39,7 +39,7 @@ class TransactionsRelationManager extends RelationManager
                     ->limit(30),
                 TextColumn::make('amount')
                     ->translateLabel()
-                    ->formatStateUsing(function (Transaction $record, $state): string|null|false {
+                    ->formatStateUsing(function (Transaction $record, string $state): string|null|false {
                         if (blank($state)) {
                             return null;
                         }
@@ -48,7 +48,7 @@ class TransactionsRelationManager extends RelationManager
 
                         $formatter = new NumberFormatter(app()->getLocale(), NumberFormatter::CURRENCY);
 
-                        $formatter->setAttribute(NumberFormatter::FRACTION_DIGITS, strlen((string) ((float) $state)) - strlen((string) ((int) $state)) - 1);
+                        $formatter->setAttribute(NumberFormatter::FRACTION_DIGITS, $record->budget->currency->precision);
 
                         return $formatter->formatCurrency($state, $currency);
                     })

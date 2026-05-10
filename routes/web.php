@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\DocsController;
-use App\Http\Controllers\HealthCheckController;
 use App\Http\Controllers\OrganizationInvitationController;
 use Dedoc\Scramble\Http\Middleware\RestrictedDocsAccess;
 use Illuminate\Support\Facades\Route;
@@ -19,8 +18,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', 'dashboard')->name('homepage');
 
-Route::get('/up', HealthCheckController::class)->name('up');
-
 Route::get('docs/{path?}', DocsController::class)
     ->middleware(RestrictedDocsAccess::class)
     ->where('path', '(.*)')
@@ -32,7 +29,4 @@ Route::group([
     Route::put('organization-invitations/{invitation}', [OrganizationInvitationController::class, 'accept'])
         ->name('organization-invitations.accept')
         ->middleware(['signed', 'throttle:6,1']);
-
-    Route::delete('organization-invitations/{invitation}', [OrganizationInvitationController::class, 'cancel'])
-        ->name('organization-invitations.cancel');
 });

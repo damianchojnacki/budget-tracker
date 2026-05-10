@@ -72,31 +72,32 @@ class BudgetOverview extends BaseWidget
             ->budgets()
             ->join('budget_histories', 'budget_histories.budget_id', '=', 'budgets.id')
             ->where('budget_histories.created_at', '<', $before ?? now())
-            ->selectRaw('DAY(budget_histories.created_at), SUM(budget_histories.amount / (SELECT rate from currencies where id = currency_id) * (SELECT rate from currencies where code = ?)) as sum', [
+            ->selectRaw('budget_histories.created_at, budget_histories.amount / (SELECT rate from currencies where id = currency_id) * (SELECT rate from currencies where code = ?) as converted_amount', [
                 $organization->currency->code,
             ])
-            ->groupByRaw('DAY(budget_histories.created_at)')
-            ->first()
-            ->sum;
+            ->get()
+            ->sum('converted_amount');
     }
 
     /**
-     * @return int[]
+     * @return float[]
      */
     protected function getTotalData(?Carbon $after = null, ?Carbon $before = null): array
     {
         $organization = Auth::user()->organization;
 
         return BudgetHistory::query()
-            ->where('budget_histories.created_at', '>', $after ?? BudgetHistory::oldest()->first()?->created_at ?? now()->subMonth())
+            ->where('budget_histories.created_at', '>', $after ?? BudgetHistory::oldest()->value('created_at') ?? now()->subMonth())
             ->where('budget_histories.created_at', '<', $before ?? now())
             ->whereHas('budget', fn ($query) => $query->where('organization_id', $organization->id))
             ->join('budgets', 'budgets.id', '=', 'budget_histories.budget_id')
-            ->selectRaw('DAY(budget_histories.created_at), SUM(budget_histories.amount / (SELECT rate from currencies where id = budgets.currency_id) * (SELECT rate from currencies where code = ?)) as sum', [
+            ->selectRaw('budget_histories.created_at, budget_histories.amount / (SELECT rate from currencies where id = budgets.currency_id) * (SELECT rate from currencies where code = ?) as converted_amount', [
                 $organization->currency->code,
             ])
-            ->groupByRaw('DAY(budget_histories.created_at)')
-            ->pluck('sum')
+            ->get()
+            ->groupBy(fn ($row) => Carbon::parse($row->created_at)->toDateString())
+            ->map(fn ($group) => $group->sum('converted_amount'))
+            ->values()
             ->toArray();
     }
 
@@ -185,7 +186,7 @@ class BudgetOverview extends BaseWidget
         return [
             'current' => static::formatCurrency($current, Auth::user()->organization->currency->code),
             'data' => $this->getTotalData(now()->startOfMonth()),
-            'diff' => $diff > 0 ? "{$diff}% ".__('increase') : ($diff < 0 ? "{$diff}% ".__('decrease') : null),
+            'diff' => $diff > 0 ? "{$diff}% " . __('increase') : ($diff < 0 ? "{$diff}% " . __('decrease') : null),
             'icon' => $diff > 0 ? 'heroicon-m-arrow-trending-up' : ($diff < 0 ? 'heroicon-m-arrow-trending-down' : null),
             'color' => $diff > 0 ? 'success' : ($diff < 0 ? 'danger' : null),
         ];

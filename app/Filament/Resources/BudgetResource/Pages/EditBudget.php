@@ -13,7 +13,7 @@ class EditBudget extends EditRecord
 
     public function getTitle(): Htmlable|string
     {
-        return __('Edit').' '.__('Budget');
+        return __('Edit') . ' ' . __('Budget');
     }
 
     protected function getHeaderActions(): array

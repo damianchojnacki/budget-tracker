@@ -72,6 +72,11 @@ class CurrencyResource extends Resource
                     ->translateLabel()
                     ->sortable()
                     ->searchable(),
+                TextColumn::make('type')
+                    ->translateLabel()
+                    ->formatStateUsing(fn (CurrencyType $state): string => $state->getName())
+                    ->sortable()
+                    ->searchable(),
                 TextColumn::make('code')
                     ->translateLabel()
                     ->sortable()

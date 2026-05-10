@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Notifications;
 
+use App\Http\Controllers\CarController;
 use App\Models\OrganizationInvitation;
 use App\Models\User;
 use App\Notifications\InvitedToOrganization;
@@ -10,7 +11,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 /**
- * @see \App\Http\Controllers\CarController
+ * @see CarController
  */
 class InvitedToOrganizationTest extends TestCase
 {
@@ -23,7 +24,7 @@ class InvitedToOrganizationTest extends TestCase
         $this->seed(CurrencySeeder::class);
     }
 
-    public function testRendersNotificationCorrectly(): void
+    public function test_renders_notification_correctly(): void
     {
         $notification = new InvitedToOrganization(
             $invitation = OrganizationInvitation::factory()->create()

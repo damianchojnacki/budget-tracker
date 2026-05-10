@@ -2,18 +2,19 @@
 
 namespace Tests\Feature\Http\Controllers;
 
+use App\Http\Controllers\DocsController;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Storage;
 use Tests\TestCase;
 
 /**
- * @see \App\Http\Controllers\DocsController
+ * @see DocsController
  */
 class DocsControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function testDocsAreVisibleInLocalEnv(): void
+    public function test_docs_are_visible_in_local_env(): void
     {
         Storage::fake('docs');
 
@@ -33,7 +34,7 @@ class DocsControllerTest extends TestCase
             ->assertHeader('Content-Type', 'text/css; charset=UTF-8');
     }
 
-    public function testDocsAreNotVisibleByGuestInProductionEnv(): void
+    public function test_docs_are_not_visible_by_guest_in_production_env(): void
     {
         $this->app->detectEnvironment(static function () {
             return 'production';
@@ -43,7 +44,7 @@ class DocsControllerTest extends TestCase
             ->assertForbidden();
     }
 
-    public function testDocsReturnNotFoundIfInvalidPath(): void
+    public function test_docs_return_not_found_if_invalid_path(): void
     {
         $this->app->detectEnvironment(static function () {
             return 'local';
