@@ -1,6 +1,8 @@
 {
     "(and :count more error)": "(i jeszcze :count błąd)",
     "(and :count more errors)": "(i jeszcze :count błędów)",
+    "Register organization": "Utwórz organizację",
+    "Base currency": "Waluta bazowa",
     "A new verification link has been sent to the email address you provided during registration.": "Nowy link weryfikacyjny został wysłany na adres e-mail podany podczas rejestracji.",
     "A new verification link has been sent to your email address.": "Nowy link weryfikacyjny został wysłany na Twój adres e-mail.",
     "All rights reserved.": "Wszelkie prawa zastrzeżone.",

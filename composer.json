@@ -15,6 +15,7 @@
         "codeat3/blade-rpg-awesome-icons": "^1.4",
         "dedoc/scramble": "^v0.13",
         "doctrine/dbal": "^3.6",
+        "dutchcodingcompany/filament-socialite": "^2.4",
         "fakerphp/faker": "^1.9.1",
         "filament/filament": "^3.2",
         "flowframe/laravel-trend": "^v0.5",
@@ -22,11 +23,13 @@
         "guzzlehttp/guzzle": "^7.2",
         "laravel-lang/locales": "^2.11",
         "laravel/framework": "^v12.55",
+        "laravel/socialite": "^5.27",
         "laravel/telescope": "^5.0",
         "laravel/tinker": "^2.8",
         "outhebox/blade-flags": "^1.7",
         "owenvoke/blade-fontawesome": "^2.4",
-        "sentry/sentry-laravel": "^4.4"
+        "sentry/sentry-laravel": "^4.4",
+        "socialiteproviders/authentik": "^5.3"
     },
     "require-dev": {
         "larastan/larastan": "^3.9",

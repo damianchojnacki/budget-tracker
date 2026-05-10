@@ -63,7 +63,7 @@ class BudgetOverview extends BaseWidget
                 $organization->currency->code,
             ])
             ->first()
-            ->sum;
+            ->sum ?? 0;
     }
 
     protected function getBudgetSumHistory(?CarbonInterface $before = null): float

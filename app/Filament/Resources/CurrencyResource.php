@@ -27,6 +27,11 @@ class CurrencyResource extends Resource
 
     protected static bool $isScopedToTenant = false;
 
+    public static function canAccess(): bool
+    {
+        return auth()->user()->isAdmin();
+    }
+
     public static function getNavigationLabel(): string
     {
         return __('Currencies');

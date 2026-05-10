@@ -2,7 +2,12 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Pages\Auth\EditProfile;
+use App\Filament\Pages\Tenancy\RegisterOrganization;
 use App\Models\Organization;
+use App\Models\User;
+use DutchCodingCompany\FilamentSocialite\FilamentSocialitePlugin;
+use DutchCodingCompany\FilamentSocialite\Provider;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -18,6 +23,7 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Laravel\Socialite\Contracts\User as SocialiteUserContract;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -28,13 +34,15 @@ class AdminPanelProvider extends PanelProvider
             ->id('panel')
             ->path('dashboard')
             ->tenant(Organization::class)
+            ->tenantRegistration(RegisterOrganization::class)
+            ->tenantMenu(fn () => auth()->user()->isAdmin())
             ->login()
             ->registration()
             ->emailVerification()
             ->passwordReset()
-            ->profile()
+            ->profile(EditProfile::class)
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => Color::Violet,
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
@@ -58,6 +66,30 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
+            ])
+            ->plugins([
+                FilamentSocialitePlugin::make()
+                    ->providers([
+                        Provider::make('authentik')
+                            ->label('Authentik')
+                            ->icon('fas-key')
+                            ->color(Color::hex('#fd4b2d'))
+                            ->outlined(false)
+                            ->stateless(false)
+                            ->visible(fn () => config('services.authentik.base_url')),
+                    ])
+                    ->createUserUsing(function (string $provider, SocialiteUserContract $oauthUser, FilamentSocialitePlugin $plugin): User {
+                        [$firstname, $lastname] = explode(' ', $oauthUser->getName());
+
+                        return User::create([
+                            'firstname' => $firstname,
+                            'lastname' => $lastname,
+                            'email' => $oauthUser->getEmail(),
+                            'email_verified_at' => now(),
+                        ]);
+                    })
+                    ->registration(true)
+                    ->slug('dashboard'),
             ]);
     }
 }
