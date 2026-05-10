@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Currency;
+use App\Models\Organization;
 use App\Models\OrganizationInvitation;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -18,8 +20,12 @@ class OrganizationInvitationSeeder extends Seeder
             'email' => 'invited@example.com',
         ]);
 
-        OrganizationInvitation::factory()->create([
-            'email' => $user->email,
-        ]);
+        $currency = Currency::first();
+
+        OrganizationInvitation::factory()
+            ->for(Organization::factory()->recycle($currency))
+            ->create([
+                'email' => $user->email,
+            ]);
     }
 }

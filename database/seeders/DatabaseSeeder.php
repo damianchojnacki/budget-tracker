@@ -17,8 +17,8 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             OrganizationInvitationSeeder::class,
             BudgetSeeder::class,
-            TransactionSeeder::class,
-            BudgetHistorySeeder::class,
+            // TransactionSeeder::class,
+            // BudgetHistorySeeder::class,
         ]);
     }
 }

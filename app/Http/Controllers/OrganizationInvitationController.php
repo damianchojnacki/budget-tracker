@@ -20,6 +20,6 @@ class OrganizationInvitationController extends Controller
 
         $invitation->delete();
 
-        return redirect()->to(Dashboard::getUrl());
+        return redirect()->to(Dashboard::getUrl(tenant: $invitation->organization));
     }
 }

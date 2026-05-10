@@ -1,42 +1,37 @@
 <?php
 
-namespace Tests\Feature\Filament;
-
 use App\Filament\Resources\OrganizationInvitationResource;
 use App\Filament\Resources\OrganizationInvitationResource\Pages\ListOrganizationInvitations;
+use App\Models\Organization;
 use App\Models\OrganizationInvitation;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Models\User;
+use Filament\Facades\Filament;
 use Livewire\Livewire;
 
-/**
- * @see OrganizationInvitationResource
- */
-class OrganizationInvitationResourceTest extends FilamentTestCase
-{
-    use RefreshDatabase;
+test('renders list page', function () {
+    $user = User::factory()->create();
 
-    public function test_renders_list_page()
-    {
-        $this->actingAs($this->user)
-            ->get(OrganizationInvitationResource::getUrl('index'))
-            ->assertSuccessful();
-    }
+    test()
+        ->actingAs($user)
+        ->get(OrganizationInvitationResource::getUrl('index', tenant: $user->organization))
+        ->assertSuccessful();
+});
 
-    public function test_lists_correct_invitations()
-    {
-        $invitations = OrganizationInvitation::factory()
-            ->recycle(
-                $this->user->organization
-            )
-            ->count(3)
-            ->create();
+test('lists correct invitations', function () {
+    $organization = Organization::factory()->create();
+    test()->actingAs($organization->owner);
+    Filament::setTenant($organization);
 
-        $hidden = OrganizationInvitation::factory()
-            ->count(3)
-            ->create();
+    $invitations = OrganizationInvitation::factory()
+        ->recycle($organization)
+        ->count(3)
+        ->create();
 
-        Livewire::test(ListOrganizationInvitations::class)
-            ->assertCanSeeTableRecords($invitations)
-            ->assertCanNotSeeTableRecords($hidden);
-    }
-}
+    $hidden = OrganizationInvitation::factory()
+        ->count(3)
+        ->create();
+
+    Livewire::test(ListOrganizationInvitations::class)
+        ->assertCanSeeTableRecords($invitations)
+        ->assertCanNotSeeTableRecords($hidden);
+});

@@ -13,15 +13,15 @@
         "ext-intl": "*",
         "bezhansalleh/filament-language-switch": "^3.0",
         "codeat3/blade-rpg-awesome-icons": "^1.4",
-        "dedoc/scramble": "^v0.9",
+        "dedoc/scramble": "^v0.13",
         "doctrine/dbal": "^3.6",
         "fakerphp/faker": "^1.9.1",
         "filament/filament": "^3.2",
-        "flowframe/laravel-trend": "^v0.2",
+        "flowframe/laravel-trend": "^v0.5",
         "guava/filament-icon-picker": "^2.0",
         "guzzlehttp/guzzle": "^7.2",
         "laravel-lang/locales": "^2.11",
-        "laravel/framework": "^v11.4",
+        "laravel/framework": "^v12.55",
         "laravel/telescope": "^5.0",
         "laravel/tinker": "^2.8",
         "outhebox/blade-flags": "^1.7",
@@ -29,15 +29,18 @@
         "sentry/sentry-laravel": "^4.4"
     },
     "require-dev": {
-        "brianium/paratest": "^v7.4",
+        "larastan/larastan": "^3.9",
         "laravel-lang/common": "^6.8",
         "laravel/pint": "^1.0",
         "laravel/sail": "^1.18",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^8.1",
-        "nunomaduro/larastan": "^2.0",
         "nunomaduro/phpinsights": "^2.8",
-        "phpunit/phpunit": "^10.5",
+        "pestphp/pest": "^3.8",
+        "pestphp/pest-plugin-drift": "^3.0",
+        "pestphp/pest-plugin-laravel": "^3.2",
+        "pestphp/pest-plugin-livewire": "^3.0",
+        "pestphp/pest-plugin-type-coverage": "^3.6",
         "spatie/laravel-ignition": "^2.0"
     },
     "autoload": {
@@ -68,6 +71,19 @@
             "@php artisan key:generate --ansi",
             "@php -r \"file_exists('database/database.sqlite') || touch('database/database.sqlite');\"",
             "@php artisan migrate --graceful --ansi"
+        ],
+        "lint": "pint --parallel",
+        "refactor": "rector",
+        "test:unit": "pest --parallel",
+        "test:type": "pest --type-coverage --min=100",
+        "test:coverage": "XDEBUG_MODE=coverage pest --parallel --coverage",
+        "test:static": "phpstan",
+        "test:lint": "pint --parallel --test",
+        "test": [
+            "@test:static",
+            "@test:type",
+            "@test:lint",
+            "@test:unit"
         ]
     },
     "extra": {

@@ -1,56 +1,42 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers;
+test('docs are visible in local env', function () {
+    Storage::fake('docs');
 
-use App\Http\Controllers\DocsController;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Storage;
-use Tests\TestCase;
+    Storage::disk('docs')->put('index.html', '<h1>Documentation</h1>');
+    Storage::disk('docs')->put('css/base.css', '.base { color: #000; }');
 
-/**
- * @see DocsController
- */
-class DocsControllerTest extends TestCase
-{
-    use RefreshDatabase;
+    app()->detectEnvironment(static function () {
+        return 'local';
+    });
 
-    public function test_docs_are_visible_in_local_env(): void
-    {
-        Storage::fake('docs');
+    test()
+        ->get(route('docs'))
+        ->assertSuccessful()
+        ->assertSeeText('Documentation');
 
-        Storage::disk('docs')->put('index.html', '<h1>Documentation</h1>');
-        Storage::disk('docs')->put('css/base.css', '.base { color: #000; }');
+    test()
+        ->get(route('docs', ['path' => 'css/base.css']))
+        ->assertSuccessful()
+        ->assertHeader('Content-Type', 'text/css; charset=utf-8');
+});
 
-        $this->app->detectEnvironment(static function () {
-            return 'local';
-        });
+test('docs are not visible by guest in production env', function () {
+    app()->detectEnvironment(static function () {
+        return 'production';
+    });
 
-        $this->get(route('docs'))
-            ->assertSuccessful()
-            ->assertSeeText('Documentation');
+    test()
+        ->get(route('docs'))
+        ->assertForbidden();
+});
 
-        $this->get(route('docs', ['path' => 'css/base.css']))
-            ->assertSuccessful()
-            ->assertHeader('Content-Type', 'text/css; charset=UTF-8');
-    }
+test('docs return not found if invalid path', function () {
+    app()->detectEnvironment(static function () {
+        return 'local';
+    });
 
-    public function test_docs_are_not_visible_by_guest_in_production_env(): void
-    {
-        $this->app->detectEnvironment(static function () {
-            return 'production';
-        });
-
-        $this->get(route('docs'))
-            ->assertForbidden();
-    }
-
-    public function test_docs_return_not_found_if_invalid_path(): void
-    {
-        $this->app->detectEnvironment(static function () {
-            return 'local';
-        });
-
-        $this->get(route('docs', ['path', 'invalid']))
-            ->assertNotFound();
-    }
-}
+    test()
+        ->get(route('docs', ['path', 'invalid']))
+        ->assertNotFound();
+});

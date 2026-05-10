@@ -1,40 +1,18 @@
 <?php
 
-namespace Tests\Feature\Notifications;
-
-use App\Http\Controllers\CarController;
 use App\Models\OrganizationInvitation;
 use App\Models\User;
 use App\Notifications\InvitedToOrganization;
-use Database\Seeders\CurrencySeeder;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 
-/**
- * @see CarController
- */
-class InvitedToOrganizationTest extends TestCase
-{
-    use RefreshDatabase;
+test('renders notification correctly', function () {
+    $notification = new InvitedToOrganization(
+        $invitation = OrganizationInvitation::factory()->create()
+    );
 
-    protected function setUp(): void
-    {
-        parent::setUp();
+    $user = User::factory()->create();
 
-        $this->seed(CurrencySeeder::class);
-    }
+    $content = $notification->toMail($user)->render()->toHtml();
 
-    public function test_renders_notification_correctly(): void
-    {
-        $notification = new InvitedToOrganization(
-            $invitation = OrganizationInvitation::factory()->create()
-        );
-
-        $user = User::factory()->create();
-
-        $content = $notification->toMail($user)->render();
-
-        $this->assertStringContainsString($invitation->organization->name, $content);
-        $this->assertStringContainsString(route('organization-invitations.accept', ['invitation' => $invitation]), $content);
-    }
-}
+    expect($content)->toContain($invitation->organization->name)
+        ->and($content)->toContain(route('organization-invitations.accept', ['invitation' => $invitation]));
+});

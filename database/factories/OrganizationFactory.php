@@ -22,9 +22,9 @@ class OrganizationFactory extends Factory
     public function definition(): array
     {
         return [
-            'owner_id' => User::factory(),
-            'currency_id' => Currency::inRandomOrder()->first()->id,
-            'name' => $this->faker->unique()->company(),
+            'owner_id' => User::factory()->state(['organization_id' => null]),
+            'currency_id' => Currency::factory(),
+            'name' => fake()->unique()->company(),
         ];
     }
 }

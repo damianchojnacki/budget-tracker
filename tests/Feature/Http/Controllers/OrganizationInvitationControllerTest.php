@@ -1,86 +1,67 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers;
-
-use App\Http\Controllers\OrganizationInvitationController;
 use App\Models\Organization;
 use App\Models\User;
-use Database\Seeders\CurrencySeeder;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Filament\Pages\Dashboard;
 use Illuminate\Support\Facades\URL;
-use Tests\TestCase;
 
-/**
- * @see OrganizationInvitationController
- */
-class OrganizationInvitationControllerTest extends TestCase
-{
-    use RefreshDatabase;
+test('can be accepted', function () {
+    $organization = Organization::factory()->create();
 
-    protected function setUp(): void
-    {
-        parent::setUp();
+    $user = User::factory()->create([
+        'organization_id' => null,
+    ]);
 
-        $this->seed(CurrencySeeder::class);
-    }
+    $invitation = $organization->invitations()->create([
+        'email' => $user->email,
+    ]);
 
-    public function test_can_be_accepted()
-    {
-        $organization = Organization::factory()->create();
+    $url = URL::signedRoute('organization-invitations.accept', ['invitation' => $invitation]);
 
-        $user = User::factory()->create([
-            'organization_id' => null,
-        ]);
+    test()
+        ->actingAs($user)
+        ->put($url)
+        ->assertRedirect(Dashboard::getUrl(tenant: $organization));
 
-        $invitation = $organization->invitations()->create([
-            'email' => $user->email,
-        ]);
+    expect($user->fresh()->organization->is($organization))->toBeTrue();
 
-        $url = URL::signedRoute('organization-invitations.accept', ['invitation' => $invitation]);
+    test()->assertModelMissing($invitation);
+});
 
-        $this->actingAs($user)
-            ->put($url)
-            ->assertSuccessful();
+test('cannot be accepted if user already belongs to organization', function () {
+    $organization = Organization::factory()->create();
 
-        $this->assertEquals($organization->id, $user->fresh()->organization->id);
-        $this->assertModelMissing($invitation);
-    }
+    $user = User::factory()->create([
+        'organization_id' => $organization->id,
+    ]);
 
-    public function test_cannot_be_accepted_if_user_already_belongs_to_organization()
-    {
-        $organization = Organization::factory()->create();
+    $invitation = $organization->invitations()->create([
+        'email' => $user->email,
+    ]);
 
-        $user = User::factory()->create([
-            'organization_id' => $organization->id,
-        ]);
+    $url = URL::signedRoute('organization-invitations.accept', ['invitation' => $invitation]);
 
-        $invitation = $organization->invitations()->create([
-            'email' => $user->email,
-        ]);
+    test()
+        ->actingAs($user)
+        ->put($url)
+        ->assertInvalid('email');
+});
 
-        $url = URL::signedRoute('organization-invitations.accept', ['invitation' => $invitation]);
+test('cannot be accepted if user has different email', function () {
+    $organization = Organization::factory()->create();
 
-        $this->actingAs($user)
-            ->put($url)
-            ->assertInvalid('email');
-    }
+    $user = User::factory()->create([
+        'organization_id' => null,
+    ]);
 
-    public function test_cannot_be_accepted_if_user_has_different_email()
-    {
-        $organization = Organization::factory()->create();
+    $invitation = $organization->invitations()->create([
+        'email' => 'anotheruser@example.com',
+    ]);
 
-        $user = User::factory()->create([
-            'organization_id' => null,
-        ]);
+    $url = URL::signedRoute('organization-invitations.accept', ['invitation' => $invitation]);
 
-        $invitation = $organization->invitations()->create([
-            'email' => 'anotheruser@example.com',
-        ]);
-
-        $url = URL::signedRoute('organization-invitations.accept', ['invitation' => $invitation]);
-
-        $this->actingAs($user)
-            ->put($url)
-            ->assertForbidden();
-    }
-}
+    test()
+        ->actingAs($user)
+        ->put($url)
+        ->assertForbidden();
+});

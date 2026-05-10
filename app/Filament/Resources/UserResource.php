@@ -7,7 +7,7 @@ use App\Filament\Resources\UserResource\Pages\EditUser;
 use App\Filament\Resources\UserResource\Pages\ListUsers;
 use App\Models\User;
 use Auth;
-use Carbon\Carbon;
+use Carbon\CarbonInterface;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
@@ -65,7 +65,7 @@ class UserResource extends Resource
                 Toggle::make('email_verified_at')
                     ->translateLabel()
                     ->label('Email Verified')
-                    ->dehydrateStateUsing(fn (?string $state): ?Carbon => filled($state) ? now() : null),
+                    ->dehydrateStateUsing(fn (?string $state): ?CarbonInterface => filled($state) ? now() : null),
             ]);
     }
 
