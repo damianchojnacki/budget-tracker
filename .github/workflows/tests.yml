@@ -7,6 +7,9 @@ on:
       - dev
     pull_request:
 
+env:
+  APP_KEY: base64:ZDvM4VCsq2LjMjVmEUL1hptH1kVBpQLIIST511DwCmc=
+
 jobs:
   test:
     name: Test application

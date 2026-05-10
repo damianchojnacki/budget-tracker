@@ -5,6 +5,9 @@ on:
     workflows: [tests]
     types: [completed]
 
+env:
+  APP_KEY: base64:ZDvM4VCsq2LjMjVmEUL1hptH1kVBpQLIIST511DwCmc=
+
 jobs:
   build:
     name: Build application image
@@ -71,10 +74,8 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
       - name: Test
-        env:
-          APP_KEY: base64:ZDvM4VCsq2LjMjVmEUL1hptH1kVBpQLIIST511DwCmc=
         run: |
-          docker compose up --wait --wait-timeout 60s -d --no-build
+          docker compose up --wait --wait-timeout 60s -d --no-build --pull never
       - name: Build and push
         uses: docker/build-push-action@v7
         with:
