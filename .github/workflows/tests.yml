@@ -5,7 +5,7 @@ on:
     branches:
       - main
       - dev
-    pull_request:
+  pull_request:
 
 env:
   APP_KEY: base64:ZDvM4VCsq2LjMjVmEUL1hptH1kVBpQLIIST511DwCmc=
