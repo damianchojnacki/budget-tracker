@@ -79,7 +79,7 @@ class AdminPanelProvider extends PanelProvider
                             ->visible(fn () => config('services.authentik.base_url')),
                     ])
                     ->createUserUsing(function (string $provider, SocialiteUserContract $oauthUser, FilamentSocialitePlugin $plugin): User {
-                        [$firstname, $lastname] = explode(' ', $oauthUser->getName());
+                        [$firstname, $lastname] = explode(' ', (string) $oauthUser->getName());
 
                         return User::create([
                             'firstname' => $firstname,

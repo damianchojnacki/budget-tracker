@@ -80,7 +80,11 @@ class Organization extends Model
      */
     public function hasUser(User $user): bool
     {
-        return $this->users->contains($user) || $user->ownsOrganization($this);
+        if ($this->users->contains($user)) {
+            return true;
+        }
+
+        return $user->ownsOrganization($this);
     }
 
     /**
@@ -88,9 +92,7 @@ class Organization extends Model
      */
     public function hasUserWithEmail(string $email): bool
     {
-        return $this->allUsers()->contains(function (User $user) use ($email) {
-            return $user->email === $email;
-        });
+        return $this->allUsers()->contains(fn (User $user): bool => $user->email === $email);
     }
 
     /**

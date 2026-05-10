@@ -12,15 +12,18 @@ class Transaction extends Model
     /** @use HasFactory<TransactionFactory> */
     use HasFactory;
 
-    protected $casts = [
-        'amount' => 'decimal:8',
-    ];
-
     /**
      * @return BelongsTo<Budget, $this>
      */
     public function budget(): BelongsTo
     {
         return $this->belongsTo(Budget::class);
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'amount' => 'decimal:8',
+        ];
     }
 }

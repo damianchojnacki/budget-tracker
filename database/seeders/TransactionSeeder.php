@@ -13,7 +13,7 @@ class TransactionSeeder extends Seeder
      */
     public function run(): void
     {
-        Budget::all()->each(function (Budget $budget) {
+        Budget::all()->each(function (Budget $budget): void {
             $precision = $budget->currency->precision;
             $multiplier = 10 ** $precision;
 
@@ -21,7 +21,7 @@ class TransactionSeeder extends Seeder
                 ->recycle($budget)
                 ->count(rand(10, 100))
                 ->create([
-                    'amount' => fn () => rand(
+                    'amount' => fn (): int|float => rand(
                         (int) round($budget->amount * -$multiplier),
                         (int) round($budget->amount * $multiplier),
                     ) / $multiplier,

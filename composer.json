@@ -46,7 +46,8 @@
         "pestphp/pest-plugin-type-coverage": "^3.6",
         "phpstan/extension-installer": "^1.4",
         "phpstan/phpstan": "^2.1",
-        "phpstan/phpstan-mockery": "^2.0"
+        "phpstan/phpstan-mockery": "^2.0",
+        "driftingly/rector-laravel": "^2.1"
     },
     "autoload": {
         "psr-4": {

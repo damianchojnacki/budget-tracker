@@ -5,7 +5,6 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\OrganizationInvitationResource\Pages\ListOrganizationInvitations;
 use App\Models\OrganizationInvitation;
 use App\Models\User;
-use Auth;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -35,7 +34,7 @@ class OrganizationInvitationResource extends Resource
     public static function form(Form $form): Form
     {
         /** @var User $user */
-        $user = Auth::user();
+        $user = \Illuminate\Support\Facades\Auth::user();
 
         return $form
             ->schema([

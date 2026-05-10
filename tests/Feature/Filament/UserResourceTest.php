@@ -12,7 +12,7 @@ use Filament\Actions\DeleteAction;
 use Illuminate\Support\Facades\Notification;
 use Livewire\Livewire;
 
-test('renders list page', function () {
+test('renders list page', function (): void {
     $user = User::factory()->create([
         'is_admin' => true,
     ]);
@@ -23,7 +23,7 @@ test('renders list page', function () {
         ->assertSuccessful();
 });
 
-test('renders create page', function () {
+test('renders create page', function (): void {
     $user = User::factory()->create([
         'is_admin' => true,
     ]);
@@ -34,7 +34,7 @@ test('renders create page', function () {
         ->assertSuccessful();
 });
 
-test('renders update page', function () {
+test('renders update page', function (): void {
     $user = User::factory()->create([
         'is_admin' => true,
     ]);
@@ -49,7 +49,7 @@ test('renders update page', function () {
         ->assertSuccessful();
 });
 
-test('does render update page for model outside tenacy', function () {
+test('does render update page for model outside tenacy', function (): void {
     $user = User::factory()->create([
         'is_admin' => true,
     ]);
@@ -64,7 +64,7 @@ test('does render update page for model outside tenacy', function () {
         ->assertNotFound();
 });
 
-test('lists correct users', function () {
+test('lists correct users', function (): void {
     $user = User::factory()->create([
         'is_admin' => true,
     ]);
@@ -85,7 +85,7 @@ test('lists correct users', function () {
         ->assertCanNotSeeTableRecords($hidden);
 });
 
-test('creates user', function () {
+test('creates user', function (): void {
     $user = User::factory()->create([
         'is_admin' => true,
     ]);
@@ -110,7 +110,7 @@ test('creates user', function () {
         ->and($record->organization->id)->toEqual($user->organization->id);
 });
 
-test('updates user', function () {
+test('updates user', function (): void {
     $user = User::factory()->create([
         'is_admin' => true,
     ]);
@@ -140,7 +140,7 @@ test('updates user', function () {
         ->and($record->email)->toEqual($data['email']);
 });
 
-test('deletes user', function () {
+test('deletes user', function (): void {
     $user = User::factory()->create([
         'is_admin' => true,
     ]);
@@ -157,7 +157,7 @@ test('deletes user', function () {
     test()->assertModelMissing($record);
 });
 
-test('invites user', function () {
+test('invites user', function (): void {
     Notification::fake();
 
     $user = User::factory()->create([
@@ -170,12 +170,10 @@ test('invites user', function () {
             'email' => $email = 'test@example.com',
         ]);
 
-    Notification::assertSentOnDemand(InvitedToOrganization::class, function ($notification, $channels, $notifable) use ($email) {
-        return $notification->invitation->email === $email && $notifable->routes['mail'] === $email;
-    });
+    Notification::assertSentOnDemand(InvitedToOrganization::class, fn ($notification, $channels, $notifable): bool => $notification->invitation->email === $email && $notifable->routes['mail'] === $email);
 });
 
-test('does not invites user if invitation already exists', function () {
+test('does not invites user if invitation already exists', function (): void {
     Notification::fake();
 
     $user = User::factory()->create([

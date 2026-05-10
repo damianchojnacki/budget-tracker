@@ -6,7 +6,6 @@ use App\Filament\Resources\UserResource\Pages\CreateUser;
 use App\Filament\Resources\UserResource\Pages\EditUser;
 use App\Filament\Resources\UserResource\Pages\ListUsers;
 use App\Models\User;
-use Auth;
 use Carbon\CarbonInterface;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -72,7 +71,7 @@ class UserResource extends Resource
     public static function table(Table $table): Table
     {
         /** @var User $user */
-        $user = Auth::user();
+        $user = \Illuminate\Support\Facades\Auth::user();
 
         return $table
             ->columns([

@@ -22,10 +22,10 @@ class BudgetFactory extends Factory
         return [
             'organization_id' => Organization::factory(),
             'currency_id' => Currency::factory(),
-            'name' => $this->faker->randomElement(['Main', 'Savings', 'Emergency']),
-            'color' => $this->faker->hexColor(),
+            'name' => fake()->randomElement(['Main', 'Savings', 'Emergency']),
+            'color' => fake()->hexColor(),
             'icon' => 'fas-money-bill-wave',
-            'amount' => $this->faker->randomFloat(2, 1, 10000),
+            'amount' => fake()->randomFloat(2, 1, 10000),
         ];
     }
 }

@@ -35,7 +35,7 @@ class AcceptOrganizationInvitationRequest extends FormRequest
     public function after(): array
     {
         return [
-            function (Validator $validator) {
+            function (Validator $validator): void {
                 if ($this->invitation->organization->hasUserWithEmail($this->email)) {
                     $validator->errors()->add(
                         'email',

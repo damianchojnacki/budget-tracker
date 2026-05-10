@@ -30,6 +30,6 @@ trait StringEnumHelpers
      */
     public static function names(): array
     {
-        return static::collect()->map(fn (self $type) => $type->getName())->toArray();
+        return static::collect()->map(fn (self $type): string => $type->getName())->toArray();
     }
 }

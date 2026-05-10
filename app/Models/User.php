@@ -8,6 +8,7 @@ use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasTenants;
 use Filament\Panel;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -54,9 +55,12 @@ class User extends Authenticatable implements FilamentUser, HasTenants, MustVeri
         return true;
     }
 
-    public function getNameAttribute(): string
+    /**
+     * @return Attribute<string, void>
+     */
+    protected function name(): Attribute
     {
-        return "{$this->firstname} {$this->lastname}";
+        return Attribute::make(get: fn (): string => "{$this->firstname} {$this->lastname}");
     }
 
     /** @return Collection<int, Organization> */
@@ -72,6 +76,10 @@ class User extends Authenticatable implements FilamentUser, HasTenants, MustVeri
     public function canAccessTenant(Model $tenant): bool
     {
         /** @phpstan-ignore-next-line  */
-        return $this->belongsToOrganization($tenant) || $this->isAdmin();
+        if ($this->belongsToOrganization($tenant)) {
+            return true;
+        }
+
+        return $this->isAdmin();
     }
 }

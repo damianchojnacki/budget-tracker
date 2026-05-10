@@ -25,7 +25,7 @@ Route::get('docs/{path?}', DocsController::class)
 
 Route::group([
     'middleware' => ['auth', 'verified'],
-], function () {
+], function (): void {
     Route::put('organization-invitations/{invitation}', [OrganizationInvitationController::class, 'accept'])
         ->name('organization-invitations.accept')
         ->middleware(['signed', 'throttle:6,1']);

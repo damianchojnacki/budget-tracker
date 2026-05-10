@@ -36,7 +36,7 @@ class RegisterOrganization extends RegisterTenant
                     ->options(fn () => Currency::query()
                         ->where('type', CurrencyType::FIAT)
                         ->get()
-                        ->mapWithKeys(fn (Currency $currency) => [
+                        ->mapWithKeys(fn (Currency $currency): array => [
                             $currency->id => "{$currency->code} - {$currency->name}",
                         ])
                         ->toArray()

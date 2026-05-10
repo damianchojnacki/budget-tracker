@@ -5,7 +5,7 @@ use App\Models\User;
 use Filament\Pages\Dashboard;
 use Illuminate\Support\Facades\URL;
 
-test('can be accepted', function () {
+test('can be accepted', function (): void {
     $organization = Organization::factory()->create();
 
     $user = User::factory()->create([
@@ -28,7 +28,7 @@ test('can be accepted', function () {
     test()->assertModelMissing($invitation);
 });
 
-test('cannot be accepted if user already belongs to organization', function () {
+test('cannot be accepted if user already belongs to organization', function (): void {
     $organization = Organization::factory()->create();
 
     $user = User::factory()->create([
@@ -47,7 +47,7 @@ test('cannot be accepted if user already belongs to organization', function () {
         ->assertInvalid('email');
 });
 
-test('cannot be accepted if user has different email', function () {
+test('cannot be accepted if user has different email', function (): void {
     $organization = Organization::factory()->create();
 
     $user = User::factory()->create([

@@ -24,9 +24,7 @@ class AuthServiceProvider extends ServiceProvider
             return null;
         });
 
-        Gate::define('viewApiDocs', function (User $user): bool {
-            return $user->isAdmin();
-        });
+        Gate::define('viewApiDocs', fn (User $user): bool => $user->isAdmin());
 
         Event::listen(static function (SocialiteWasCalled $event): void {
             $event->extendSocialite('authentik', Provider::class);

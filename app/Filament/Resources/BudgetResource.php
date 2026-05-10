@@ -73,13 +73,13 @@ class BudgetResource extends Resource
                     ->translateLabel()
                     ->searchable()
                     ->options(fn () => Currency::all()
-                        ->map(fn (Currency $currency) => [
+                        ->map(fn (Currency $currency): array => [
                             'id' => $currency->id,
-                            'label' => "{$currency->code} - {$currency->name}",
+                            'label' => "$currency->code - $currency->name",
                             'type' => $currency->type->getName(),
                         ])
                         ->groupBy('type')
-                        ->map(fn (Collection $currencies, string $type) => $currencies->mapWithKeys(fn (array $currency) => [$currency['id'] => $currency['label']])
+                        ->map(fn (Collection $currencies, string $type) => $currencies->mapWithKeys(fn (array $currency): array => [$currency['id'] => $currency['label']])
                             ->toArray()
                         )
                         ->toArray()
@@ -103,9 +103,9 @@ class BudgetResource extends Resource
             ->columns([
                 IconColumn::make('icon')
                     ->translateLabel()
-                    ->icon(fn (string $state) => $state)
+                    ->icon(fn (string $state): string => $state)
                     ->color('none')
-                    ->extraAttributes(fn (Budget $record) => ['style' => "color: {$record->color}"]),
+                    ->extraAttributes(fn (Budget $record): array => ['style' => "color: {$record->color}"]),
                 TextColumn::make('name')
                     ->translateLabel()
                     ->sortable()
@@ -128,11 +128,9 @@ class BudgetResource extends Resource
                     ->sortable(),
                 TextColumn::make('amount_base_currency')
                     ->label(__('Amount') . " ({$organization->currency->code})")
-                    ->getStateUsing(function (Budget $record) use ($organization) {
-                        return $record->selectRaw('(amount / (SELECT rate from currencies where id = currency_id) * (SELECT rate from currencies where code = ?)) as sum', [
-                            $organization->currency->code,
-                        ])->find($record->id)->sum;
-                    })
+                    ->getStateUsing(fn (Budget $record) => $record->selectRaw('(amount / (SELECT rate from currencies where id = currency_id) * (SELECT rate from currencies where code = ?)) as sum', [
+                        $organization->currency->code,
+                    ])->find($record->id)->sum)
                     ->money($organization->currency->code)
                     ->sortable(),
                 TextColumn::make('currency.name')
@@ -151,7 +149,7 @@ class BudgetResource extends Resource
                         Select::make('type')
                             ->native(false)
                             ->translateLabel()
-                            ->options(CurrencyType::collect()->mapWithKeys(fn (CurrencyType $type) => [
+                            ->options(CurrencyType::collect()->mapWithKeys(fn (CurrencyType $type): array => [
                                 $type->value => $type->getName(),
                             ])),
                     ])

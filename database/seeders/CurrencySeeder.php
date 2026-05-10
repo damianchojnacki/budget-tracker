@@ -137,7 +137,7 @@ class CurrencySeeder extends Seeder
         ) {
             Currency::insert(
                 collect($currencies)
-                    ->map(fn ($currency) => array_merge($currency, [
+                    ->map(fn ($currency): array => array_merge($currency, [
                         'type' => $type,
                         'created_at' => $now,
                         'updated_at' => $now,

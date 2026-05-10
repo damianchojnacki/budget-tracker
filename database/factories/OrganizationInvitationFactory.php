@@ -18,7 +18,7 @@ class OrganizationInvitationFactory extends Factory
     {
         return [
             'organization_id' => Organization::factory(),
-            'email' => $this->faker->unique()->email(),
+            'email' => fake()->unique()->email(),
         ];
     }
 }

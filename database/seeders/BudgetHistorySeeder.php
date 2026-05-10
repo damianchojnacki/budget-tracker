@@ -13,8 +13,8 @@ class BudgetHistorySeeder extends Seeder
      */
     public function run(): void
     {
-        Budget::with('transactions')->get()->each(function (Budget $budget) {
-            $budget->transactions->each(function (Transaction $transaction) use ($budget) {
+        Budget::with('transactions')->get()->each(function (Budget $budget): void {
+            $budget->transactions->each(function (Transaction $transaction) use ($budget): void {
                 $budget->history()->create([
                     'amount' => $budget->amount += $transaction->amount,
                     'created_at' => $transaction->created_at,

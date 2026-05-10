@@ -8,7 +8,7 @@ use App\Models\User;
 use Filament\Facades\Filament;
 use Livewire\Livewire;
 
-test('renders list page', function () {
+test('renders list page', function (): void {
     $user = User::factory()->create();
 
     test()
@@ -17,7 +17,7 @@ test('renders list page', function () {
         ->assertSuccessful();
 });
 
-test('lists correct invitations', function () {
+test('lists correct invitations', function (): void {
     $organization = Organization::factory()->create();
     test()->actingAs($organization->owner);
     Filament::setTenant($organization);

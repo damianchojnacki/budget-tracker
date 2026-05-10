@@ -23,10 +23,10 @@ class RateServiceProvider extends ServiceProvider
     public function boot(): void
     {
         // drivers
-        $this->app->singleton(CoinCapDriver::class, fn () => new CoinCapDriver);
-        $this->app->singleton(CurrencyApiDriver::class, fn () => new CurrencyApiDriver);
+        $this->app->singleton(CoinCapDriver::class, fn (): CoinCapDriver => new CoinCapDriver);
+        $this->app->singleton(CurrencyApiDriver::class, fn (): CurrencyApiDriver => new CurrencyApiDriver);
 
-        $this->app->singleton('rate', fn () => new RateService);
+        $this->app->singleton('rate', fn (): RateService => new RateService);
         $this->app->alias('rate', RateService::class);
     }
 }

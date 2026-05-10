@@ -3,12 +3,12 @@
 namespace App\Filament\Widgets;
 
 use App\Models\BudgetHistory;
-use Carbon\Carbon;
 use Carbon\CarbonInterface;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Date;
 use NumberFormatter;
 
 class BudgetOverview extends BaseWidget
@@ -97,7 +97,7 @@ class BudgetOverview extends BaseWidget
                 $organization->currency->code,
             ])
             ->get()
-            ->groupBy(fn (mixed $row) => Carbon::parse($row->created_at)->toDateString())
+            ->groupBy(fn (mixed $row): string => Date::parse($row->created_at)->toDateString())
             ->map(fn (mixed $group) => $group->sum('converted_amount'))
             ->values()
             ->toArray();

@@ -20,11 +20,9 @@ class BudgetHistoryFactory extends Factory
     {
         return [
             'budget_id' => Budget::factory(),
-            'amount' => $this->faker->randomFloat(2, 1, 10000),
+            'amount' => fake()->randomFloat(2, 1, 10000),
             'created_at' => now()->subDays(rand(0, 90)),
-            'updated_at' => function ($attributes) {
-                return $attributes['created_at'];
-            },
+            'updated_at' => fn (array $attributes) => $attributes['created_at'],
         ];
     }
 }

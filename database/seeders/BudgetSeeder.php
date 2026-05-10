@@ -17,7 +17,7 @@ class BudgetSeeder extends Seeder
     {
         $currencies = Currency::all();
 
-        Organization::all()->each(function (Organization $organization) use ($currencies) {
+        Organization::all()->each(function (Organization $organization) use ($currencies): void {
             $organization->budgets()->saveMany(
                 Budget::factory()
                     ->count(rand(0, 6))

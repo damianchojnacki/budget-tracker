@@ -32,15 +32,11 @@ class RateService
     {
         $class = config("rate.drivers.{$driver}.class");
 
-        if (!class_exists($class)) {
-            throw new DriverNotFoundException("Driver `{$driver}` not found. Please specify correct driver in rate config.");
-        }
+        throw_unless(class_exists($class), new DriverNotFoundException("Driver `{$driver}` not found. Please specify correct driver in rate config."));
 
         $driver = app()->make($class);
 
-        if (!$driver instanceof Driver) {
-            throw new DriverNotFoundException("Driver `{$class}` must be instance of " . Driver::class);
-        }
+        throw_unless($driver instanceof Driver, new DriverNotFoundException("Driver `{$class}` must be instance of " . Driver::class));
 
         return $driver;
     }

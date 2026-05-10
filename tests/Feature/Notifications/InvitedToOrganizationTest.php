@@ -4,7 +4,7 @@ use App\Models\OrganizationInvitation;
 use App\Models\User;
 use App\Notifications\InvitedToOrganization;
 
-test('renders notification correctly', function () {
+test('renders notification correctly', function (): void {
     $notification = new InvitedToOrganization(
         $invitation = OrganizationInvitation::factory()->create()
     );

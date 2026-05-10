@@ -9,15 +9,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @property CurrencyType $type
+ */
 class Currency extends Model
 {
     /** @use HasFactory<CurrencyFactory> */
     use HasFactory;
-
-    protected $casts = [
-        'type' => CurrencyType::class,
-        'rate' => 'decimal:10',
-    ];
 
     /**
      * @return HasMany<Budget, $this>
@@ -33,5 +31,13 @@ class Currency extends Model
     public function organization(): BelongsTo
     {
         return $this->belongsTo(Organization::class);
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'type' => CurrencyType::class,
+            'rate' => 'decimal:10',
+        ];
     }
 }

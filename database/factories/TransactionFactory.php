@@ -20,13 +20,11 @@ class TransactionFactory extends Factory
     {
         return [
             'budget_id' => Budget::factory(),
-            'name' => $this->faker->word,
-            'description' => $this->faker->paragraph,
-            'amount' => $this->faker->randomFloat(2, -1000, 1000),
+            'name' => fake()->word(),
+            'description' => fake()->paragraph(),
+            'amount' => fake()->randomFloat(2, -1000, 1000),
             'created_at' => now()->subDays(rand(0, 90)),
-            'updated_at' => function ($attributes) {
-                return $attributes['created_at'];
-            },
+            'updated_at' => fn (array $attributes) => $attributes['created_at'],
         ];
     }
 }

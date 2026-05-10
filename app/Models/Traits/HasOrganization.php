@@ -43,7 +43,10 @@ trait HasOrganization
         if (!$organization) {
             return false;
         }
+        if ($this->ownsOrganization($organization)) {
+            return true;
+        }
 
-        return $this->ownsOrganization($organization) || $this->organization_id == $organization->id;
+        return $this->organization_id == $organization->id;
     }
 }

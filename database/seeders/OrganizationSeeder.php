@@ -18,7 +18,7 @@ class OrganizationSeeder extends Seeder
 
         User::factory()->count(3)->create([
             'organization_id' => null,
-        ])->each(function (User $user) use ($currency) {
+        ])->each(function (User $user) use ($currency): void {
             $organization = Organization::factory()
                 ->recycle($currency)
                 ->create([

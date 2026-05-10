@@ -11,9 +11,7 @@ class DocsController extends Controller
 {
     public function __invoke(Request $request, string $path = 'index.html'): Response
     {
-        if (!Storage::disk('docs')->exists($path)) {
-            abort(404);
-        }
+        abort_unless(Storage::disk('docs')->exists($path), 404);
 
         return response(Storage::disk('docs')->get($path), 200, [
             'Content-Type' => static::getMimeType(Storage::disk('docs')->path($path)),

@@ -55,15 +55,11 @@ class CoinCapDriver implements Driver
      */
     protected function getRates(): Collection
     {
-        return Cache::remember($this->url, 3600 * 24, function () {
-            return Http::get($this->url)
-                ->collect('data')
-                ->map(function (array $crypto) {
-                    return new RateDto(
-                        code: strtolower($crypto['symbol']),
-                        value: $crypto['rateUsd']
-                    );
-                });
-        });
+        return Cache::remember($this->url, 3600 * 24, fn () => Http::get($this->url)
+            ->collect('data')
+            ->map(fn (array $crypto): RateDto => new RateDto(
+                code: strtolower((string) $crypto['symbol']),
+                value: $crypto['rateUsd']
+            )));
     }
 }

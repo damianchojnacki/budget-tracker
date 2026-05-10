@@ -51,7 +51,7 @@ class CurrencyResource extends Resource
                     ->required(),
                 Select::make('type')
                     ->translateLabel()
-                    ->options(CurrencyType::collect()->mapWithKeys(fn (CurrencyType $type) => [
+                    ->options(CurrencyType::collect()->mapWithKeys(fn (CurrencyType $type): array => [
                         $type->value => $type->getName(),
                     ]))
                     ->native(false)

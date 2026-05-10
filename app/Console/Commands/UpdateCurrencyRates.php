@@ -27,7 +27,7 @@ class UpdateCurrencyRates extends Command
      */
     public function handle(): int
     {
-        Currency::all()->each(function (Currency $currency) {
+        Currency::all()->each(function (Currency $currency): void {
             $rate = Rate::get($currency);
 
             if (!$rate) {

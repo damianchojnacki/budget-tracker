@@ -22,7 +22,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        URL::macro('signature', function (string $route, array $attributes = [], ?Carbon $expiration = null) {
+        URL::macro('signature', function (string $route, array $attributes = [], ?Carbon $expiration = null): null|array|string {
             $url = URL::signedRoute($route, $attributes, $expiration);
 
             $url = parse_url($url, PHP_URL_QUERY);
@@ -44,7 +44,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Model::unguard();
 
-        LanguageSwitch::configureUsing(function (LanguageSwitch $switch) {
+        LanguageSwitch::configureUsing(function (LanguageSwitch $switch): void {
             $switch->locales(['en', 'pl']);
         });
 
@@ -61,8 +61,6 @@ class AppServiceProvider extends ServiceProvider
 
         Authenticate::redirectUsing(static fn (): string => Filament::getLoginUrl());
 
-        RateLimiter::for('api', function (Request $request) {
-            return Limit::perMinute(config('app.api_rate_limit_by_minute'))->by($request->user()?->id ?: $request->ip());
-        });
+        RateLimiter::for('api', fn (Request $request) => Limit::perMinute(config('app.api_rate_limit_by_minute'))->by($request->user()?->id ?: $request->ip()));
     }
 }

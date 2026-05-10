@@ -33,16 +33,12 @@ class CurrencyApiDriver implements Driver
      */
     protected function getRates(): Collection
     {
-        return Cache::remember($this->url, 3600 * 24, function () {
-            return Http::get($this->url)
-                ->collect('usd')
-                ->mapWithKeys(function (float|int $rate, string $code) {
-                    return [$code => new RateDto(
-                        code: strtolower($code),
-                        value: $rate,
-                    )];
-                })
-                ->values();
-        });
+        return Cache::remember($this->url, 3600 * 24, fn () => Http::get($this->url)
+            ->collect('usd')
+            ->mapWithKeys(fn (float|int $rate, string $code): array => [$code => new RateDto(
+                code: strtolower($code),
+                value: $rate,
+            )])
+            ->values());
     }
 }
